@@ -23,7 +23,6 @@
 (add-hook 'js2-mode-hook 'js2-mode-complex-hook)
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 
-
 ;; альтернативный вариант 
 ;; настройка javascript ide
 ;; (defun set-javascript-mode() 
@@ -50,3 +49,66 @@
  '(js2-electric-keys (quote ("{" "}" "(" ")" "[" "]" ":" ";" "," "*")))
  '(js2-highlight-level 3)
 )
+
+;;;; настройка slime для javascript
+;; Pymacs
+;;(require 'cl-lib)
+;;(require 'pymacs)
+
+;;(require 'package)
+;;(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
+;;(add-to-list 'package-archives '("melpa-stable" . "http://stable.melpa.org/packages/") t)
+;;(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)      
+
+;; (add-to-list 'pymacs-load-path "~/.emacs.d/python/python-mode/completion")
+;; (autoload 'pymacs-apply "pymacs")
+;; (autoload 'pymacs-call "pymacs")
+;; (autoload 'pymacs-eval "pymacs" nil t)
+;; (autoload 'pymacs-exec "pymacs" nil t)
+;; (autoload 'pymacs-load "pymacs" nil t)
+;; (autoload 'pymacs-autoload "pymacs")
+;;(pymacs-load "rope" "ropemacs")
+
+;; Swank installation 
+;; 1. install swank such described in https://github.com/swank-js/swank-js
+;; 2. download git slime for 2012-02-12
+;; 3. put into slime/contrib link to slime-js.el that is in the swank-js
+;; 4. config slime such as bottom
+;; 5. run swank-js
+;; 6. use slime-connect to connect to swank-js
+;; 7. need create link node to nodejs
+;;
+;; links:
+;;   * https://github.com/swank-js/swank-js
+;;   * https://github.com/slime/slime
+;;   * http://www.idryman.org/blog/2013/03/23/installing-swank-dot-js/
+;;   * http://xiaohanyu.me/oh-my-emacs/modules/ome-javascript.html
+;;   * https://common-lisp.net/project/slime/doc/html/index.html#SEC_Contents
+;;
+;; how get slime by sha: 
+;;   * git clone
+;;   * git checkout <sha1 rev> of the rev you want ;; 385d9c20803de8dda1d2a6fd13fbec96f0e008b1
+;;   * git reset --hard
+;;
+;; howto delete package:
+;; The command package-menu-mark-delete (key 'd') followed by package-menu-execute (key 'x') worked for me.
+;; 
+
+;; (if (is-linux)
+;; 	(progn 
+;; 	  (setq inferior-lisp-program "/usr/bin/sbcl") ; your Lisp system
+;; 	  (add-to-list 'load-path "~/slime/")  ; your SLIME directory
+;; 	  (require 'slime-autoloads)
+;; 	  (eval-after-load "slime"
+;; 		'(progn
+;; 		   (add-to-list 'load-path "~/slime/contrib/")  ; your SLIME contrib directory
+;; 		   (require 'slime-js)
+;; 		   ;; вместо slime-fancy нужно использовать slime-repl
+;; 		   ;; (slime-setup '(slime-fancy slime-asdf slime-banner))
+;; 		   (slime-setup '(slime-repl slime-asdf slime-banner)) 
+;; 		   (setq slime-complete-symbol*-fancy t)
+;; 		   ;;(setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol)
+;; 		   ))
+;; 	  ;;(add-hook 'lisp-mode-hook (lambda () (slime-mode t)))
+;; 	  ;;(add-hook 'inferior-lisp-mode-hook (lambda () (inferior-slime-mode t)))
+;;  ))
