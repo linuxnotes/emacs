@@ -1,0 +1,43 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: execmod
+# key: execmod
+# binding: direct-keybinding
+# group: spec
+# contributor: Anton
+# --
+#coding: utf-8
+
+""" Описание модуля
+"""
+
+import traceback
+
+def is_in_exec():
+    """ Выполняется проверка вызван ли скрипт как exec """
+    try: 
+        a = p1
+        return True
+    except NameError as e:
+        return False
+
+def handle_request(call_name, call_type, call_params):
+    retval = {}
+    if call_name != "":
+        raise Exception(u"Unsupported call_name %s" % (call_name))
+
+    if call_type == "":
+        pass
+    elif call_type == "":
+        pass
+    else:
+        raise Exception(u"Unsupported call_type %s" % (call_type))
+
+    return retval
+
+
+if is_in_exec():
+    try:
+        retval = handle_request(p1, p2, p3)
+    except Exception as e:
+        traceback.print_exc()
+        retval = {"result": "failure", "msg": str(e) }

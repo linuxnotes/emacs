@@ -1,0 +1,8 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: cod
+# key: cod
+# binding: direct-keybinding
+# group: spec
+# contributor: Anton
+# --
+#coding: utf-8

@@ -1,0 +1,4 @@
+#нужно отклюить блокировку в файерволе 
+#
+wget https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py -O - --no-check-certificate | python
+easy_install pip

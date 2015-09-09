@@ -1,0 +1,8 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: vme
+# key: vme
+# binding: direct-keybinding
+# group: ext
+# contributor: Anton
+# --
+var me = this;

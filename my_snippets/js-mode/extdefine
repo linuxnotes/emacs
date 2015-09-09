@@ -1,0 +1,18 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: extdefined
+# key: extdefine
+# binding: direct-keybinding
+# group: ext
+# contributor: Anton
+# --
+/**
+ * @class ${1:with default value}
+ *
+ **/
+
+Ext.define("$1", {
+  $0
+
+});
+
+
