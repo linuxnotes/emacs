@@ -110,6 +110,10 @@
  '("Cyrillic"))
 
 
+;; popup
+(add-to-list 'load-path "~/.emacs.d/popup")
+(require 'popup)
+
 ;; autocomplete
 (add-to-list 'load-path "~/.emacs.d/auto_complete")
 (require 'auto-complete)
@@ -145,6 +149,15 @@
 (add-to-list 'load-path "~/.emacs.d/theme")
 (require 'theme-config)
 
+;; yasnippet
+(add-to-list 'load-path "~/.emacs.d/yasnippet")
+(require 'yasnippet)
+;; Load the snippet files themselves
+(setq yas-snippet-dirs
+      '("~/.emacs.d/yasnippet/yasmate/snippets" "~/.emacs.d/yasnippet/snippets" 
+		"~/.emacs.d/my_snippets"))
+(yas-reload-all) ;; this need for use yasnippet as minor mode
+
 ;; projectile
 ;; projectile-mode ;; если нужно не глобально
 (add-to-list 'load-path "~/.emacs.d/projectile")
@@ -155,18 +168,6 @@
 (add-to-list 'load-path "~/.emacs.d/projectile/epl")
 (require 'projectile)
 (projectile-global-mode)
-
-;; popup
-(add-to-list 'load-path "~/.emacs.d/popup")
-(require 'popup)
-
-;; yasnippet
-(add-to-list 'load-path "~/.emacs.d/yasnippet")
-(require 'yasnippet)
-;; Load the snippet files themselves
-(setq yas-snippet-dirs
-      '("~/.emacs.d/yasnippet/yasmate/snippets" "~/.emacs.d/my_snippets"))
-(yas-reload-all) ;; this need for use yasnippet as minor mode
 
 ;; autopair
 (add-to-list 'load-path "~/.emacs.d/autopair")
