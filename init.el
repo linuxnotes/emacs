@@ -121,6 +121,15 @@
 (require 'auto-complete-config)
 (ac-config-default)
 
+;; yasnippet
+(add-to-list 'load-path "~/.emacs.d/yasnippet")
+(require 'yasnippet)
+;; Load the snippet files themselves
+(setq yas-snippet-dirs
+      '("~/.emacs.d/yasnippet/yasmate/snippets" "~/.emacs.d/yasnippet/snippets" 
+		"~/.emacs.d/my_snippets"))
+(yas-reload-all) ;; this need for use yasnippet as minor mode
+
 ;;emacs lisp
 (add-to-list 'load-path "~/.emacs.d/elisp")
 (require 'elisp-config)
@@ -148,15 +157,6 @@
 ;; Themes
 (add-to-list 'load-path "~/.emacs.d/theme")
 (require 'theme-config)
-
-;; yasnippet
-(add-to-list 'load-path "~/.emacs.d/yasnippet")
-(require 'yasnippet)
-;; Load the snippet files themselves
-(setq yas-snippet-dirs
-      '("~/.emacs.d/yasnippet/yasmate/snippets" "~/.emacs.d/yasnippet/snippets" 
-		"~/.emacs.d/my_snippets"))
-(yas-reload-all) ;; this need for use yasnippet as minor mode
 
 ;; projectile
 ;; projectile-mode ;; если нужно не глобально
