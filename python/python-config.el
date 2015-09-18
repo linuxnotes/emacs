@@ -53,21 +53,44 @@
 (setq py-switch-buffers-on-execute-p nil)
 (setq py-split-windows-on-execute-p nil)
 
+(defun ipythonm()
+"Define ipython correct command"
+;; todo: fix defualt ipython command
+  (interactive)
+   (ipython)
+   (switch-to-buffer "*IPython*")
+  )
+
 ;; add remove empty strings for get complition to ipython
 (setq py-ipython0.11-completion-command-string
   "import re; print(';'.join(filter(lambda x: not re.match(x, '\s*'), get_ipython().Completer.all_completions('%s')))) #PYTHON-MODE SILENT\n")
 
 ;; настройка режим проверки 
+;; need pylint
+
+;; (when (load "flymake" t)
+;;   (defun flymake-pylint-init ()
+;;     (let* ((temp-file (flymake-init-create-temp-buffer-copy
+;;                        'flymake-create-temp-inplace))
+;;            (local-file (file-relative-name
+;;                         temp-file
+;;                         (file-name-directory buffer-file-name))))
+;;       (list "epylint" (list local-file))))
+;;   (add-to-list 'flymake-allowed-file-name-masks
+;;                '("\\.py\\'" flymake-pylint-init)))
+
+;; need pyflakes
+
 (when (load "flymake" t)
-  (defun flymake-pylint-init ()
+  (defun flymake-pyflakes-init ()
     (let* ((temp-file (flymake-init-create-temp-buffer-copy
                        'flymake-create-temp-inplace))
            (local-file (file-relative-name
                         temp-file
                         (file-name-directory buffer-file-name))))
-      (list "epylint" (list local-file))))
+      (list "pyflakes" (list local-file))))
   (add-to-list 'flymake-allowed-file-name-masks
-               '("\\.py\\'" flymake-pylint-init)))
+               '("\\.py\\'" flymake-pyflakes-init)))
 
 (defun python-mode-complex-hook () 
   ;;http://stfw.ru/page.php?id=12357
