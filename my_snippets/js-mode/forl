@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+#name : forl
+# --
+for(var ${1:i} = ${2:0}; $1 < ${3:len}; $1++) {
+  $0
+}
