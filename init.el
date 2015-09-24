@@ -328,3 +328,6 @@ Defaults to `error'."
 ;; git clone https://github.com/capitaomorte/yasnippet.git
 ;; git clone https://gitlab.com/python-mode-devs/python-mode.git
 
+(grep-compute-defaults) ;; установить значения по умолчанию
+(grep-apply-setting 'grep-command "grep * -r -n --color -i -e")
+(grep-apply-setting 'grep-find-command "find . ! -name \"*~\" ! -name \"#*#\" -type f -print0 | xargs -0 -e grep -nH -e ")
