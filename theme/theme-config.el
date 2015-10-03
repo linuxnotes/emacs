@@ -8,10 +8,23 @@
 ;;(require 'color-theme)                                                                      
 ;;(color-theme-initialize)                                                                    
 
-(add-to-list 'custom-theme-load-path (expand-file-name "~/.emacs.d/theme/"))
+(when (not (boundp 'custom-theme-load-path))
+  (message "custome theme load path")
+  (defvar custom-theme-load-path '() "variable for themes")
+  (message "custome theme load path %s" custom-theme-load-path)
+)
+
+(if (not custom-theme-load-path)
+	(setq custom-theme-load-path (expand-file-name "~/.emacs.d/theme/"))
+  (add-to-list 'custom-theme-load-path (expand-file-name "~/.emacs.d/theme/"))
+)
+
 ;;http://emacsthemes.caisah.info/zenburn-theme/
 ;;git clone https://github.com/bbatsov/zenburn-emacs
-(load-theme 'zenburn t)
+(condition-case nil
+	(load-theme 'zenburn t)
+  (error (load-theme 'zenburn))
+)
 ;; (load-theme 'gotham t)
 ;; (color-theme-xp) 
 ;; (require 'color-theme-gruber-darker)
