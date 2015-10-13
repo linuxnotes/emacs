@@ -1,0 +1,13 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: pargs
+# key: pargs
+# binding: direct-keybinding
+# group: spec
+# contributor: Anton
+# --
+def parse_args():
+    import argparse
+    parser = argparse.ArgumentParser(description="$1")
+    parser.add_argument('$2', action='$3', help='$4')
+    args = parser.parse_args()
+    return args
