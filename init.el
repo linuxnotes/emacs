@@ -1,5 +1,8 @@
 ;;;;
 (add-to-list 'load-path "~/.emacs.d"  "~/.emacs.d/cl-lib")
+(condition-case nil
+	(require 'cl-lib)
+  (error(load-file "~/.emacs.d/cl-lib/cl-lib.el")))
 
 ;;;; Установка констант
 (defun is-windows () 
@@ -118,7 +121,8 @@
 
 ;; popup
 (add-to-list 'load-path "~/.emacs.d/popup")
-(require 'popup)
+(load-file "~/.emacs.d/popup/popup.el")
+;;(require 'popup)
 
 ;; autocomplete
 (add-to-list 'load-path "~/.emacs.d/auto_complete")
@@ -248,12 +252,10 @@
         (select-window (funcall selector)))
       (setq arg (if (plusp arg) (1- arg) (1+ arg))))))
 
-;;hg clone https://bitbucket.org/agriggio/ahg
 (add-to-list 'load-path "~/.emacs.d/ahg")
 (require 'ahg)
 
 ;;; Control version systems
-;;git clone git://github.com/magit/magit.git
 (when (not (fboundp 'string-suffix-p))
   (defun string-suffix-p (str1 str2 &optional ignore-case)
   (let ((begin2 (- (length str2) (length str1)))
@@ -287,8 +289,12 @@ Defaults to `error'."
 
 (add-to-list 'load-path "~/.emacs.d/magit" )
 (add-to-list 'load-path "~/.emacs.d/git-modes")
-(require 'magit)
-(setq magit-last-seen-setup-instructions "1.4.0")
+;; try load magit
+(condition-case nil 
+	(progn (require 'magit)
+		   (setq magit-last-seen-setup-instructions "1.4.0"))
+  (error nil))
+
 
 ;; my functions 
 (defun change-brackets (from-b to-b)
@@ -332,8 +338,11 @@ Defaults to `error'."
 
 ;; after install 
 ;; git clone https://github.com/capitaomorte/yasnippet.git
+;; git clone https://github.com/AndreaCrotti/yasnippet-snippets.git
 ;; git clone https://gitlab.com/python-mode-devs/python-mode.git
-
+;; git clone git://github.com/magit/magit.git
+;; hg clone https://bitbucket.org/agriggio/ahg
+;; cd projectile; wget http://repo.or.cz/w/emacs.git/blob_plain/ba08b24186711eaeb3748f3d1f23e2c2d9ed0d09:/lisp/emacs-lisp/package.el
 (grep-compute-defaults) ;; установить значения по умолчанию
 (grep-apply-setting 'grep-command "grep * -r -n --color -i -e")
 (grep-apply-setting 'grep-find-command "find . ! -name \"*~\" ! -name \"#*#\" -type f -print0 | xargs -0 -e grep -nH -e ")
