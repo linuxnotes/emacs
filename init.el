@@ -89,6 +89,12 @@
 (global-set-key (kbd "M-n") 'forward-paragraph)
 (global-set-key (kbd "C-x j") 'previous-multiframe-window)
 
+(defun m-prev-window()
+  (interactive)
+(other-window -1))
+(global-set-key (kbd "C-x p") 'm-prev-window)
+
+
 ;; замена строк
 (global-set-key (kbd "C-x C-m") 'replace-string)
 
