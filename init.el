@@ -281,8 +281,9 @@ Defaults to `error'."
            (delete-dups (copy-sequence (cons name conditions))))
       (when message (put name 'error-message message)))))
 
-(add-to-list 'load-path "~/.emacs.d/magit" )
 (add-to-list 'load-path "~/.emacs.d/git-modes")
+(add-to-list 'load-path "~/.emacs.d/magit" )
+
 ;; try load magit
 (condition-case nil 
 	(progn (require 'magit)
@@ -331,10 +332,12 @@ Defaults to `error'."
 (require 'spell-config)
 
 ;; after install 
+;; for old emacs and git versions need use magit 1.4.2 and git modes
 ;; git clone https://github.com/capitaomorte/yasnippet.git
 ;; git clone https://github.com/AndreaCrotti/yasnippet-snippets.git
 ;; git clone https://gitlab.com/python-mode-devs/python-mode.git
 ;; git clone git://github.com/magit/magit.git
+;; git clone https://github.com/magit/git-modes.git
 ;; hg clone https://bitbucket.org/agriggio/ahg
 ;; cd projectile; wget http://repo.or.cz/w/emacs.git/blob_plain/ba08b24186711eaeb3748f3d1f23e2c2d9ed0d09:/lisp/emacs-lisp/package.el
 (grep-compute-defaults) ;; установить значения по умолчанию
