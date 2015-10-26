@@ -104,6 +104,8 @@
 	 ;; NOTE:  ??? call yas-minor-mode after 
 	 ;; define-key disable yas-minor-mode ???
 	 (define-key py-mode-map (kbd "RET") 'newline-and-indent)
+     (define-key py-mode-map (kbd "\e\ef") 'flymake-mode)
+
 	 ;;(define-key py-mode-map [tab] 'yas/expand)
 	 ;; this change need for correct indent in python mode when use yasnippet
 	 ((lambda () (set (make-local-variable 'yas-indent-line) 'fixed)))
@@ -113,7 +115,7 @@
 )
 
 (add-hook 'python-mode-hook 'python-mode-complex-hook 1)
-(global-set-key (kbd "\e\ef") 'flymake-mode)
+;;(global-set-key (kbd "\e\ef") 'flymake-mode)
 
 (add-to-list 'auto-mode-alist '("\.py\'" . python-mode))
 

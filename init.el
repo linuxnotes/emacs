@@ -287,9 +287,8 @@ Defaults to `error'."
            (delete-dups (copy-sequence (cons name conditions))))
       (when message (put name 'error-message message)))))
 
-(add-to-list 'load-path "~/.emacs.d/git-modes")
 (add-to-list 'load-path "~/.emacs.d/magit" )
-
+(add-to-list 'load-path "~/.emacs.d/git-modes")
 ;; try load magit
 (condition-case nil 
 	(progn (require 'magit)
@@ -338,14 +337,23 @@ Defaults to `error'."
 (require 'spell-config)
 
 ;; after install 
-;; for old emacs and git versions need use magit 1.4.2 and git modes
 ;; git clone https://github.com/capitaomorte/yasnippet.git
 ;; git clone https://github.com/AndreaCrotti/yasnippet-snippets.git
 ;; git clone https://gitlab.com/python-mode-devs/python-mode.git
 ;; git clone git://github.com/magit/magit.git
-;; git clone https://github.com/magit/git-modes.git
 ;; hg clone https://bitbucket.org/agriggio/ahg
 ;; cd projectile; wget http://repo.or.cz/w/emacs.git/blob_plain/ba08b24186711eaeb3748f3d1f23e2c2d9ed0d09:/lisp/emacs-lisp/package.el
 (grep-compute-defaults) ;; установить значения по умолчанию
 (grep-apply-setting 'grep-command "grep * -r -n --color -i -e")
 (grep-apply-setting 'grep-find-command "find . ! -name \"*~\" ! -name \"#*#\" -type f -print0 | xargs -0 -e grep -nH -e ")
+
+;; remove temp files
+(defun clear-folder ()
+  (interactive)
+  (message "Clear folder, directory: %s" default-directory)
+  (shell-command "rm *.pyc *~ *.orig"))
+
+(defun dired-mode-complex-hook()
+  ((lambda ()
+	(define-key dired-mode-map (kbd "C-c C-l") 'clear-folder))))
+(add-hook 'dired-mode-hook 'dired-mode-complex-hook 1)
