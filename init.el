@@ -254,6 +254,15 @@
 
 (add-to-list 'load-path "~/.emacs.d/ahg")
 (require 'ahg)
+(defun ahg-status-cur-dir ()
+  "Получить статус по текущему каталогу"
+  (interactive)
+  (let ((curdir default-directory)
+		( newcurdir(expand-file-name default-directory)))
+	(setq default-directory newcurdir)
+	(ahg-status newcurdir)
+	(setq default-directory curdir)))
+(global-set-key (kbd "C-c h g d") 'ahg-status-cur-dir)
 
 ;;; Control version systems
 (when (not (fboundp 'string-suffix-p))
@@ -351,7 +360,9 @@ Defaults to `error'."
 (defun clear-folder ()
   (interactive)
   (message "Clear folder, directory: %s" default-directory)
-  (shell-command "rm *.pyc *~ *.orig"))
+  (shell-command "rm *.pyc *~ *.orig")
+  (revert-buffer)
+)
 
 (defun dired-mode-complex-hook()
   ((lambda ()
