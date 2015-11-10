@@ -368,3 +368,7 @@ Defaults to `error'."
   ((lambda ()
 	(define-key dired-mode-map (kbd "C-c C-l") 'clear-folder))))
 (add-hook 'dired-mode-hook 'dired-mode-complex-hook 1)
+
+;; Configuration for dictionaries
+(add-to-list 'load-path "~/.emacs.d/dictem")
+(require 'dictem-config)
