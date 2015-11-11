@@ -1,4 +1,20 @@
 ;;;;
+(defmacro part-module-load(name &optional feature)
+  "Load module macro"
+  `(progn 
+	 (add-to-list 'load-path ,(concat "~/.emacs.d/" (symbol-name name)))
+	 ,(if (not (not feature))
+		 `(require ',feature)
+	   `(require ',(intern (concat (symbol-name name) "-config")))
+	   ))
+  )
+
+(defun part-module-load-f(name feature-name)
+  "Load module function"
+  (add-to-list 'load-path (concat "~/.emacs.d/" name))
+  (require feature-name)
+)
+
 (add-to-list 'load-path "~/.emacs.d"  "~/.emacs.d/cl-lib")
 (condition-case nil
 	(require 'cl-lib)
@@ -141,32 +157,23 @@
 (yas-reload-all) ;; this need for use yasnippet as minor mode
 
 ;;emacs lisp
-(add-to-list 'load-path "~/.emacs.d/elisp")
-(require 'elisp-config)
+(part-module-load-f "elisp" 'elisp-config)
 ;;javascript
-(add-to-list 'load-path "~/.emacs.d/js")
-(require 'js-config)
+(part-module-load-f "js" 'js-config)
 ;; visual basic
-(add-to-list 'load-path "~/.emacs.d/vb-mode")
-(require 'visual-basic-mode)
+(part-module-load-f "vb-mode" 'visual-basic-mode)
 ;; Python
-(add-to-list 'load-path "~/.emacs.d/python/")
-(require 'python-config)
+(part-module-load-f "python" 'python-config)
 ;; lua
-(add-to-list 'load-path "~/.emacs.d/lua")
-(require 'lua-mode)
+(part-module-load-f "lua" 'lua-mode)
 ;; json
-(add-to-list 'load-path "~/.emacs.d/json")
-(require 'json-config)
+(part-module-load-f "json" 'json-config)
 ;; web mode
-(add-to-list 'load-path "~/.emacs.d/web-mode")
-(require 'web-mode-config)
+(part-module-load-f "web-mode" 'web-mode-config)
 ;; макросы
-(add-to-list 'load-path "~/.emacs.d/macros")
-(require 'my-user-macro)
+(part-module-load-f "macros" 'my-user-macro)
 ;; Themes
-(add-to-list 'load-path "~/.emacs.d/theme")
-(require 'theme-config)
+(part-module-load-f "theme" 'theme-config)
 
 ;; projectile
 ;; projectile-mode ;; если нужно не глобально
