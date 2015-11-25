@@ -27,9 +27,13 @@
   (not (boundp 'w32-system-shells)))
 
 ;; шрифт
-(if (is-linux) 
-	(set-default-font "Monospace 9") ;; шрифт для Linux
-  (set-default-font "Courier New 9")) ;; шрифт для Windows
+;; cp hack2.0 /usr/share/fonts/truetype/ -R
+;; fc-cache
+(condition-case nil
+    (set-default-font "Hack 9")
+  (error(if (is-linux) 
+			(set-default-font "Monospace 9") ;; шрифт для Linux
+		  (set-default-font "Courier New 9"))))
 
 (setq make-backup-files nil)
 (setq auto-save-list-file-name nil)
