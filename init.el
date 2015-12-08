@@ -9,6 +9,11 @@
 	   ))
   )
 
+;; отключение стандартной 
+;; системы контроля версий
+;; http://www.gnu.org/software/emacs/manual/html_node/emacs/Version-Control.html
+(setf vc-handled-backends nil)
+
 (defun part-module-load-f(name feature-name)
   "Load module function"
   (add-to-list 'load-path (concat "~/.emacs.d/" name))
