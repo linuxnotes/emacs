@@ -35,10 +35,12 @@
 ;; cp hack2.0 /usr/share/fonts/truetype/ -R
 ;; fc-cache
 (condition-case nil
-    (set-default-font "Hack 9")
-  (error(if (is-linux) 
+    (set-default-font "Hack 9")re
+  (error
+      (if (is-linux) 
 			(set-default-font "Monospace 9") ;; шрифт для Linux
-		  (set-default-font "Courier New 9"))))
+		  (set-default-font "Courier New 9"))
+         ))
 
 (setq make-backup-files nil)
 (setq auto-save-list-file-name nil)
@@ -386,5 +388,5 @@ Defaults to `error'."
 (add-hook 'dired-mode-hook 'dired-mode-complex-hook 1)
 
 ;; Configuration for dictionaries
-(add-to-list 'load-path "~/.emacs.d/dictem")
+(add-to-list 'load-path "~/.emacs.d/dictem/")
 (require 'dictem-config)
