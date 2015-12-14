@@ -35,7 +35,7 @@
 ;; cp hack2.0 /usr/share/fonts/truetype/ -R
 ;; fc-cache
 (condition-case nil
-    (set-default-font "Hack 9")re
+    (set-default-font "Hack 9")
   (error
       (if (is-linux) 
 			(set-default-font "Monospace 9") ;; шрифт для Linux
