@@ -390,3 +390,8 @@ Defaults to `error'."
 ;; Configuration for dictionaries
 (add-to-list 'load-path "~/.emacs.d/dictem/")
 (require 'dictem-config)
+
+(when (is-windows)
+  (setq visible-bell 1)
+  (add-to-list 'process-coding-system-alist '("[cC][mM][dD][pP][rR][oO][xX][yY]" cp1251 . cp1251))
+  (remove-hook 'find-file-hooks 'vc-find-file-hook))
