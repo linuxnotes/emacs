@@ -2,7 +2,7 @@
 
 ;; для создания макроса нужно сделать 
 ;; макрос, потом name-last-kbd-macro
-;; потом insert-kbd-macro
+;; потом insert-kbd-macro (можно и без name-last-kbd-macro)
 
 ;; макрос для преобразования new в Ext.create
 (fset 'newToExtCreate
@@ -16,6 +16,9 @@
 
 (fset 'arrtofuncall
    [?\C-  ?\C-f ?\C-x ?\C-m ?\[ return ?\( return ?\C-s ?\] ?\C-  ?\C-b ?\C-  ?\C-f ?\C-x ?\C-m ?\] return ?\) return ?\C-x ?\C-s])
+
+(setq 'quote-dict
+   [?\C-  ?\C-s ?: ?\C-b ?\" ?\C-a ?\C-n])
 
 ;;забиндим это на esc-esc-n
 (global-set-key (kbd "\e\en") 'newToExtCreate)
