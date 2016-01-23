@@ -17,7 +17,7 @@
 (fset 'arrtofuncall
    [?\C-  ?\C-f ?\C-x ?\C-m ?\[ return ?\( return ?\C-s ?\] ?\C-  ?\C-b ?\C-  ?\C-f ?\C-x ?\C-m ?\] return ?\) return ?\C-x ?\C-s])
 
-(setq 'quote-dict
+(fset 'quote-dict
    [?\C-  ?\C-s ?: ?\C-b ?\" ?\C-a ?\C-n])
 
 ;;забиндим это на esc-esc-n
