@@ -370,9 +370,12 @@ Defaults to `error'."
 ;; git clone git://github.com/magit/magit.git
 ;; hg clone https://bitbucket.org/agriggio/ahg
 ;; cd projectile; wget http://repo.or.cz/w/emacs.git/blob_plain/ba08b24186711eaeb3748f3d1f23e2c2d9ed0d09:/lisp/emacs-lisp/package.el
+;;; grep by extensions
+;; grep -r --include \*.<ext> -n --color -e <template> --exclude-dir=designer 
 (grep-compute-defaults) ;; установить значения по умолчанию
 (grep-apply-setting 'grep-command "grep * -r -n --color -i -e")
 (grep-apply-setting 'grep-find-command "find . ! -name \"*~\" ! -name \"#*#\" -type f -print0 | xargs -0 -e grep -nH -e ")
+
 
 ;; remove temp files
 (defun clear-folder ()
