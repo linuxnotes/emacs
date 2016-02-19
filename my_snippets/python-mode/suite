@@ -1,0 +1,9 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: suite
+# key: suite
+# binding: direct-keybinding
+# group: spec
+# contributor: Anton
+# --
+suite = unittest.TestLoader().loadTestsFromTestCase($1)
+unittest.TextTestRunner(verbosity=2).run(suite)

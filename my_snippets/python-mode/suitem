@@ -1,0 +1,10 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: suitem
+# key: suitem
+# binding: direct-keybinding
+# group: spec
+# contributor: Anton
+# --
+fast = unittest.TestSuite()
+fast.addTest($1("$2"))
+unittest.TextTestRunner().run(fast)
