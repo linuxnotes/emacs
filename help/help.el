@@ -29,7 +29,7 @@
 ;; recode-region
 
 ;;чтобы в xterm Alt корректно работало в 
-;; echo 'xterm*metaSendsEscape: true' >> /etc/X11/app-defaults/Xterm
+;; echo 'xterm*metaSendsEscape: true' >> /etc/X11/app-defaults/XTerm
 
 ;; for use same color theme in console mode
 ;; env TERM=xterm-256color emacs -nw
