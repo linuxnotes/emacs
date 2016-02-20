@@ -23,3 +23,4 @@ cedet
 ecb
 Pymacs-master
 git-modes
+projectile/package.el
