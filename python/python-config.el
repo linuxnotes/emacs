@@ -79,8 +79,34 @@
 ;;   (add-to-list 'flymake-allowed-file-name-masks
 ;;                '("\\.py\\'" flymake-pylint-init)))
 
-;; need pyflakes
+;; ;; epylint must be put to the ~/bin/epylint
+;; #!/usr/bin/env python
 
+;; import re
+;; import sys
+;; from subprocess import *
+;; p = Popen("pylint -f parseable -r n --disable-msg-cat=C,R %s" %
+;;           sys.argv[1], shell = True, stdout = PIPE).stdout
+;; for line in p.readlines():
+;;     match = re.search("\\[([WE])(, (.+?))?\\]", line)
+;;     if match:
+;;         kind = match.group(1)
+;;         func = match.group(3)
+
+;;         if kind == "W":
+;;             msg = "Warning"
+;;         else:
+;;             msg = "Error"
+
+;;         if func:
+;;             line = re.sub("\\[([WE])(, (.+?))?\\]",
+;;                           "%s (%s):" % (msg, func), line)
+;;         else:
+;;             line = re.sub("\\[([WE])?\\]", "%s:" % msg, line)
+;;         print line,
+;;     p.close()
+
+;; need pyflakes
 (when (load "flymake" t)
   (defun flymake-pyflakes-init ()
     (let* ((temp-file (flymake-init-create-temp-buffer-copy
@@ -113,6 +139,7 @@
 	 (smart-operator-mode-on)
    ))
 )
+(add-hook 'python-mode-hook 'flymake-mode)
 
 (add-hook 'python-mode-hook 'python-mode-complex-hook 1)
 ;;(global-set-key (kbd "\e\ef") 'flymake-mode)
