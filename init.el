@@ -392,6 +392,8 @@ Defaults to `error'."
 ;; git clone https://github.com/kiwanami/emacs-deferred.git
 ;; git clone https://github.com/kiwanami/emacs-epc.git
 ;; git clone https://github.com/tkf/emacs-jedi.git
+;; git clone https://github.com/tkf/emacs-jedi-direx.git
+;; git clone https://github.com/m2ym/direx-el.git
 ;; hg clone https://bitbucket.org/agriggio/ahg
 ;; cd projectile; wget http://repo.or.cz/w/emacs.git/blob_plain/ba08b24186711eaeb3748f3d1f23e2c2d9ed0d09:/lisp/emacs-lisp/package.el
 ;;; grep by extensions

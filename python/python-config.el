@@ -39,11 +39,14 @@
 (add-to-list 'load-path "~/.emacs.d/emacs-deferred")
 (add-to-list 'load-path "~/.emacs.d/emacs-epc")
 (add-to-list 'load-path "~/.emacs.d/emacs-jedi")
+(add-to-list 'load-path "~/.emacs.d/direx-el")
+(add-to-list 'load-path "~/.emacs.d/emacs-jedi-direx")
 (require 'concurrent)
 (require 'epc)
 ;;(setq jedi:setup-keys t)                      ; optional
 ;;(setq jedi:complete-on-dot t)                 ; optional
 (require 'jedi)
+(require 'jedi-direx)
 (customize-set-value 'jedi:setup-keys t)
 
 ;;(autoload 'jedi:setup "jedi" nil t)
@@ -183,6 +186,11 @@
 
 (add-hook 'python-mode-hook 'flymake-mode)
 (add-hook 'python-mode-hook 'python-mode-complex-hook)
+
+(eval-after-load "python"
+  '(define-key python-mode-map "\C-cx" 'jedi-direx:pop-to-buffer))
+(add-hook 'jedi-mode-hook 'jedi-direx:setup)
+
 ;;(add-hook 'python-mode-hook 'jedi:setup)
 (add-to-list 'auto-mode-alist '("\.py\'" . python-mode))
 
