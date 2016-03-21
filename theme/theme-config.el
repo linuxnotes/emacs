@@ -21,6 +21,16 @@
 
 ;;http://emacsthemes.caisah.info/zenburn-theme/
 ;;git clone https://github.com/bbatsov/zenburn-emacs
+;;git clone https://github.com/bkruczyk/badwolf-emacs.git
+;;git clone https://github.com/jasonblewis/color-theme-wombat.git
+;; (condition-case nil
+;; 	(load-theme 'badwolf t)
+;;   (error (load-theme 'badwolf))
+;; )
+;; (condition-case nil
+;; 	(load-theme 'wombat t)
+;;   (error (load-theme 'wombat))
+;; )
 (condition-case nil
 	(load-theme 'zenburn t)
   (error (load-theme 'zenburn))

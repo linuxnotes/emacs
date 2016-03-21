@@ -1,1 +1,1 @@
-https://github.com/nene/config.git
+;;https://github.com/nene/config.git

@@ -6,19 +6,34 @@
 ;;(modify-coding-system-alist 'file "\\.js\\'" 'cp1251) ;; js файлы в cp1251
 
 ;;(autoload 'js2-mode "js2-mode" nil t)
+(if (or (not (boundp 'js2-global-externs)) 
+		(null js2-global-externs))
+	(setq-default js2-global-externs '("Ext"))
+  (add-to-list 'js2-global-externs "Ext"))
+
+
 (require 'js2-mode)
 (require 'js2-imenu-extras)
+
+
 
 (defun js2-mode-complex-hook()
     ((lambda ()
 	 (yas-minor-mode)
 	 (define-key js-mode-map [tab] 'yas/expand)
-	 ((lambda () (set (make-local-variable 'yas-indent-line) 'fixed)))
+	 ;;((lambda () (set (make-local-variable 'yas-indent-line) 'fixed)))
 	 ;;(setq yas/after-exit-snippet-hook 'indent-according-to-mode)
-	 (smart-operator-mode-on)
+	 ;;(smart-operator-mode-on) ;;NOTE if there is error yas-minor-mode is not full
+     (yas-activate-extra-mode 'js-mode)
 	 ;;(slime-js-minor-mode 1)
 	))
 )
+
+;; (defun js2-mode-init-hook()
+;;   (message "call js2-mode-init-hook")
+;;   (yas-activate-extra-mode 'js-mode)
+;; )
+;;(add-hook 'js2-init-hook 'js2-mode-init-hook)
 
 (add-hook 'js2-mode-hook 'js2-mode-complex-hook)
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
@@ -44,7 +59,8 @@
 ;; (add-to-list 'auto-mode-alist '("\\.js$" . set-javascript-mode)) 
 
 (custom-set-variables 
- '(js2-bounce-indent-p t)
+ '(js2-bounce-indent-p nil)
+ '(js2-auto-indent-p nil)
  ;; '(js2-dynamic-idle-timer-adjust 5000)
  '(js2-electric-keys (quote ("{" "}" "(" ")" "[" "]" ":" ";" "," "*")))
  '(js2-highlight-level 3)

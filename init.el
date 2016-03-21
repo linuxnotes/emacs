@@ -148,15 +148,18 @@
 
 ;; popup
 (add-to-list 'load-path "~/.emacs.d/popup")
-(load-file "~/.emacs.d/popup/popup.el")
-;;(require 'popup)
+;;(load-file "~/.emacs.d/popup/popup.el")
+(require 'popup)
 
 ;; autocomplete
 (add-to-list 'load-path "~/.emacs.d/auto_complete")
-(require 'auto-complete)
+;;(load "~/.emacs.d/auto_complete/auto-complete.el")
+(require 'auto-complete) ;; if load not by require it will be jedi:complete error
+(customize-set-value 'ac-auto-start nil)
 (add-to-list 'ac-dictionary-directories "~/.emacs.d/auto_complete/dict")
 (require 'auto-complete-config)
 (ac-config-default)
+;;(customize-set-value 'ac-auto-show-menu 0.2)
 
 ;; yasnippet
 (add-to-list 'load-path "~/.emacs.d/yasnippet")
@@ -166,6 +169,7 @@
       '("~/.emacs.d/yasnippet/yasmate/snippets" "~/.emacs.d/yasnippet/snippets" 
 		"~/.emacs.d/my_snippets"))
 (yas-reload-all) ;; this need for use yasnippet as minor mode
+(setq yas-indent-line 'fixed)
 
 ;;emacs lisp
 (part-module-load-f "elisp" 'elisp-config)
@@ -174,7 +178,8 @@
 ;; visual basic
 (part-module-load-f "vb-mode" 'visual-basic-mode)
 ;; Python
-(part-module-load-f "python" 'python-config)
+(load "~/.emacs.d/python/python-config.el")
+;;(part-module-load-f "python" 'python-config)
 ;; lua
 (part-module-load-f "lua" 'lua-mode)
 ;; json
@@ -314,14 +319,19 @@ Defaults to `error'."
            (delete-dups (copy-sequence (cons name conditions))))
       (when message (put name 'error-message message)))))
 
-(add-to-list 'load-path "~/.emacs.d/magit" )
+(add-to-list 'load-path "~/.emacs.d/magit")
 (add-to-list 'load-path "~/.emacs.d/git-modes")
+
 ;; try load magit
 (condition-case nil 
 	(progn (require 'magit)
 		   (setq magit-last-seen-setup-instructions "1.4.0"))
   (error nil))
 
+;; load special settings
+(condition-case nil 
+	(require 'init-special)
+  (error nil))
 
 ;; my functions 
 (defun change-brackets (from-b to-b)
@@ -364,10 +374,24 @@ Defaults to `error'."
 (require 'spell-config)
 
 ;; after install 
+;; git clone https://github.com/auto-complete/auto-complete.git
 ;; git clone https://github.com/capitaomorte/yasnippet.git
 ;; git clone https://github.com/AndreaCrotti/yasnippet-snippets.git
 ;; git clone https://gitlab.com/python-mode-devs/python-mode.git
+
 ;; git clone git://github.com/magit/magit.git
+;; cd magit; git reset 1.4.2 --hard; 
+;; git clone https://github.com/magit/git-modes
+;; cd git modes; make lisp docs; cd ..
+;; cp git-modes/git-commit-mode.elc . ; cp git-modes/git-rebase-mode.elc . 
+;; make lisp
+
+;; git clone https://github.com/winterTTr/ace-jump-mode.git
+;; git clone https://github.com/tkf/emacs-python-environment.git
+;; git clone https://github.com/kiwanami/emacs-ctable.git
+;; git clone https://github.com/kiwanami/emacs-deferred.git
+;; git clone https://github.com/kiwanami/emacs-epc.git
+;; git clone https://github.com/tkf/emacs-jedi.git
 ;; hg clone https://bitbucket.org/agriggio/ahg
 ;; cd projectile; wget http://repo.or.cz/w/emacs.git/blob_plain/ba08b24186711eaeb3748f3d1f23e2c2d9ed0d09:/lisp/emacs-lisp/package.el
 ;;; grep by extensions

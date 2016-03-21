@@ -24,3 +24,12 @@ ecb
 Pymacs-master
 git-modes
 projectile/package.el
+init-special.el
+auto-complete
+emacs-ctable
+emacs-deferred
+emacs-epc
+emacs-jedi
+emacs-python-environment
+ace-jump-mode
+.python-environments

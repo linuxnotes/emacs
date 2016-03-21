@@ -9,7 +9,19 @@
 ;; (load-file "C:Users\\user\\AppData\\Roaming\\.emacs.d\\utils\\bytecompiledirectory.el")
 ;; (special-byte-compile-directory "C:Users\\user\\AppData\\Roaming\\.emacs.d\\utils\\")
 
-(defun special-byte-compile-directory(directory)
+(defun is-ignored (elt ignores)
+  (let ((result nil))
+	(catch 'aaa 
+	  (dolist (ign ignores nil)
+		(if (string-equal (expand-file-name elt) (expand-file-name ign))
+			(progn 
+			  (setq result t)
+			  (throw 'aaa 1))
+		  )))
+  result
+  ))
+
+(defun special-byte-compile-directory(directory &optional ignores)
   (message "special-byte-compile-directory %s " directory)
   (message "directory files =  %s " (directory-files directory))
   (let ((files (directory-files directory)))
@@ -23,8 +35,9 @@
 		  (progn
 			(message " compile file %s" elt)
 			(byte-compile-file elt))
-		(if (and (file-directory-p elt) (not (string/ends-with elt ".")) (not (string/ends-with elt "..")))
-			(special-byte-compile-directory elt))
+		(if (and (file-directory-p elt) (not (string/ends-with elt ".")) (not (string/ends-with elt "..")) 
+(listp ignores) (not (is-ignored elt ignores)))
+			(special-byte-compile-directory elt ignores))
 		  )
 	  )
 	)
