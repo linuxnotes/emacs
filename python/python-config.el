@@ -149,7 +149,7 @@
 		)
 	;;(message "before save excursion %s" prevstring)
 	(save-excursion 
-	  (if (or (eql col 1) (string-match "\s" prevstring))
+	  (if (or (eql col 1) (eql col 0) (string-match "\s" prevstring))
 		  (setq result t)
 		nil
 		))
