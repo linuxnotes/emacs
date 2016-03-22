@@ -152,13 +152,14 @@
 (require 'popup)
 
 ;; autocomplete
-(add-to-list 'load-path "~/.emacs.d/auto_complete")
+(add-to-list 'load-path "~/.emacs.d/auto-complete")
 ;;(load "~/.emacs.d/auto_complete/auto-complete.el")
 (require 'auto-complete) ;; if load not by require it will be jedi:complete error
 (customize-set-value 'ac-auto-start nil)
 (add-to-list 'ac-dictionary-directories "~/.emacs.d/auto_complete/dict")
 (require 'auto-complete-config)
-(ac-config-default)
+(global-auto-complete-mode t)
+;;(ac-config-default)
 ;;(customize-set-value 'ac-auto-show-menu 0.2)
 
 ;; yasnippet
