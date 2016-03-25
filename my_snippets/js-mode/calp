@@ -1,0 +1,7 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: calp
+# key: calp
+# binding: direct-keybinding
+# --
+me.callParent(arguments);
+$0

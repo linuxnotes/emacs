@@ -187,6 +187,27 @@
 (add-hook 'python-mode-hook 'flymake-mode)
 (add-hook 'python-mode-hook 'python-mode-complex-hook)
 
+(defun direx:override-find-item-other-window (&optional item)
+  (interactive)
+  (setq item (or item (direx:item-at-point!)))
+  (direx:override-generic-find-item item t))
+
+(defmethod direx:override-generic-find-item ((item jedi-direx:item)
+											 not-this-window)
+  "Overriting of method find item, such that tree will be close after select"
+  (let* ((root (direx:item-root item))
+         (filename (direx:file-full-name (direx:item-tree root)))
+         (curwin (get-buffer-window (current-buffer))))
+    (if not-this-window
+        (progn 
+          (find-file-other-window filename)
+          (quit-window nil curwin))
+      (find-file filename))
+    (direx-jedi:-goto-item item)))
+
+;; set key for method
+(define-key direx:direx-mode-map (kbd "O") 'direx:override-find-item-other-window)
+
 (eval-after-load "python"
   '(define-key python-mode-map "\C-cx" 'jedi-direx:pop-to-buffer))
 (add-hook 'jedi-mode-hook 'jedi-direx:setup)

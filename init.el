@@ -1,4 +1,6 @@
 ;;;;
+
+;;; Utils
 (defmacro part-module-load(name &optional feature)
   "Load module macro"
   `(progn 
@@ -8,6 +10,13 @@
 	   `(require ',(intern (concat (symbol-name name) "-config")))
 	   ))
   )
+
+(defun append-to-list (list-var elements)
+  "Append ELEMENTS to the end of LIST-VAR.
+   The return value is the new value of LIST-VAR.
+   Example: (append-to-list 'some '(\"some1\", \"some2\", \"some3\"))
+  "
+  (set list-var (append (symbol-value list-var) elements)))
 
 ;; отключение стандартной 
 ;; системы контроля версий
