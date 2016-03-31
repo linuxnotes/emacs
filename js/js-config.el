@@ -11,16 +11,18 @@
 	(setq-default js2-global-externs '("Ext"))
   (add-to-list 'js2-global-externs "Ext"))
 
-
 (require 'js2-mode)
 (require 'js2-imenu-extras)
-
-
+(require 'js2-direx-jedi)
 
 (defun js2-mode-complex-hook()
     ((lambda ()
 	 (yas-minor-mode)
 	 (define-key js-mode-map [tab] 'yas/expand)
+     (define-key js2-mode-map [tab] 'yas/expand)
+     (define-key js-mode-map "\C-cx" 'js2-jedi-direx:pop-to-buffer)
+     (define-key js2-mode-map "\C-cx" 'js2-jedi-direx:pop-to-buffer)
+     ;;(define-key direx:direx-mode-map (kbd "O") 'js2-jedi-direx:find-item-other-window-and-close)
 	 ;;((lambda () (set (make-local-variable 'yas-indent-line) 'fixed)))
 	 ;;(setq yas/after-exit-snippet-hook 'indent-according-to-mode)
 	 ;;(smart-operator-mode-on) ;;NOTE if there is error yas-minor-mode is not full
@@ -35,6 +37,7 @@
 ;; )
 ;;(add-hook 'js2-init-hook 'js2-mode-init-hook)
 
+(define-key direx:direx-mode-map (kbd "O") 'js2-jedi-direx:find-item-other-window-and-close)
 (add-hook 'js2-mode-hook 'js2-mode-complex-hook)
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 
