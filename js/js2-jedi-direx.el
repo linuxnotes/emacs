@@ -180,4 +180,3 @@
 ;; 	nil))
 
 (provide 'js2-jedi-direx)
-(provide 'js2-direx-jedi)

@@ -13,7 +13,7 @@
 
 (require 'js2-mode)
 (require 'js2-imenu-extras)
-(require 'js2-direx-jedi)
+(require 'js2-jedi-direx)
 
 (defun js2-mode-complex-hook()
     ((lambda ()
