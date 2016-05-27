@@ -1,5 +1,6 @@
 ;; bindings special key functions for different charset
 ;; for emacs > 24.1
+;; https://www.linux.org.ru/forum/desktop/8850631
 ;; http://ru-emacs.livejournal.com/82428.html
 (defun reverse-input-method (input-method)
   "Build the reverse mapping of single letters from INPUT-METHOD."
@@ -24,6 +25,13 @@
     (when input-method
       (activate-input-method current))))
 ;; M-x reverse-input-method RET *computer RET
+
+(setq read-passwd-map
+       (let ((map read-passwd-map))
+         (set-keymap-parent map minibuffer-local-map)
+         (define-key map [return] #'exit-minibuffer)
+         (define-key map [backspace] #'delete-backward-char)
+         map))
 
 (defadvice read-passwd (around my-read-passwd act)
   (let ((local-function-key-map nil))
