@@ -120,6 +120,9 @@
 (global-set-key (kbd "\e\ec") 'comment-region)
 (global-set-key (kbd "\e\eu") 'uncomment-region)
 
+;; поиск файла
+(global-set-key (kbd "\e\exf") 'find-file-at-point)
+
 ;; перемещение с использованием Alt
 (global-set-key (kbd "M-p") 'backward-paragraph)
 (global-set-key (kbd "M-n") 'forward-paragraph)
@@ -436,3 +439,19 @@ Defaults to `error'."
 (when (is-windows)
   (add-to-list 'process-coding-system-alist '("[cC][mM][dD][pP][rR][oO][xX][yY]" cp1251 . cp1251))
   (remove-hook 'find-file-hooks 'vc-find-file-hook))
+
+;; ace jump
+(add-to-list 'load-path "~/.emacs.d/ace-jump-mode")
+(autoload
+  'ace-jump-mode
+  "ace-jump-mode"
+  "Ace jump back:-)"
+  t)
+(eval-after-load "ace-jump-mode"
+  '(ace-jump-mode-enable-mark-sync))
+(define-key global-map (kbd "C-c j") 'ace-jump-mode)
+
+;; set bindings for differrent charset
+(when (>= emacs-major-version 24)
+  (progn (require 'charset-bindings)
+		 (reverse-input-method (intern charset-symbol-name))))
