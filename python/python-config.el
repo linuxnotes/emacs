@@ -28,10 +28,10 @@
 (setenv "LD_LIBRARY_PATH" "/usr/lib/oracle/11.2/client64/lib")
 ;;NOTE CHECK THAT PYTHONPATH IS SETTED
 
-;; (setq py-install-directory "~/.emacs.d/python/python-mode/")
+(setq py-install-directory "~/.emacs.d/python/python-mode/")
 ;; (add-to-list 'load-path "~/.emacs.d/python/python-mode/completion")
-;; (add-to-list 'load-path py-install-directory)
-;; (require 'python-mode)
+(add-to-list 'load-path py-install-directory)
+(require 'python-mode)
 
 ;; python jedi may be slow
 (add-to-list 'load-path "~/.emacs.d/emacs-python-environment")
@@ -210,6 +210,9 @@
 
 (eval-after-load "python"
   '(define-key python-mode-map "\C-cx" 'jedi-direx:pop-to-buffer))
+(eval-after-load "python-mode"
+  '(define-key python-mode-map "\C-cx" 'jedi-direx:pop-to-buffer))
+
 (add-hook 'jedi-mode-hook 'jedi-direx:setup)
 
 ;;(add-hook 'python-mode-hook 'jedi:setup)

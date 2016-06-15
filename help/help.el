@@ -34,3 +34,6 @@
 ;; for use same color theme in console mode
 ;; env TERM=xterm-256color emacs -nw
 ;; export TERM=xterm-256color
+
+;; 
+;; C-u s for dired mode set the params for ls

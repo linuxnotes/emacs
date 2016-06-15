@@ -119,6 +119,7 @@
 ;;Закомментировать раскомментировать область
 (global-set-key (kbd "\e\ec") 'comment-region)
 (global-set-key (kbd "\e\eu") 'uncomment-region)
+(global-set-key (kbd "\e\er") 'revert-buffer)
 
 ;; поиск файла
 (global-set-key (kbd "\e\exf") 'find-file-at-point)
@@ -455,3 +456,5 @@ Defaults to `error'."
 (when (>= emacs-major-version 24)
   (progn (require 'charset-bindings)
 		 (reverse-input-method (intern charset-symbol-name))))
+
+(part-module-load-f "ide-skel" 'ide-skel-config)
