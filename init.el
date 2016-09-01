@@ -458,3 +458,17 @@ Defaults to `error'."
 		 (reverse-input-method (intern charset-symbol-name))))
 
 (part-module-load-f "ide-skel" 'ide-skel-config)
+
+(add-to-list 'load-path "~/.emacs.d/lib/dired")
+(require 'dired-tar)
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(js2-auto-indent-p nil)
+ '(js2-bounce-indent-p nil)
+ '(js2-electric-keys (quote ("{" "}" "(" ")" "[" "]" ":" ";" "," "*")))
+ '(js2-highlight-level 3)
+)

@@ -21,7 +21,6 @@
 (setenv "PATH"
   (concat
    "~/bin/utils/" ":"
-   "~/bmcmd/config/lib/" ":"
    (getenv "PATH")
   )
 )

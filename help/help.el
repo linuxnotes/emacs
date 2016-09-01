@@ -37,3 +37,8 @@
 
 ;; 
 ;; C-u s for dired mode set the params for ls
+
+;; отключить tab и установить ширину tab
+;; https://www.emacswiki.org/emacs/NoTabs
+;; (setq indent-tabs-mode nil)
+;; (infer-indentation-style)
