@@ -1,5 +1,6 @@
 #!/bin/sh
 
+git clone https://github.com/h1t/emacs-chat.git lib/emacs-chat
 git clone https://github.com/capitaomorte/yasnippet.git
 git clone https://github.com/AndreaCrotti/yasnippet-snippets.git
 mv yasnippet-snippets/* yasnippet/snippets/
