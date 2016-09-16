@@ -35,7 +35,7 @@
   (error(load-file "~/.emacs.d/cl-lib/cl-lib.el")))
 
 ;;;; Установка констант
-(defun is-windows () 
+(defun is-windows ()
   (boundp 'w32-system-shells))
 (defun is-linux () 
   (not (boundp 'w32-system-shells)))
@@ -50,8 +50,15 @@
 			(set-default-font "Monospace 9") ;; шрифт для Linux
 		  (set-default-font "Courier New 9"))
          ))
+;; move backups in special directory
+;; Write backup files to own directory
+(setq backup-directory-alist
+      `(("." . ,(expand-file-name
+                 (concat (file-name-as-directory(expand-file-name "~")) ".emacs-backups")))))
+;; Make backups of files, even when they're in version control
+(setq vc-make-backup-files t)
+;;(setq make-backup-files nil)
 
-(setq make-backup-files nil)
 (setq auto-save-list-file-name nil)
 (setq auto-safe-default nil)
 

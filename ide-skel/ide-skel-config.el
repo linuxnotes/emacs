@@ -42,17 +42,7 @@
   (global-set-key [C-prior] 'tabbar-backward)
   (global-set-key [C-next]  'tabbar-forward)
 
-  (require 'sqlplus)
-  (setf sqlplus-command "sqlplus64")
-  (setenv "TNS_ADMIN" (getenv "HOME"))
-  (setenv "JAVA_HOME" "/usr/lib/jvm/java-7-openjdk-amd64")
-  (setenv "ORACLE_HOME" "/usr/lib/oracle/11.2/client64")
-  (setenv "LD_LIBRARY_PATH" (concat  (getenv "ORACLE_HOME") "/lib:$JAVA_HOME/jre/lib/amd64:/usr/local/lib:/usr/lib/oracle/11.2/client64/lib"))
-  (setenv "NLS_LANG" "AMERICAN_AMERICA.UTF8")
-  (setenv "PATH" (concat
-         "~/bin/utils/"
-         ":"
-         (getenv "PATH")))
+  (my-load-sqlplus)
   
 ;;;; (require 'folding)
   ;; подсветка скобок
@@ -79,5 +69,19 @@
   (load-file "~/.emacs.d/ide-skel/sqlplus2.el")
   ;; (require 'sqlplus2)
 )
+
+(defun my-load-sqlplus()
+  (interactive)
+  (require 'sqlplus)
+  (setf sqlplus-command "sqlplus64")
+  (setenv "TNS_ADMIN" (getenv "HOME"))
+  (setenv "JAVA_HOME" "/usr/lib/jvm/java-7-openjdk-amd64")
+  (setenv "ORACLE_HOME" "/usr/lib/oracle/11.2/client64")
+  (setenv "LD_LIBRARY_PATH" (concat  (getenv "ORACLE_HOME") "/lib:$JAVA_HOME/jre/lib/amd64:/usr/local/lib:/usr/lib/oracle/11.2/client64/lib"))
+  (setenv "NLS_LANG" "AMERICAN_AMERICA.UTF8")
+  (setenv "PATH" (concat
+				  "~/bin/utils/"
+				  ":"
+				  (getenv "PATH"))))
 
 (provide 'ide-skel-config)
