@@ -37,8 +37,20 @@
 
 ;; 
 ;; C-u s for dired mode set the params for ls
+;; i в dired mode добавляет содержимое каталога к текущему каталогу
+
+;;  M - ` показывает меню в соседнем буфере
 
 ;; отключить tab и установить ширину tab
 ;; https://www.emacswiki.org/emacs/NoTabs
 ;; (setq indent-tabs-mode nil)
 ;; (infer-indentation-style)
+
+;; toggle-truncate-lines ;; отключить перевод строк 
+
+;; https://www.emacswiki.org/emacs/BuildTags#toc3
+;; cd /path/to/my/project
+;; find . -type f -iname "*.[ch]" | etags -
+;; (setq tags-table-list
+;;      '("~/emacs" "/usr/local/lib/emacs/src"))
+;; visit-tags-table M-. M-,

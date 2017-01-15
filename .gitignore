@@ -13,6 +13,7 @@ magit
 abbrev_defs
 ahg
 python/python-mode
+python/Pymacs
 yasnippet
 abbrev_defs
 .projectile

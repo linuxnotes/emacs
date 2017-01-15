@@ -17,29 +17,35 @@
 
 ;; python-mode нужно скачивать с github: https://github.com/emacsmirror/python-mode
 
-;; нужно чтобы корректно подгружался cx_Oracle
-(setenv "PATH"
-  (concat
-   "~/bin/utils/" ":"
-   (getenv "PATH")
-  )
-)
-(setenv "LD_LIBRARY_PATH" "/usr/lib/oracle/11.2/client64/lib")
 ;;NOTE CHECK THAT PYTHONPATH IS SETTED
+(require 'e-tools)
 
-(setq py-install-directory "~/.emacs.d/python/python-mode/")
-;; (add-to-list 'load-path "~/.emacs.d/python/python-mode/completion")
-(add-to-list 'load-path py-install-directory)
-(require 'python-mode)
+;;pymacs
+(add-to-list 'load-path "~/.emacs.d/python/Pymacs/") ;; pymacs
+(require 'pymacs)
+(if (not (boundp 'pymacs-load-path))
+		 (setq pymacs-load-path '())
+	nil)
+;;
+
+;; Ipython
+(setq python-shell-interpreter "ipython"
+	  python-shell-interpreter-args "-i")
+
+(setenv "LD_LIBRARY_PATH" "/usr/lib/oracle/11.2/client64/lib") ;; for cx_Oracle
+(e-tools-add-to-path "~/bin/utils")
+(e-tools-add-to-list 'load-path 
+					 "~/.emacs.d/python/Pymacs/"				;; pymacs
+					 "~/.emacs.d/emacs-python-environment"		;; jedi
+					 "~/.emacs.d/emacs-ctable"					;; jedi
+					 "~/.emacs.d/emacs-deferred"				;; jedi
+					 "~/.emacs.d/emacs-epc"						;; jedi
+					 "~/.emacs.d/emacs-jedi"					;; jedi
+					 "~/.emacs.d/direx-el"						;; jedi
+					 "~/.emacs.d/emacs-jedi-direx"				;; jedi
+					 )
 
 ;; python jedi may be slow
-(add-to-list 'load-path "~/.emacs.d/emacs-python-environment")
-(add-to-list 'load-path "~/.emacs.d/emacs-ctable")
-(add-to-list 'load-path "~/.emacs.d/emacs-deferred")
-(add-to-list 'load-path "~/.emacs.d/emacs-epc")
-(add-to-list 'load-path "~/.emacs.d/emacs-jedi")
-(add-to-list 'load-path "~/.emacs.d/direx-el")
-(add-to-list 'load-path "~/.emacs.d/emacs-jedi-direx")
 (require 'concurrent)
 (require 'epc)
 ;;(setq jedi:setup-keys t)                      ; optional
@@ -47,42 +53,37 @@
 (require 'jedi)
 (require 'jedi-direx)
 (customize-set-value 'jedi:setup-keys t)
-
-;;(autoload 'jedi:setup "jedi" nil t)
+(autoload 'jedi:setup "jedi" nil t)
 
 ;; (add-hook 'python-mode-hook 'auto-complete-mode)
-;;(add-hook 'python-mode-hook 'jedi:ac-setup)
+;; (add-hook 'python-mode-hook 'jedi:ac-setup)
 
-;;(require 'pycomplete)
-;;(ac-config-default)
-;;(setq py-load-pymacs-p t) ;;еслиpymacs поставляется вместе с pymacs 
-; use IPython
-(setq py-shell-name "ipython")
-(setq-default py-which-bufname "IPython")
+;; ;; for correct work of tab key
+;; (eval-after-load "python"
+;;   '(define-key inferior-python-mode-map "\t" 'python-shell-completion-complete-or-indent))
 
 ;; ; switch to the interpreter after executing code
 ;; ;; if no need switch to buffer
-(setq py-keep-windows-configuration t)
+;;(setq py-keep-windows-configuration t)
 
 ; switch-to-buffer but not split
-(setq py-split-windows-on-execute-function (lambda() t ))
-(setq py-split-windows-on-execute nil)
+;; (setq py-split-windows-on-execute-function (lambda() t ))
+;; (setq py-split-windows-on-execute nil)
 
-;; ; don't split windows
-(setq py-switch-buffers-on-execute-p nil)
-(setq py-split-windows-on-execute-p nil)
+;; ;; ; don't split windows
+;; (setq py-switch-buffers-on-execute-p nil)
+;; (setq py-split-windows-on-execute-p nil)
 
 (defun ipythonm()
 "Define ipython correct command"
 ;; todo: fix defualt ipython command
   (interactive)
    (ipython)
-   (switch-to-buffer "*IPython*")
-  )
+   (switch-to-buffer "*IPython*"))
 
-;; add remove empty strings for get complition to ipython
-(setq py-ipython0.11-completion-command-string
-  "import re; print(';'.join(filter(lambda x: not re.match(x, '\s*'), get_ipython().Completer.all_completions('%s')))) #PYTHON-MODE SILENT\n")
+;; ;; add remove empty strings for get complition to ipython
+;; (setq py-ipython0.11-completion-command-string
+;;   "import re; print(';'.join(filter(lambda x: not re.match(x, '\s*'), get_ipython().Completer.all_completions('%s')))) #PYTHON-MODE SILENT\n")
 
 ;; настройка режим проверки 
 ;; need pylint
@@ -174,8 +175,7 @@
      (define-key python-mode-map jedi:key-complete 'jedi:complete)
      (define-key python-mode-map (kbd "C-c f") 'flymake-display-err-menu-for-current-line)
 	 (jedi:setup)
-
-	 ;;(define-key py-mode-map [tab] 'yas/expand)
+	 (define-key python-mode-map (kbd "C-x i") 'yas/expand) ;; redifine insert-file that not used
 	 ;; this change need for correct indent in python mode when use yasnippet
 	 ;; ((lambda () (set (make-local-variable 'yas-indent-line) 'fixed)))
 	 ;;(setq yas/after-exit-snippet-hook 'indent-according-to-mode)
@@ -214,7 +214,6 @@
 
 (add-hook 'jedi-mode-hook 'jedi-direx:setup)
 
-;;(add-hook 'python-mode-hook 'jedi:setup)
-(add-to-list 'auto-mode-alist '("\.py\'" . python-mode))
+(add-hook 'python-mode-hook 'jedi:setup)
 
 (provide 'python-config)

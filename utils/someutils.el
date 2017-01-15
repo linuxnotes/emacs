@@ -53,3 +53,18 @@ Restart")
 (defun last-lines-match (regexp &optional n)
   (setq n (or n 3))
   (re-search-backward regexp (line-beginning-position (- 0 n)) t))
+
+(defun shell-cd-to ()
+"Insert cd string to shell buffer for to go to directory of current file"
+(interactive)
+  (let ((default-directory (file-name-directory buffer-file-name))
+        (l-dir-name (file-name-directory buffer-file-name)))
+    (shell "*shell*")
+    (insert-string (concatenate 'string "cd " l-dir-name))))
+
+(global-set-key (kbd "C-x g") 'shell-cd-to)
+
+(defun shell-dir (name dir)
+  (interactive "sShell name: \nDDirectory: ")
+  (let ((default-directory dir))
+    (shell name)))

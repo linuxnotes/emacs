@@ -1,4 +1,6 @@
 ;;;;
+(add-to-list 'load-path "~/.emacs.d/lib/e-tools")
+(require 'e-tools)
 
 ;;; Utils
 (defmacro part-module-load(name &optional feature)
@@ -44,11 +46,11 @@
 ;; cp hack2.0 /usr/share/fonts/truetype/ -R
 ;; fc-cache
 (condition-case nil
-    (set-default-font "Hack 9")
+    (set-default-font "Hack 10")
   (error
       (if (is-linux) 
-			(set-default-font "Monospace 9") ;; шрифт для Linux
-		  (set-default-font "Courier New 9"))
+			(set-default-font "Monospace 10") ;; шрифт для Linux
+		  (set-default-font "Courier New 10"))
          ))
 ;; move backups in special directory
 ;; Write backup files to own directory
@@ -63,7 +65,9 @@
 (setq auto-safe-default nil)
 
 ;; выключить toolbar
-(tool-bar-mode -1) 
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+
 ;;не показывть начальный экран
 (setq inhibit-startup-message t)
 
@@ -75,6 +79,9 @@
 
 ;; 
 (setq scroll-step 1)
+
+;; dont change window
+(push (cons "\\*shell\\*" display-buffer--same-window-action) display-buffer-alist)
 
 ;;показывать парные скобки
 (show-paren-mode t)   
@@ -179,6 +186,13 @@
 (add-to-list 'ac-dictionary-directories "~/.emacs.d/auto_complete/dict")
 (require 'auto-complete-config)
 (global-auto-complete-mode t)
+
+;; change key-maps
+(define-key ac-completing-map "\M-n" nil)
+(define-key ac-completing-map "\M-p" nil)
+(define-key ac-completing-map "\C-n" 'ac-next)
+(define-key ac-completing-map "\C-p" 'ac-previous)
+
 ;;(ac-config-default)
 ;;(customize-set-value 'ac-auto-show-menu 0.2)
 
@@ -298,14 +312,60 @@
 
 (add-to-list 'load-path "~/.emacs.d/ahg")
 (require 'ahg)
+
+;; patched for user ahg for directory or for full project
+(defun ahg-status-clbk (clbk &rest extra-switches)
+  "Run hg status. When called non-interactively, it is possible
+to pass extra switches to hg status."
+  (interactive)
+  (let ((buf (get-buffer-create "*aHg-status*"))
+        (curdir default-directory)
+        (show-message (interactive-p))
+        (root (ahg-root)))
+    (when ahg-status-consider-extra-switches
+      (let ((sbuf (ahg-get-status-buffer root)))
+        (when sbuf
+          (with-current-buffer sbuf
+            (setq extra-switches ahg-status-extra-switches)))))
+    (with-current-buffer buf
+      (let ((inhibit-read-only t))
+        (erase-buffer))
+      (setq default-directory (file-name-as-directory curdir))
+      (set (make-local-variable 'ahg-root) (car extra-switches)) ;; changes
+      (set (make-local-variable 'ahg-status-extra-switches) extra-switches)
+      (ahg-push-window-configuration))
+	;;(message "calback = %s extra-switches = %s" clbk (car extra-switches))
+    (ahg-generic-command
+     "status" extra-switches
+     (lexical-let ((clbk clbk)
+				   (default-dir (car extra-switches))
+				   (no-pop ahg-status-no-pop)
+                   (point-pos ahg-status-point-pos))
+       (lambda (process status)
+         (ahg-status-sentinel process status no-pop point-pos)
+		 ;;(message "callback = %s" clbk)
+		 (funcall clbk)
+		 ))
+	 buf
+         nil (not show-message))))
+
+(defun ahg-status-refresh ()
+  (interactive)
+  (let ((ahg-status-point-pos (ahg-line-point-pos))
+        ;;(ahg-status-consider-extra-switches t)
+        )
+    (call-interactively 'ahg-status-cur-dir)))
+
 (defun ahg-status-cur-dir ()
   "Получить статус по текущему каталогу"
   (interactive)
   (let ((curdir default-directory)
-		( newcurdir(expand-file-name default-directory)))
+		(newcurdir (expand-file-name default-directory))
+		)
 	(setq default-directory newcurdir)
-	(ahg-status newcurdir)
-	(setq default-directory curdir)))
+	(ahg-status-clbk (lexical-let ((_newcurdir newcurdir)) (lambda () (setq default-directory _newcurdir)))
+					 newcurdir)
+	(setq default-directory newcurdir)))
 (global-set-key (kbd "C-c h g d") 'ahg-status-cur-dir)
 
 ;;; Control version systems
@@ -340,18 +400,21 @@ Defaults to `error'."
            (delete-dups (copy-sequence (cons name conditions))))
       (when message (put name 'error-message message)))))
 
+;; load special settings
+(condition-case nil 
+	(require 'init-special)
+  (error nil))
+
 (add-to-list 'load-path "~/.emacs.d/magit")
 (add-to-list 'load-path "~/.emacs.d/git-modes")
 
 ;; try load magit
 (condition-case nil 
-	(progn (require 'magit)
-		   (setq magit-last-seen-setup-instructions "1.4.0"))
-  (error nil))
-
-;; load special settings
-(condition-case nil 
-	(require 'init-special)
+	(progn
+	  (require 'magit)
+	  (setq magit-last-seen-setup-instructions "1.4.0")
+	  
+	  )
   (error nil))
 
 ;; my functions 
@@ -399,6 +462,9 @@ Defaults to `error'."
 ;; git clone https://github.com/capitaomorte/yasnippet.git
 ;; git clone https://github.com/AndreaCrotti/yasnippet-snippets.git
 ;; git clone https://gitlab.com/python-mode-devs/python-mode.git
+;; cd ~/.emacs.d/python/python-mode/
+;; git reset --hard 74072ce9b7924a21636eb2735e35eacc1439bba6
+;; 
 
 ;; git clone git://github.com/magit/magit.git
 ;; cd magit; git reset 1.4.2 --hard; 
@@ -479,3 +545,4 @@ Defaults to `error'."
  '(js2-electric-keys (quote ("{" "}" "(" ")" "[" "]" ":" ";" "," "*")))
  '(js2-highlight-level 3)
 )
+(global-hl-line-mode 1)
