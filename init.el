@@ -147,6 +147,7 @@
   (interactive)
 (other-window -1))
 (global-set-key (kbd "C-x p") 'm-prev-window)
+(global-set-key (kbd "C-c d") 'delete-trailing-whitespace)
 
 
 ;; замена строк
@@ -215,6 +216,10 @@
 ;; Python
 (load "~/.emacs.d/python/python-config.el")
 ;;(part-module-load-f "python" 'python-config)
+
+(add-to-list 'load-path "~/.emacs.d/perl/")
+(require 'perl-config)
+
 ;; lua
 (part-module-load-f "lua" 'lua-mode)
 ;; json

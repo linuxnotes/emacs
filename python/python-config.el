@@ -175,7 +175,7 @@
      (define-key python-mode-map jedi:key-complete 'jedi:complete)
      (define-key python-mode-map (kbd "C-c f") 'flymake-display-err-menu-for-current-line)
 	 (jedi:setup)
-	 (define-key python-mode-map (kbd "C-x i") 'yas/expand) ;; redifine insert-file that not used
+	 (define-key python-mode-map (kbd "C-x i") 'yas-expand) ;; redifine insert-file that not used
 	 ;; this change need for correct indent in python mode when use yasnippet
 	 ;; ((lambda () (set (make-local-variable 'yas-indent-line) 'fixed)))
 	 ;;(setq yas/after-exit-snippet-hook 'indent-according-to-mode)
