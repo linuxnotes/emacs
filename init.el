@@ -31,7 +31,7 @@
   (require feature-name)
 )
 
-(add-to-list 'load-path "~/.emacs.d"  "~/.emacs.d/cl-lib")
+(append-to-list 'load-path '("~/.emacs.d/lang" "~/.emacs.d/lib"  "~/.emacs.d/cl-lib"))
 (condition-case nil
 	(require 'cl-lib)
   (error(load-file "~/.emacs.d/cl-lib/cl-lib.el")))
@@ -157,6 +157,9 @@
 (global-set-key (kbd "C-c y") '(lambda () 
     (interactive) (popup-menu 'yank-menu)))
 
+;; remove binding set-fill-prefix
+(global-set-key (kbd "C-x .") nil)
+
 ;; включение возможности делать upcase/downcase region
 (put 'upcase-region 'disabled nil)
 (put 'downcase-region 'disabled nil)
@@ -239,8 +242,11 @@
 (add-to-list 'load-path "~/.emacs.d/projectile/f")
 (add-to-list 'load-path "~/.emacs.d/projectile/pkg-info")
 (add-to-list 'load-path "~/.emacs.d/projectile/epl")
-(require 'projectile)
-(projectile-global-mode)
+(if (not (is-windows))
+	(progn
+	  (require 'projectile)
+	  (projectile-global-mode))
+  nil)
 
 ;; autopair
 (add-to-list 'load-path "~/.emacs.d/autopair")
@@ -535,7 +541,9 @@ Defaults to `error'."
   (progn (require 'charset-bindings)
 		 (reverse-input-method (intern charset-symbol-name))))
 
-(part-module-load-f "ide-skel" 'ide-skel-config)
+(if (file-exists-p (expand-file-name "~/ide-skel/ide-skel-config.el"))
+	(part-module-load-f "ide-skel" 'ide-skel-config)
+  nil)
 
 (add-to-list 'load-path "~/.emacs.d/lib/dired")
 (require 'dired-tar)
@@ -551,3 +559,7 @@ Defaults to `error'."
  '(js2-highlight-level 3)
 )
 (global-hl-line-mode 1)
+
+(add-to-list 'load-path "~/.emacs.d/cs-mode/")
+(require 'csharp-mode)
+(add-to-list 'auto-mode-alist '("\.cs\'" . csharp-mode))
