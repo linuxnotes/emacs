@@ -54,3 +54,6 @@
 ;; (setq tags-table-list
 ;;      '("~/emacs" "/usr/local/lib/emacs/src"))
 ;; visit-tags-table M-. M-,
+
+;; C-x C-- уменьшить текст
+;; C-x C-+ увеличить текст

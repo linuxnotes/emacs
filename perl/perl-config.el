@@ -9,6 +9,8 @@
 		;; определение и вызов функции 
 		((lambda ()
 		   (define-key perl-mode-map (kbd "C-c f") 'flymake-display-err-menu-for-current-line)
+		   (yas-minor-mode)
+		   (define-key perl-mode-map (kbd "C-x i") 'yas-expand) ;; redifine insert-file that not used
 		   ))
 		)
 	  (add-hook 'perl-mode-hook 'perl-mode-complex-hook)
@@ -18,7 +20,7 @@
 	  (setq flymake-perlcritic-command
 			"~/.emacs.d/perl/bin/flymake_perlcritic")
 	  ;; Lets set it to be the most severe available.
-	  (setq flymake-perlcritic-severity 1)
+	  (setq flymake-perlcritic-severity 4)
 	  ;; If you don't want to use the default ~/.perlcriticrc
 	  ;;(setq flymake-perlcritic-profile "~/projects/big-project/perlcriticrc")
 	  (require 'flymake-perlcritic)
@@ -39,6 +41,6 @@
 			   (expand-file-name "~/perl5") ":")
 			  (getenv "PERL_LOCAL_LIB_ROOT"))
 	  )
-  nil) 
+  nil)
 
 (provide 'perl-config)

@@ -32,7 +32,9 @@
 (setq python-shell-interpreter "ipython"
 	  python-shell-interpreter-args "-i")
 
-(setenv "LD_LIBRARY_PATH" "/usr/lib/oracle/11.2/client64/lib") ;; for cx_Oracle
+(setenv "LD_LIBRARY_PATH" (concat
+						   "/usr/lib/oracle/11.2/client64/lib:"
+						   (getenv "LD_LIBRARY_PATH"))) ;; for cx_Oracle
 (e-tools-add-to-path "~/bin/utils")
 (e-tools-add-to-list 'load-path 
 					 "~/.emacs.d/python/Pymacs/"				;; pymacs
