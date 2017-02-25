@@ -190,6 +190,7 @@
 (add-to-list 'ac-dictionary-directories "~/.emacs.d/auto_complete/dict")
 (require 'auto-complete-config)
 (global-auto-complete-mode t)
+(global-set-key (kbd "C-c C-c i") 'auto-complete)
 
 ;; change key-maps
 (define-key ac-completing-map "\M-n" nil)
@@ -436,7 +437,7 @@ Defaults to `error'."
   (message "to-b %c" to-b)
 
   (let* (
-		 (pairs '( (?\(. ?\)) (?\{.?\}) (?\[.?\])))
+		 (pairs '( (?\(. ?\)) (?\{.?\}) (?\[.?\]) (?\".?\") (?\'.?\')))
 		 (close-from-b (cdr(assoc from-b pairs)))
 		 (close-to-b (cdr(assoc to-b pairs)))
 		 ) 
