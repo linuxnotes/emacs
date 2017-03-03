@@ -5,7 +5,7 @@
 
 
 ;;; cperl-mode is preferred to perl-mode
-(defalias 'perl-mode 'cperl-mode)
+;;(defalias 'perl-mode 'cperl-mode)
 
 (if (is-linux)
 	(progn
@@ -16,6 +16,7 @@
 		   (define-key cperl-mode-map (kbd "C-c f") 'flymake-display-err-menu-for-current-line)
 		   (flymake-mode)
 		   (yas-minor-mode)
+		   
 		   (define-key perl-mode-map (kbd "C-x i") 'yas-expand) ;; redifine insert-file that not used
 		   (define-key cperl-mode-map (kbd "C-x i") 'yas-expand) ;; redifine insert-file that not used
 		   ))
@@ -50,5 +51,14 @@
 			  (getenv "PERL_LOCAL_LIB_ROOT"))
 	  )
   nil)
+
+(setq
+ cperl-close-paren-offset -4
+ cperl-continued-statement-offset 4
+ cperl-indent-level 4
+ cperl-indent-parens-as-block t
+ cperl-tabs-always-indent t
+ cperl-pod-here-fontify nil
+ )
 
 (provide 'perl-config)
