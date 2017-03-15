@@ -7,18 +7,30 @@
 ;;; cperl-mode is preferred to perl-mode
 ;;(defalias 'perl-mode 'cperl-mode)
 
+(add-to-list 'load-path "~/.emacs.d/imenu")
+(require 'imenu-tree)
+(load-file "~/.emacs.d/imenu/imenu-tree.el") 
+
 (if (is-linux)
 	(progn
 	  (defun perl-mode-complex-hook ()
 		;; определение и вызов функции
 		((lambda ()
 		   (define-key perl-mode-map (kbd "C-c f") 'flymake-display-err-menu-for-current-line)
-		   (define-key cperl-mode-map (kbd "C-c f") 'flymake-display-err-menu-for-current-line)
+		   (if (boundp 'cperl-mode-map)
+			   (progn (define-key cperl-mode-map (kbd "C-c f") 'flymake-display-err-menu-for-current-line)
+					  (define-key cperl-mode-map (kbd "C-c x") 'imenu-tree))
+			   
+			 nil)
 		   (flymake-mode)
 		   (yas-minor-mode)
 		   
 		   (define-key perl-mode-map (kbd "C-x i") 'yas-expand) ;; redifine insert-file that not used
-		   (define-key cperl-mode-map (kbd "C-x i") 'yas-expand) ;; redifine insert-file that not used
+		   (define-key perl-mode-map (kbd "C-c x") 'imenu-tree) ;; redifine insert-file that not used
+		   
+		   (if (boundp 'cperl-mode-map)
+			   (define-key cperl-mode-map (kbd "C-x i") 'yas-expand) ;; redifine insert-file that not used
+			 nil)
 		   ))
 		)
 	  (add-hook 'perl-mode-hook 'perl-mode-complex-hook)

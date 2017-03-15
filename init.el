@@ -61,8 +61,11 @@
 (setq vc-make-backup-files t)
 ;;(setq make-backup-files nil)
 
+;; put auto-save files in one directory
 (setq auto-save-list-file-name nil)
 (setq auto-safe-default nil)
+(setq auto-save-file-name-transforms
+	  `((".*" ,(concat (file-name-as-directory(expand-file-name "~")) ".emacs-autosaves") t)))
 
 ;; выключить toolbar
 (tool-bar-mode -1)

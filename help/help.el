@@ -57,3 +57,16 @@
 
 ;; C-x C-- уменьшить текст
 ;; C-x C-+ увеличить текст
+
+;; C-u M-q block-fill выравнивание правой и левой части
+;; C-u <length> fill-region выравнять по заданной длине
+;; fill-region 'right выровнять по правому краю
+
+
+;; flush-lines ^\s-*$ удалить все пустые строки
+
+;; .emacs.d/projectile-bookmarks.eld удалить, если projectile начал ругаться на end of file during parsing
+
+;; (set-frame-fot "Font 9") set font size for window
+										;
+;; erase-buffer clear shell buffer
