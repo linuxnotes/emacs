@@ -1,0 +1,10 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: sco
+# key: sco
+# binding: direct-keybinding
+# group: spec
+# contributor: linuxnotes
+# --
+=pod
+=head2 $0
+=cut
