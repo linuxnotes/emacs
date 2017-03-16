@@ -54,18 +54,16 @@
          ))
 ;; move backups in special directory
 ;; Write backup files to own directory
-(setq backup-directory-alist
-      `(("." . ,(expand-file-name
-                 (concat (file-name-as-directory(expand-file-name "~")) ".emacs-backups")))))
+;; Backups and temp files
+(setq-default backup-directory-alist '(("." . "~/.emacs-backups"))
+              auto-save-file-name-transforms '((".*" "~/.emacs-autosaves/" t))
+              backup-by-copying t
+              create-lockfiles nil)
+
+
 ;; Make backups of files, even when they're in version control
 (setq vc-make-backup-files t)
 ;;(setq make-backup-files nil)
-
-;; put auto-save files in one directory
-(setq auto-save-list-file-name nil)
-(setq auto-safe-default nil)
-(setq auto-save-file-name-transforms
-	  `((".*" ,(concat (file-name-as-directory(expand-file-name "~")) ".emacs-autosaves") t)))
 
 ;; выключить toolbar
 (tool-bar-mode -1)
@@ -567,3 +565,11 @@ Defaults to `error'."
 (add-to-list 'load-path "~/.emacs.d/cs-mode/")
 (require 'csharp-mode)
 (add-to-list 'auto-mode-alist '("\.cs\'" . csharp-mode))
+
+;; Editing
+(setq-default tab-width 4
+              fill-column 80
+              indent-tabs-mode nil
+              show-paren-style 'expression
+              show-trailing-whitespace t)
+(show-paren-mode)
