@@ -1,13 +1,13 @@
-;;;; Настройки для работы с python 
+;;;; Настройки для работы с python
 ;;;; http://habrahabr.ru/post/46350/
 
 ;; Магия которую пришлось выполнить после установки pymacs для python и для emacs если сам pymacs ставить из
-;; 1. видимо в новой версии pymacs который python немного поменялся api, поэтому from Pymacs.pymacs import main не работает, 
+;; 1. видимо в новой версии pymacs который python немного поменялся api, поэтому from Pymacs.pymacs import main не работает,
 ;;    а работает просто from Pymacs import main
 ;;    поэтому находим файлы pymacs.el pymacs.elc и в них делаем замену этим строчек
 ;; 2. Выдается ошибка не совпадения версий, это чиним аналогично ищем pymacs.el, pymacs.elc и ставим версию как у pymacs из python
 ;;    после этого получилось загрузить pycomplete
-;; 3. Не удается найти модуль, для этого прописываем дополнительные пути для загрузки сразу после requre pymacs, туда нужно 
+;; 3. Не удается найти модуль, для этого прописываем дополнительные пути для загрузки сразу после requre pymacs, туда нужно
 ;;    вписать путь, где лежит pycomplete
 ;; 4. Чтобы удалить установленный из git pymacs нужно найти все Pymacs модули и удалить их и потом еще в файле
 ;;    /usr/local/lib/python2.7/dist-packages/easy-install.pth удалить путь до папке куда скопирован git репозиторий
@@ -36,7 +36,7 @@
 						   "/usr/lib/oracle/11.2/client64/lib:"
 						   (getenv "LD_LIBRARY_PATH"))) ;; for cx_Oracle
 (e-tools-add-to-path "~/bin/utils")
-(e-tools-add-to-list 'load-path 
+(e-tools-add-to-list 'load-path
 					 "~/.emacs.d/python/Pymacs/"				;; pymacs
 					 "~/.emacs.d/emacs-python-environment"		;; jedi
 					 "~/.emacs.d/emacs-ctable"					;; jedi
@@ -87,7 +87,7 @@
 ;; (setq py-ipython0.11-completion-command-string
 ;;   "import re; print(';'.join(filter(lambda x: not re.match(x, '\s*'), get_ipython().Completer.all_completions('%s')))) #PYTHON-MODE SILENT\n")
 
-;; настройка режим проверки 
+;; настройка режим проверки
 ;; need pylint
 
 ;; (when (load "flymake" t)
@@ -144,13 +144,13 @@
 (require 'cl-lib)
 (cl-defun m-jedi:complete (&key (expand ac-expand-on-auto-complete))
   (interactive)
-  (let ((cur-pos (point)) 
-		(col (current-column)) 
+  (let ((cur-pos (point))
+		(col (current-column))
 		(prevstring (string (char-before (point))))
 		(result nil)
 		)
 	;;(message "before save excursion %s" prevstring)
-	(save-excursion 
+	(save-excursion
 	  (if (or (eql col 1) (eql col 0) (string-match "\s" prevstring))
 		  (setq result t)
 		nil
@@ -160,16 +160,16 @@
 	  (indent-for-tab-command)
 	  )))
 
-(defun python-mode-complex-hook () 
+(defun python-mode-complex-hook ()
   ;;http://stfw.ru/page.php?id=12357
-  ;; определение и вызов функции 
+  ;; определение и вызов функции
   ((lambda ()
 	 (message "Run python complex hook")
 	 (set-variable 'py-indent-offset 4)
 	 (set-variable 'py-smart-indentation nil)
 	 (set-variable 'indent-tabs-mode nil)
 	 (yas-minor-mode)
-	 ;; NOTE:  ??? call yas-minor-mode after 
+	 ;; NOTE:  ??? call yas-minor-mode after
 	 ;; define-key disable yas-minor-mode ???
 	 (define-key python-mode-map (kbd "RET") 'newline-and-indent)
      (define-key python-mode-map (kbd "\e\ef") 'flymake-mode)
@@ -178,6 +178,7 @@
      (define-key python-mode-map (kbd "C-c f") 'flymake-display-err-menu-for-current-line)
 	 (jedi:setup)
 	 (define-key python-mode-map (kbd "C-x i") 'yas-expand) ;; redifine insert-file that not used
+     (hs-minor-mode)
 	 ;; this change need for correct indent in python mode when use yasnippet
 	 ;; ((lambda () (set (make-local-variable 'yas-indent-line) 'fixed)))
 	 ;;(setq yas/after-exit-snippet-hook 'indent-according-to-mode)
@@ -200,7 +201,7 @@
          (filename (direx:file-full-name (direx:item-tree root)))
          (curwin (get-buffer-window (current-buffer))))
     (if not-this-window
-        (progn 
+        (progn
           (find-file-other-window filename)
           (quit-window nil curwin))
       (find-file filename))

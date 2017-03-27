@@ -1,4 +1,19 @@
 ;;;;
+(require 'package)
+
+;Add melpa to list of repositories
+(add-to-list 'package-archives
+	     '("melpa" . "http://melpa.milkbox.net/packages/")
+             t)
+
+;Initialize package.el
+(package-initialize)
+
+;; power line pretty status bar
+(package-install 'powerline)
+(powerline-default-theme)
+(setq powerline-default-separator 'slant)
+
 (add-to-list 'load-path "~/.emacs.d/lib/e-tools")
 (require 'e-tools)
 
@@ -46,7 +61,7 @@
 ;; cp hack2.0 /usr/share/fonts/truetype/ -R
 ;; fc-cache
 (condition-case nil
-    (set-default-font "Hack 10")
+    (set-default-font "Hack 9")
   (error
       (if (is-linux) 
 			(set-default-font "Monospace 10") ;; шрифт для Linux
@@ -559,7 +574,11 @@ Defaults to `error'."
  '(js2-bounce-indent-p nil)
  '(js2-electric-keys (quote ("{" "}" "(" ")" "[" "]" ":" ";" "," "*")))
  '(js2-highlight-level 3)
-)
+ '(package-selected-packages (quote (powerline "powerline")))
+ '(send-mail-function (quote smtpmail-send-it))
+ '(smtpmail-smtp-server "smtp.mail.ru")
+ '(smtpmail-smtp-service 465)
+ '(smtpmail-stream-type (quote ssl)))
 (global-hl-line-mode 1)
 
 (add-to-list 'load-path "~/.emacs.d/cs-mode/")
@@ -570,6 +589,18 @@ Defaults to `error'."
 (setq-default tab-width 4
               fill-column 80
               indent-tabs-mode nil
-              show-paren-style 'expression
-              show-trailing-whitespace t)
+              show-paren-style 'expression)
+
+;; All program modes
+(add-hook 'prog-mode-hook (lambda ()
+                            (setq show-trailing-whitespace t)
+                            ))
+
 (show-paren-mode)
+(put 'erase-buffer 'disabled nil)
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
