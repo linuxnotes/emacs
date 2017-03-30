@@ -77,11 +77,11 @@
 ;; (setq py-split-windows-on-execute-p nil)
 
 (defun ipythonm()
-"Define ipython correct command"
-;; todo: fix defualt ipython command
+  "Define ipython correct command"
+  ;; todo: fix defualt ipython command
   (interactive)
-   (ipython)
-   (switch-to-buffer "*IPython*"))
+  (run-python)
+  (switch-to-buffer "*Python*"))
 
 ;; ;; add remove empty strings for get complition to ipython
 ;; (setq py-ipython0.11-completion-command-string

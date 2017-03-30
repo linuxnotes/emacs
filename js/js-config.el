@@ -23,11 +23,11 @@
      (define-key yas-minor-mode-map [tab] 'yas/expand)
      (define-key js-mode-map "\C-cx" 'js2-jedi-direx:pop-to-buffer)
      (define-key js2-mode-map "\C-cx" 'js2-jedi-direx:pop-to-buffer)
+     (hs-minor-mode)
      ;;(define-key direx:direx-mode-map (kbd "O") 'js2-jedi-direx:find-item-other-window-and-close)
 	 ;;((lambda () (set (make-local-variable 'yas-indent-line) 'fixed)))
 	 ;;(setq yas/after-exit-snippet-hook 'indent-according-to-mode)
 	 ;;(smart-operator-mode-on) ;;NOTE if there is error yas-minor-mode is not full
-     
 	 ;;(slime-js-minor-mode 1)
 	))
 )
