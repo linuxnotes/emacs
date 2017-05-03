@@ -14,6 +14,15 @@
 (powerline-default-theme)
 (setq powerline-default-separator 'slant)
 
+(package-install 'ssh)
+(setq tramp-default-method "ssh")
+(require 'ssh)
+(add-hook 'ssh-mode-hook
+          (lambda ()
+            (setq ssh-directory-tracking-mode t)
+            (shell-dirtrack-mode t)
+            (setq dirtrackp nil)))
+
 (add-to-list 'load-path "~/.emacs.d/lib/e-tools")
 (require 'e-tools)
 
@@ -60,13 +69,22 @@
 ;; шрифт
 ;; cp hack2.0 /usr/share/fonts/truetype/ -R
 ;; fc-cache
-(condition-case nil
-    (set-default-font "Hack 9")
-  (error
-      (if (is-linux) 
-			(set-default-font "Monospace 10") ;; шрифт для Linux
-		  (set-default-font "Courier New 10"))
-         ))
+;; set-default-font font keep-size fonts if font equal t then also for future
+(defun initfuncs-set-fonts (&rest args)
+  (message "initfuncs-set-fonts")
+  (condition-case nil
+      (progn (set-default-font "Hack 9" t t)
+             (message "font setted"))
+    (error
+     (if (is-linux)
+         (set-default-font "Monospace 10" t t) ;; шрифт для Linux
+       (set-default-font "Courier New 10" t t))
+     ))
+  )
+(initfuncs-set-fonts)
+;; excecute after create frame
+;;(add-to-list 'after-make-frame-functions #'initfuncs-set-fonts)
+
 ;; move backups in special directory
 ;; Write backup files to own directory
 ;; Backups and temp files
@@ -206,7 +224,7 @@
 (add-to-list 'ac-dictionary-directories "~/.emacs.d/auto_complete/dict")
 (require 'auto-complete-config)
 (global-auto-complete-mode t)
-(global-set-key (kbd "C-c C-c i") 'auto-complete)
+(global-set-key (kbd "C-c i") 'auto-complete)
 
 ;; change key-maps
 (define-key ac-completing-map "\M-n" nil)
@@ -574,7 +592,7 @@ Defaults to `error'."
  '(js2-bounce-indent-p nil)
  '(js2-electric-keys (quote ("{" "}" "(" ")" "[" "]" ":" ";" "," "*")))
  '(js2-highlight-level 3)
- '(package-selected-packages (quote (powerline "powerline")))
+ '(package-selected-packages (quote (ssh "ssh" powerline "powerline")))
  '(send-mail-function (quote smtpmail-send-it))
  '(smtpmail-smtp-server "smtp.mail.ru")
  '(smtpmail-smtp-service 465)
@@ -604,3 +622,9 @@ Defaults to `error'."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
+(defun initfuncs-to-underscore ()
+  (interactive)
+  (progn (replace-regexp "\\([A-Z]\\)" "_\\1" nil (region-beginning) (region-end))
+         (downcase-region (region-beginning) (region-end)))
+  )

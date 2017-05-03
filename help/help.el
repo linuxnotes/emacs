@@ -70,3 +70,13 @@
 ;; (set-frame-fot "Font 9") set font size for window
 										;
 ;; erase-buffer clear shell buffer
+
+;; C-x l [count-lines-page]
+;; C-h l [view-lossage]
+
+;; excecute after create frame
+;; (defun set-my-scrollbars (_)
+;;  (set-scroll-bar-mode 'right))
+;; (add-to-list 'after-make-frame-functions #'set-my-scrollbars)
+
+;; https://github.com/pft/elisp-assorted/blob/master/disk-usage.el

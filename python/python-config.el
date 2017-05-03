@@ -47,6 +47,21 @@
 					 "~/.emacs.d/emacs-jedi-direx"				;; jedi
 					 )
 
+(defun python-config-execute-buffer-in-shell ()
+  (interactive)
+  ;; in *Python* goto to folder of current buffer
+  ;; execute !python buffer_name
+  (let* (
+         (buf-file-name (expand-file-name (buffer-file-name)))
+         (proc (python-shell-get-process-or-error "Python process not found"))
+         (buf (process-buffer proc))
+         )
+    (switch-to-buffer-other-window buf)
+    (process-send-string proc (concat "cd " (file-name-directory buf-file-name) "\n"))
+    (process-send-string proc (concat "!python " (file-name-nondirectory buf-file-name) "\n"))
+    (goto-char (point-max))
+    ))
+
 ;; python jedi may be slow
 (require 'concurrent)
 (require 'epc)
@@ -176,6 +191,7 @@
 	 (define-key python-mode-map [(tab)] 'm-jedi:complete)
      (define-key python-mode-map jedi:key-complete 'jedi:complete)
      (define-key python-mode-map (kbd "C-c f") 'flymake-display-err-menu-for-current-line)
+     (define-key python-mode-map (kbd "C-c C-c") 'python-config-execute-buffer-in-shell)
 	 (jedi:setup)
 	 (define-key python-mode-map (kbd "C-x i") 'yas-expand) ;; redifine insert-file that not used
      (hs-minor-mode)
