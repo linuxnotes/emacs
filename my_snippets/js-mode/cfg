@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
 #name: cfg
 # --
-/** @cfg 
- **/
+/** @cfg {$1} $0
+ */
