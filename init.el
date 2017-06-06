@@ -510,7 +510,11 @@ Defaults to `error'."
 ;; git clone https://gitlab.com/python-mode-devs/python-mode.git
 ;; cd ~/.emacs.d/python/python-mode/
 ;; git reset --hard 74072ce9b7924a21636eb2735e35eacc1439bba6
-;; 
+;;
+;; ;; switch-window
+;; cd ~/.emacs.d/lib/switch-window
+;; git clone https://github.com/dimitri/switch-window.git
+;;
 
 ;; git clone git://github.com/magit/magit.git
 ;; cd magit; git reset 1.4.2 --hard; 
