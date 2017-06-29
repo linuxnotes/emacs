@@ -6,7 +6,7 @@
 (add-to-list 'load-path "~/.emacs.d/imenu")
 
 (require 'imenu-tree)
-(load-file "~/.emacs.d/imenu/imenu-tree.el") 
+(load-file "~/.emacs.d/imenu/imenu-tree.el")
 
 (if (is-linux)
 	(progn
@@ -17,15 +17,15 @@
 		   (if (boundp 'cperl-mode-map)
 			   (progn (define-key cperl-mode-map (kbd "C-c f") 'flymake-display-err-menu-for-current-line)
 					  (define-key cperl-mode-map (kbd "C-c x") 'imenu-tree))
-			   
+
 			 nil)
 		   (flymake-mode)
 		   (yas-minor-mode)
 		   (hs-minor-mode)
-		   
+
 		   (define-key perl-mode-map (kbd "C-x i") 'yas-expand) ;; redifine insert-file that not used
 		   (define-key perl-mode-map (kbd "C-c x") 'imenu-tree) ;; redifine insert-file that not used
-		   
+
 		   (if (boundp 'cperl-mode-map)
 			   (define-key cperl-mode-map (kbd "C-x i") 'yas-expand) ;; redifine insert-file that not used
 			 nil)
@@ -47,7 +47,7 @@
 	  ;;(setq flymake-perlcritic-profile "~/projects/big-project/perlcriticrc")
 
 	  (require 'flymake-perlcritic)
-	  
+
 	  ;;set some paths
 	  (setenv "PATH"
 			  (concat

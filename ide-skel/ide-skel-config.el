@@ -72,6 +72,7 @@
 
 (defun my-load-sqlplus()
   (interactive)
+  (add-to-list 'load-path "~/.emacs.d/ide-skel")
   (require 'sqlplus)
   (setf sqlplus-command "sqlplus64")
   (setenv "TNS_ADMIN" (getenv "HOME"))

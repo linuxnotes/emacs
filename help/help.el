@@ -1,5 +1,5 @@
 ;; HELP and TODO
-;; C-q C-j перевод на другую строку можно использовать при 
+;; C-q C-j перевод на другую строку можно использовать при
 ;; выполнении замены
 
 ;; TODO: Посмотреть что это
@@ -21,21 +21,21 @@
 ;; пересобрать все файлы
 ;;C-u 0 M-x byte-recompile-directory
 
-;; сменить кодировку файла 
+;; сменить кодировку файла
 ;;(set-buffer-file-coding-system)
 ;;(encode-coding-region) ;; перекодировать выделенный регион
 
-;; чтобы перекодироваь регион нужно выполнить 
+;; чтобы перекодироваь регион нужно выполнить
 ;; recode-region
 
-;;чтобы в xterm Alt корректно работало в 
+;;чтобы в xterm Alt корректно работало в
 ;; echo 'xterm*metaSendsEscape: true' >> /etc/X11/app-defaults/XTerm
 
 ;; for use same color theme in console mode
 ;; env TERM=xterm-256color emacs -nw
 ;; export TERM=xterm-256color
 
-;; 
+;;
 ;; C-u s for dired mode set the params for ls
 ;; i в dired mode добавляет содержимое каталога к текущему каталогу
 
@@ -46,7 +46,7 @@
 ;; (setq indent-tabs-mode nil)
 ;; (infer-indentation-style)
 
-;; toggle-truncate-lines ;; отключить перевод строк 
+;; toggle-truncate-lines ;; отключить перевод строк
 
 ;; https://www.emacswiki.org/emacs/BuildTags#toc3
 ;; cd /path/to/my/project
@@ -70,6 +70,7 @@
 ;; (set-frame-fot "Font 9") set font size for window
 										;
 ;; erase-buffer clear shell buffer
+;; comint-clear-buffer for emacs > 25
 
 ;; C-x l [count-lines-page]
 ;; C-h l [view-lossage]
@@ -80,3 +81,16 @@
 ;; (add-to-list 'after-make-frame-functions #'set-my-scrollbars)
 
 ;; https://github.com/pft/elisp-assorted/blob/master/disk-usage.el
+
+
+;; C-x r s r
+;; Copy region into register r (copy-to-register).
+;; C-x r i r
+;; Insert text from register r (insert-register).
+;; M-x append-to-register <RET> r
+;; Append region to text in register r.
+;; When register r contains text, you can use C-x r + (increment-register) to append to that register. Note that command C-x r + behaves differently if r contains a number. See Number Registers.
+;;
+;; M-x prepend-to-register <RET> r
+
+;; 

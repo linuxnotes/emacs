@@ -632,3 +632,6 @@ Defaults to `error'."
   (progn (replace-regexp "\\([A-Z]\\)" "_\\1" nil (region-beginning) (region-end))
          (downcase-region (region-beginning) (region-end)))
   )
+
+(add-to-list 'load-path "~/.emacs.d/lib/ibuffer")
+(require 'ibuffer-config)
