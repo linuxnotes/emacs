@@ -29,4 +29,4 @@
 ;; Don't ask for confirmation to delete marked buffers
 (setq ibuffer-expert t)
 
-(provide ibuffer-config)
+(provide 'ibuffer-config)
