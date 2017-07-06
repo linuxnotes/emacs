@@ -635,3 +635,7 @@ Defaults to `error'."
 
 (add-to-list 'load-path "~/.emacs.d/lib/ibuffer")
 (require 'ibuffer-config)
+
+(add-to-list 'load-path "~/.emacs.d/lib/org")
+(require 'org-config)
+
