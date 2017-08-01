@@ -15,6 +15,8 @@ wget http://repo.or.cz/w/emacs.git/blob_plain/ba08b24186711eaeb3748f3d1f23e2c2d9
 cd ..
 emacs -l ~/.emac.d/utils/recompile_emacs_dirs.el
 cd ~/.emacs.d/lib/switch-window
-git clone https://github.com/dimitri/switch-window.git
+;;git clone https://github.com/dimitri/switch-window.git
+git clone https://github.com/abo-abo/avy.git
+git clone https://github.com/abo-abo/ace-window.git
 #git reset --hard 8d37f5660666516ab6c9e6ec1da748ea1669ed4b
 

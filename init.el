@@ -12,7 +12,8 @@
 ;; power line pretty status bar
 (package-install 'powerline)
 (powerline-default-theme)
-(setq powerline-default-separator 'slant)
+(setq powerline-default-separator 'arrow-fade)
+
 
 (package-install 'ssh)
 (setq tramp-default-method "ssh")
@@ -596,7 +597,7 @@ Defaults to `error'."
  '(js2-bounce-indent-p nil)
  '(js2-electric-keys (quote ("{" "}" "(" ")" "[" "]" ":" ";" "," "*")))
  '(js2-highlight-level 3)
- '(package-selected-packages (quote (ssh "ssh" powerline "powerline")))
+ '(package-selected-packages (quote (org-pomodoro ssh "ssh" powerline "powerline")))
  '(send-mail-function (quote smtpmail-send-it))
  '(smtpmail-smtp-server "smtp.mail.ru")
  '(smtpmail-smtp-service 465)
@@ -639,3 +640,5 @@ Defaults to `error'."
 (add-to-list 'load-path "~/.emacs.d/lib/org")
 (require 'org-config)
 
+(add-to-list 'load-path "~/.emacs.d/lib/undo-tree")
+(require 'undo-tree-config)
