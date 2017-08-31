@@ -574,7 +574,7 @@ Defaults to `error'."
   t)
 (eval-after-load "ace-jump-mode"
   '(ace-jump-mode-enable-mark-sync))
-(define-key global-map (kbd "C-c j") 'ace-jump-mode)
+(define-key global-map (kbd "M-j") 'ace-jump-mode)
 
 ;; set bindings for differrent charset
 (when (>= emacs-major-version 24)

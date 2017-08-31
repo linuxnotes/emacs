@@ -2,7 +2,6 @@
 (add-to-list 'load-path "~/.emacs.d/lib/switch-window/ace-window") ;; https://github.com/abo-abo/ace-window.git
 (require 'ace-window)
 (setq aw-keys '(?a ?b ?c ?d ?e ?f ?g ?h ?k))
-(global-set-key (kbd "C-x o") 'other-window)
 (global-set-key (kbd "C-x j") 'ace-window)
 
 ;; (add-to-list 'load-path "~/.emacs.d/lib/switch-window/switch-window")
