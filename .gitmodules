@@ -1,6 +1,9 @@
 [submodule "use-package"]
-	path = use-package
+	path = lib/use-package/
 	url = https://github.com/jwiegley/use-package.git
 [submodule "lib/ace-jump-mode"]
 	path = lib/ace-jump-mode
 	url = https://github.com/winterTTr/ace-jump-mode.git
+[submodule "lib/use-package"]
+	path = lib/use-package
+	url = https://github.com/jwiegley/use-package.git
