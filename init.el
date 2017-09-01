@@ -285,9 +285,16 @@
   nil)
 
 ;; autopair
-(add-to-list 'load-path "~/.emacs.d/autopair")
-(require 'autopair)
-(autopair-global-mode) ;; enable autopair in all buffers
+;; for emacs >= 24.4 electric-pair-mode is recomended
+;; else autopair
+(if (or (>= emacs-major-version 24)
+        (and (= emacs-major-version 24)
+             (>= emacs-minor-version 4)))
+    (electric-pair-mode)
+  (progn (add-to-list 'load-path "~/.emacs.d/autopair")
+         (require 'autopair)
+         (autopair-global-mode)
+         ))
 
 ;; todo
 (add-to-list 'load-path "~/.emacs.d/todo/")
