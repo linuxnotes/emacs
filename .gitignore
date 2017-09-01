@@ -32,7 +32,6 @@ emacs-deferred
 emacs-epc
 emacs-jedi
 emacs-python-environment
-ace-jump-mode
 .python-environments
 TAGS
 lib/switch-window/switch-window

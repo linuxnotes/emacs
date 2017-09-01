@@ -4,7 +4,19 @@
 ;Add melpa to list of repositories
 (add-to-list 'package-archives
 	     '("melpa" . "http://melpa.milkbox.net/packages/")
-             t)
+         t)
+
+(add-to-list 'load-path "~/.emacs.d/lib/e-tools")
+(require 'e-tools)
+
+(e-tools-add-to-list 'load-path "~/.emacs.d/lib/use-package")
+(require 'use-package)
+
+(use-package ace-jump-mode
+             :load-path "lib/ace-jump-mode"
+             :commands ace-jump-mode
+             :bind (("M-j" . ace-jump-mode))
+             :config (ace-jump-mode-enable-mark-sync))
 
 ;Initialize package.el
 (package-initialize)
@@ -23,9 +35,6 @@
             (setq ssh-directory-tracking-mode t)
             (shell-dirtrack-mode t)
             (setq dirtrackp nil)))
-
-(add-to-list 'load-path "~/.emacs.d/lib/e-tools")
-(require 'e-tools)
 
 ;;; Utils
 (defmacro part-module-load(name &optional feature)
@@ -571,17 +580,6 @@ Defaults to `error'."
 (when (is-windows)
   (add-to-list 'process-coding-system-alist '("[cC][mM][dD][pP][rR][oO][xX][yY]" cp1251 . cp1251))
   (remove-hook 'find-file-hooks 'vc-find-file-hook))
-
-;; ace jump
-(add-to-list 'load-path "~/.emacs.d/ace-jump-mode")
-(autoload
-  'ace-jump-mode
-  "ace-jump-mode"
-  "Ace jump back:-)"
-  t)
-(eval-after-load "ace-jump-mode"
-  '(ace-jump-mode-enable-mark-sync))
-(define-key global-map (kbd "M-j") 'ace-jump-mode)
 
 ;; set bindings for differrent charset
 (when (>= emacs-major-version 24)
