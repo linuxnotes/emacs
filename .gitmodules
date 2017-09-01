@@ -19,3 +19,6 @@
 [submodule "lib/evil"]
 	path = lib/evil
 	url = https://github.com/emacs-evil/evil.git
+[submodule "lib/lua-mode"]
+	path = lib/lua-mode
+	url = https://github.com/immerrr/lua-mode.git
