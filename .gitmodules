@@ -7,3 +7,6 @@
 [submodule "lib/use-package"]
 	path = lib/use-package
 	url = https://github.com/jwiegley/use-package.git
+[submodule "lib/emacs-goodies-el"]
+	path = lib/emacs-goodies-el
+	url = https://github.com/linuxnotes/emacsgoodies.git
