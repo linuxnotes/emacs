@@ -13,10 +13,10 @@
 (require 'use-package)
 
 (use-package ace-jump-mode
-             :load-path "lib/ace-jump-mode"
-             :commands ace-jump-mode
-             :bind (("M-j" . ace-jump-mode))
-             :config (ace-jump-mode-enable-mark-sync))
+  :load-path "lib/ace-jump-mode"
+  :commands ace-jump-mode
+  :bind (("M-j" . ace-jump-mode))
+  :config (ace-jump-mode-enable-mark-sync))
 
 (use-package evil-mode
              :load-path "lib/evil-mode"
@@ -274,7 +274,11 @@
 (require 'perl-config)
 
 ;; lua
-(part-module-load-f "lua" 'lua-mode)
+(use-package lua-mode
+  :load-path "lib/lua-mode"
+  :commands lua-mode
+  :mode "\\.lua\\'" . lua-mode)
+
 ;; json
 (part-module-load-f "json" 'json-config)
 ;; web mode
