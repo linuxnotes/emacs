@@ -16,3 +16,6 @@
 [submodule "lib/emacs-chat"]
 	path = lib/emacs-chat
 	url = https://github.com/h1t/emacs-chat.git
+[submodule "lib/evil"]
+	path = lib/evil
+	url = https://github.com/emacs-evil/evil.git
