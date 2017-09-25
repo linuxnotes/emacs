@@ -10,3 +10,9 @@
 [submodule "lib/emacs-goodies-el"]
 	path = lib/emacs-goodies-el
 	url = https://github.com/linuxnotes/emacsgoodies.git
+[submodule "evil"]
+	path = evil
+	url = https://github.com/emacs-evil/evil.git
+[submodule "lib/emacs-chat"]
+	path = lib/emacs-chat
+	url = https://github.com/h1t/emacs-chat.git
