@@ -18,6 +18,11 @@
              :bind (("M-j" . ace-jump-mode))
              :config (ace-jump-mode-enable-mark-sync))
 
+(use-package evil-mode
+             :load-path "lib/evil-mode"
+             :commands evil-mode
+             :bind (([f9] . evil-mode)))
+
 ;Initialize package.el
 (package-initialize)
 
