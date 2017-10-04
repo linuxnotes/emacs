@@ -278,15 +278,13 @@
   :commands lua-mode
   :mode ("\\.lua\\'" . lua-mode))
 
-;; (use-package json-mode
-;;   :load-path "lib/json-mode"
-;;   :commands json-mode
-;;   :init (modify-coding-system-alist 'file "\\.json\\" 'utf-8)
-;;   :config
-;;   (setq json-reformat:pretty-string? 't))
+(use-package json-mode
+  :load-path '("lib/json-mode" "lib/json-snatcher" "lib/json-reformat")
+  :commands json-mode
+  :init (modify-coding-system-alist 'file "\\.json\\'" 'utf-8)
+  :config
+  (setq json-reformat:pretty-string? 't))
 
-;; json
-(part-module-load-f "json" 'json-config)
 ;; web mode
 (part-module-load-f "web-mode" 'web-mode-config)
 ;; макросы
