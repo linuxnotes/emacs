@@ -43,3 +43,12 @@
 [submodule "lib/emacs-jedi-direx"]
 	path = lib/emacs-jedi-direx
 	url = https://github.com/tkf/emacs-jedi-direx.git
+[submodule "lib/json-mode"]
+	path = lib/json-mode
+	url = https://github.com/joshwnj/json-mode.git
+[submodule "lib/json-snatcher"]
+	path = lib/json-snatcher
+	url = https://github.com/Sterlingg/json-snatcher.git
+[submodule "lib/json-reformat"]
+	path = lib/json-reformat
+	url = https://github.com/gongo/json-reformat.git
