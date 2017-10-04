@@ -22,3 +22,24 @@
 [submodule "lib/lua-mode"]
 	path = lib/lua-mode
 	url = https://github.com/immerrr/lua-mode.git
+[submodule "lib/emacs-python-environment"]
+	path = lib/emacs-python-environment
+	url = https://github.com/tkf/emacs-python-environment.git
+[submodule "lib/emacs-ctable"]
+	path = lib/emacs-ctable
+	url = https://github.com/kiwanami/emacs-ctable.git
+[submodule "lib/emacs-deferred"]
+	path = lib/emacs-deferred
+	url = https://github.com/kiwanami/emacs-deferred.git
+[submodule "lib/emacs-epc"]
+	path = lib/emacs-epc
+	url = https://github.com/kiwanami/emacs-epc.git
+[submodule "lib/emacs-jedi"]
+	path = lib/emacs-jedi
+	url = https://github.com/tkf/emacs-jedi.git
+[submodule "lib/direx-el"]
+	path = lib/direx-el
+	url = https://github.com/m2ym/direx-el.git
+[submodule "lib/emacs-jedi-direx"]
+	path = lib/emacs-jedi-direx
+	url = https://github.com/tkf/emacs-jedi-direx.git
