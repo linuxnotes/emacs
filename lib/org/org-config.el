@@ -3,7 +3,7 @@
     (progn (add-to-list 'package-archives
                         '("melpa" . "https://melpa.org/packages/") t)
            (package-install 'org-pomodoro)
-           (setf org-pomodoro-length 30))
+           (setf org-pomodoro-length 60))
   nil
 )
 

@@ -44,7 +44,7 @@
 ;;; Utils
 (defmacro part-module-load(name &optional feature)
   "Load module macro"
-  `(progn 
+  `(progn
 	 (add-to-list 'load-path ,(concat "~/.emacs.d/" (symbol-name name)))
 	 ,(if (not (not feature))
 		 `(require ',feature)
@@ -59,7 +59,7 @@
   "
   (set list-var (append (symbol-value list-var) elements)))
 
-;; отключение стандартной 
+;; отключение стандартной
 ;; системы контроля версий
 ;; http://www.gnu.org/software/emacs/manual/html_node/emacs/Version-Control.html
 (setf vc-handled-backends nil)
@@ -78,7 +78,7 @@
 ;;;; Установка констант
 (defun is-windows ()
   (boundp 'w32-system-shells))
-(defun is-linux () 
+(defun is-linux ()
   (not (boundp 'w32-system-shells)))
 
 ;; шрифт
@@ -126,14 +126,14 @@
 ;; краткие ответы на вопрос
 (fset 'yes-or-no-p 'y-or-n-p)
 
-;; 
+;;
 (setq scroll-step 1)
 
 ;; dont change window
 (push (cons "\\*shell\\*" display-buffer--same-window-action) display-buffer-alist)
 
 ;;показывать парные скобки
-(show-paren-mode t)   
+(show-paren-mode t)
 
 ;;;; работа с конфигом
 (defun load-config()
@@ -141,16 +141,16 @@
   (interactive)
   (find-file "~/.emacs.d/init.el"))
 
-(defun reload-config() 
+(defun reload-config()
   "Перезагрузить файл конфигурации"
-  (interactive) 
+  (interactive)
   (load-file "~/.emacs.d/init.el"))
 
-(defun setcp1251() 
+(defun setcp1251()
     (interactive)
     (set-language-environment "Cyrillic-CP1251"))
 
-(defun setutf8() 
+(defun setutf8()
     (interactive)
     (set-language-environment "UTF-8"))
 
@@ -158,7 +158,7 @@
 (global-set-key [f3] 'setcp1251)
 (global-set-key [f4] 'setutf8)
 
-;;макросы 
+;;макросы
 (global-set-key [f5] 'kmacro-start-macro)
 (global-set-key [f6] 'kmacro-end-macro)
 (global-set-key [f7] 'call-last-kbd-macro)
@@ -168,7 +168,7 @@
 (load-file "~/.emacs.d/nlinam/nlinum.el")
 (global-set-key [f8] 'nlinum-mode)
 
-;; выбор буффера 
+;; выбор буффера
 ;; переопеределим стандартный list-buffer на ibuffer
 ;;(global-set-key [f11] 'ibuffer)
 (global-set-key (kbd "C-x C-b") 'ibuffer)
@@ -203,7 +203,7 @@
 (global-set-key (kbd "C-x C-m") 'replace-string)
 
 ;; меню для вставки
-(global-set-key (kbd "C-c y") '(lambda () 
+(global-set-key (kbd "C-c y") '(lambda ()
     (interactive) (popup-menu 'yank-menu)))
 
 ;; remove binding set-fill-prefix
@@ -255,7 +255,7 @@
 (require 'yasnippet)
 ;; Load the snippet files themselves
 (setq yas-snippet-dirs
-      '("~/.emacs.d/yasnippet/yasmate/snippets" "~/.emacs.d/yasnippet/snippets" 
+      '("~/.emacs.d/yasnippet/yasmate/snippets" "~/.emacs.d/yasnippet/snippets"
 		"~/.emacs.d/my_snippets"))
 (yas-reload-all) ;; this need for use yasnippet as minor mode
 (setq yas-indent-line 'fixed)
@@ -273,11 +273,17 @@
 (add-to-list 'load-path "~/.emacs.d/perl/")
 (require 'perl-config)
 
-;; lua
 (use-package lua-mode
   :load-path "lib/lua-mode"
   :commands lua-mode
-  :mode "\\.lua\\'" . lua-mode)
+  :mode ("\\.lua\\'" . lua-mode))
+
+;; (use-package json-mode
+;;   :load-path "lib/json-mode"
+;;   :commands json-mode
+;;   :init (modify-coding-system-alist 'file "\\.json\\" 'utf-8)
+;;   :config
+;;   (setq json-reformat:pretty-string? 't))
 
 ;; json
 (part-module-load-f "json" 'json-config)
@@ -353,7 +359,7 @@
                         start end))
   (when indent-tabs-mode (tabify start end)))
 
-;; ;; другая версия 
+;; ;; другая версия
 ;; (defun right-justify-rectangle (start end)
 ;;   (interactive "r")
 ;;   (apply-on-rectangle (lambda (c0 c1)
@@ -367,7 +373,7 @@
 ;; выравниваение в влево
 ;; (delete-whitespace-rectangle)
 
-;; выровнять по полю 
+;; выровнять по полю
 ;; align-regexp
 
 (defun transpose-buffers (arg)
@@ -473,7 +479,7 @@ Defaults to `error'."
       (when message (put name 'error-message message)))))
 
 ;; load special settings
-(condition-case nil 
+(condition-case nil
 	(require 'init-special)
   (error nil))
 
@@ -481,15 +487,15 @@ Defaults to `error'."
 (add-to-list 'load-path "~/.emacs.d/git-modes")
 
 ;; try load magit
-(condition-case nil 
+(condition-case nil
 	(progn
 	  (require 'magit)
 	  (setq magit-last-seen-setup-instructions "1.4.0")
-	  
+
 	  )
   (error nil))
 
-;; my functions 
+;; my functions
 (defun change-brackets (from-b to-b)
   "Функция выполняет замену скобок с одного типа на другой"
   (interactive "cfrom:\ncto:")
@@ -500,9 +506,9 @@ Defaults to `error'."
 		 (pairs '( (?\(. ?\)) (?\{.?\}) (?\[.?\]) (?\".?\") (?\'.?\')))
 		 (close-from-b (cdr(assoc from-b pairs)))
 		 (close-to-b (cdr(assoc to-b pairs)))
-		 ) 
-	
-	(save-excursion 
+		 )
+
+	(save-excursion
 	  (search-backward (char-to-string from-b))
 	  (delete-char 1)
 	  (insert-char to-b)
@@ -518,10 +524,10 @@ Defaults to `error'."
 ;; save-current-configuration сохранить, resume загрузить
 (load-file "~/.emacs.d/sessions/revive.elc")
 (defun m-desktop-read ()
-  "Выполнить считывание данных предыдущего сеанса с 
+  "Выполнить считывание данных предыдущего сеанса с
    обновлением конфигурации yasnippets
   "
-  (interactive) 
+  (interactive)
   (desktop-read)
   (yas-reload-all))
 
@@ -529,7 +535,7 @@ Defaults to `error'."
 (add-to-list 'load-path "~/.emacs.d/spelling")
 (require 'spell-config)
 
-;; after install 
+;; after install
 ;; git clone https://github.com/auto-complete/auto-complete.git
 ;; git clone https://github.com/capitaomorte/yasnippet.git
 ;; git clone https://github.com/AndreaCrotti/yasnippet-snippets.git
@@ -543,10 +549,10 @@ Defaults to `error'."
 ;;
 
 ;; git clone git://github.com/magit/magit.git
-;; cd magit; git reset 1.4.2 --hard; 
+;; cd magit; git reset 1.4.2 --hard;
 ;; git clone https://github.com/magit/git-modes
 ;; cd git modes; make lisp docs; cd ..
-;; cp git-modes/git-commit-mode.elc . ; cp git-modes/git-rebase-mode.elc . 
+;; cp git-modes/git-commit-mode.elc . ; cp git-modes/git-rebase-mode.elc .
 ;; make lisp
 
 ;; git clone https://github.com/winterTTr/ace-jump-mode.git
@@ -560,7 +566,7 @@ Defaults to `error'."
 ;; hg clone https://bitbucket.org/agriggio/ahg
 ;; cd projectile; wget http://repo.or.cz/w/emacs.git/blob_plain/ba08b24186711eaeb3748f3d1f23e2c2d9ed0d09:/lisp/emacs-lisp/package.el
 ;;; grep by extensions
-;; grep -r --include \*.<ext> -n --color -e <template> --exclude-dir=designer 
+;; grep -r --include \*.<ext> -n --color -e <template> --exclude-dir=designer
 (grep-compute-defaults) ;; установить значения по умолчанию
 (grep-apply-setting 'grep-command "grep * -r -n --color -i -e")
 (grep-apply-setting 'grep-find-command "find . ! -name \"*~\" ! -name \"#*#\" -type f -print0 | xargs -0 -e grep -nH -e ")

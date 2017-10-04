@@ -20,6 +20,8 @@
 ;;NOTE CHECK THAT PYTHONPATH IS SETTED
 (require 'e-tools)
 
+(define-coding-system-alias 'ascii 'us-ascii)
+
 ;;pymacs
 (add-to-list 'load-path "~/.emacs.d/python/Pymacs/") ;; pymacs
 (require 'pymacs)

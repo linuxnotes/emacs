@@ -27,11 +27,11 @@ git-modes
 projectile/package.el
 init-special.el
 auto-complete
-emacs-ctable
-emacs-deferred
-emacs-epc
-emacs-jedi
-emacs-python-environment
+#emacs-ctable
+#emacs-deferred
+#emacs-epc
+#emacs-jedi
+#emacs-python-environment
 .python-environments
 TAGS
 lib/switch-window/switch-window
