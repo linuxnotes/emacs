@@ -28,13 +28,13 @@
 
 ;;; Code:
 
-(add-to-list 'load-path "~/.emacs.d/emacs-python-environment")
-(add-to-list 'load-path "~/.emacs.d/emacs-ctable")
-(add-to-list 'load-path "~/.emacs.d/emacs-deferred")
-(add-to-list 'load-path "~/.emacs.d/emacs-epc")
-(add-to-list 'load-path "~/.emacs.d/emacs-jedi")
-(add-to-list 'load-path "~/.emacs.d/direx-el")
-(add-to-list 'load-path "~/.emacs.d/emacs-jedi-direx")
+(add-to-list 'load-path "~/.emacs.d/lib/emacs-python-environment")
+(add-to-list 'load-path "~/.emacs.d/lib/emacs-ctable")
+(add-to-list 'load-path "~/.emacs.d/lib/emacs-deferred")
+(add-to-list 'load-path "~/.emacs.d/lib/emacs-epc")
+(add-to-list 'load-path "~/.emacs.d/lib/emacs-jedi")
+(add-to-list 'load-path "~/.emacs.d/lib/direx-el")
+(add-to-list 'load-path "~/.emacs.d/lib/emacs-jedi-direx")
 
 (require 'jedi-direx)
 (require 'js2-mode)

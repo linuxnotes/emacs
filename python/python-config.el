@@ -40,13 +40,13 @@
 (e-tools-add-to-path "~/bin/utils")
 (e-tools-add-to-list 'load-path
 					 "~/.emacs.d/python/Pymacs/"				;; pymacs
-					 "~/.emacs.d/emacs-python-environment"		;; jedi
-					 "~/.emacs.d/emacs-ctable"					;; jedi
-					 "~/.emacs.d/emacs-deferred"				;; jedi
-					 "~/.emacs.d/emacs-epc"						;; jedi
-					 "~/.emacs.d/emacs-jedi"					;; jedi
-					 "~/.emacs.d/direx-el"						;; jedi
-					 "~/.emacs.d/emacs-jedi-direx"				;; jedi
+					 "~/.emacs.d/lib/emacs-python-environment"		;; jedi
+					 "~/.emacs.d/lib/emacs-ctable"					;; jedi
+					 "~/.emacs.d/lib/emacs-deferred"				;; jedi
+					 "~/.emacs.d/lib/emacs-epc"						;; jedi
+					 "~/.emacs.d/lib/emacs-jedi"					;; jedi
+					 "~/.emacs.d/lib/direx-el"						;; jedi
+					 "~/.emacs.d/lib/emacs-jedi-direx"				;; jedi
 					 )
 
 (defun python-config-execute-buffer-in-shell ()
