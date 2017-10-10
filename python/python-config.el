@@ -17,6 +17,8 @@
 
 ;; python-mode нужно скачивать с github: https://github.com/emacsmirror/python-mode
 
+;; change interpreter directory (setq default-directory "desired-directory")
+
 ;;NOTE CHECK THAT PYTHONPATH IS SETTED
 (require 'e-tools)
 

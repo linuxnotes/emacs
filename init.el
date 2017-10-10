@@ -279,11 +279,11 @@
   :mode ("\\.lua\\'" . lua-mode))
 
 (use-package json-mode
-  :load-path '("lib/json-mode" "lib/json-snatcher" "lib/json-reformat")
+  :load-path "lib/json-mode" "lib/json-snatcher" "lib/json-reformat"
   :commands json-mode
+  :mode ("\\.json\\'" . json-mode)
   :init (modify-coding-system-alist 'file "\\.json\\'" 'utf-8)
-  :config
-  (setq json-reformat:pretty-string? 't))
+  :config (setq json-reformat:pretty-string? 't))
 
 ;; web mode
 (part-module-load-f "web-mode" 'web-mode-config)
@@ -369,7 +369,7 @@
 ;;                                                (match-end 0) end))))
 ;;                       start end))
 ;; выравниваение в влево
-;; (delete-whitespace-rectangle)
+;; (delete-whitespa/ce-rectangle)
 
 ;; выровнять по полю
 ;; align-regexp
