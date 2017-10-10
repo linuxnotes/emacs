@@ -1,11 +1,20 @@
 ;;http://stackoverflow.com/questions/4115465/emacs-dired-too-much-information
 ;; (dired-hide-details-mode) ;; or key ( will hide unhide details
 
-(defun initfunc-open-perlhandler()
-  (interactive)
-  (dired "~/creation/ia/Externals/Perl/PerlHandler"))
+(require 'dired+)
+(require 'dired-tar)
 
-(defun open-eshell-in-current-directory ()
+(defcustom e:dired-project-path nil
+  "Current active project"
+  :group 'e:dired
+  :tag "Current active project"
+  :type '(string))
+
+(defun e:dired-open-project()
+  (interactive)
+  (dired e:dired-project-path))
+
+(defun e:dired-open-shell()
   (interactive)
   ;; in *Python* goto to folder of current buffer
   ;; execute !python buffer_name
@@ -17,22 +26,32 @@
     (switch-to-buffer-other-window "*eshell*")
     ))
 
-(defun eshell-cd-to-perl-parser ()
+(defun e:dired-eshell-project()
   (interactive)
   ;; in *Python* goto to folder of current buffer
   ;; execute !python buffer_name
   (let* ((folder-name (expand-file-name default-directory)))
     (with-current-buffer "*eshell*"
       (eshell-return-to-prompt)
-      (insert (concat "cd " "~/creation/ia/Externals/Perl/PerlHandler"))
+      (insert (concat "cd " e:dired-project-path))
       (eshell-send-input))
     ))
 
-(defun dired-mode-complex-hook()
+;; remove temp files
+(defun e:dired-clear-folder ()
+  (interactive)
+  (message "Clear folder, directory: %s" default-directory)
+  (shell-command "rm *.pyc *~ *.orig")
+  (revert-buffer)
+)
+
+(defun e:dired-complex-hook()
   ((lambda ()
-     (define-key dired-mode-map (kbd "C-c C-e") 'open-eshell-in-current-directory)
-     (define-key dired-mode-map (kbd "C-c C-l") 'clear-folder))))
-(add-hook 'dired-mode-hook 'dired-mode-complex-hook 1)
+     (define-key dired-mode-map (kbd "C-c C-e") 'e:dired-open-shell)
+     (define-key dired-mode-map (kbd "C-c C-l") 'e:dired-clear-folder))))
+(add-hook 'dired-mode-hook 'e:dired-complex-hook 1)
+
+(provide 'dired-config)
 
 ;; (require 'ls-lisp)
 ;; (setq ls-lisp-use-insert-directory-program nil)
