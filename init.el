@@ -265,7 +265,13 @@
 ;;javascript
 (part-module-load-f "js" 'js-config)
 ;; visual basic
-(part-module-load-f "vb-mode" 'visual-basic-mode)
+;;(part-module-load-f "vb-mode" 'visual-basic-mode)
+(use-package visual-basic-mode
+  :load-path "lib/vb-mode"
+  :commands visual-basic-mode
+  :mode (("\\.vb\\'" . lua-mode)
+         ("\\.vbs\\'" . lua-mode)))
+
 ;; Python
 (load "~/.emacs.d/python/python-config.el")
 ;;(part-module-load-f "python" 'python-config)
