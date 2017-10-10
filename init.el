@@ -13,10 +13,11 @@
 (require 'use-package)
 
 (use-package ace-jump-mode
+  :defer t
   :load-path "lib/ace-jump-mode"
-  :commands ace-jump-mode
-  :bind (("M-j" . ace-jump-mode))
-  :config (ace-jump-mode-enable-mark-sync))
+  :init
+  (autoload 'ace-jump-mode "ace-jump-mode" nil t)
+  (bind-key "M-j" 'ace-jump-mode))
 
 (use-package evil-mode
              :load-path "lib/evil-mode"
@@ -575,19 +576,11 @@ Defaults to `error'."
 (grep-apply-setting 'grep-command "grep * -r -n --color -i -e")
 (grep-apply-setting 'grep-find-command "find . ! -name \"*~\" ! -name \"#*#\" -type f -print0 | xargs -0 -e grep -nH -e ")
 
-
-;; remove temp files
-(defun clear-folder ()
-  (interactive)
-  (message "Clear folder, directory: %s" default-directory)
-  (shell-command "rm *.pyc *~ *.orig")
-  (revert-buffer)
-)
-
-(defun dired-mode-complex-hook()
-  ((lambda ()
-	(define-key dired-mode-map (kbd "C-c C-l") 'clear-folder))))
-(add-hook 'dired-mode-hook 'dired-mode-complex-hook 1)
+(use-package dired
+  :defer 1
+  :load-path "~/.emacs.d/lib/dired"
+  :commands dired
+  :init (require 'dired-config))
 
 ;; Configuration for dictionaries
 (add-to-list 'load-path "~/.emacs.d/dictem/")
@@ -608,9 +601,6 @@ Defaults to `error'."
 (if (file-exists-p (expand-file-name "~/ide-skel/ide-skel-config.el"))
 	(part-module-load-f "ide-skel" 'ide-skel-config)
   nil)
-
-(add-to-list 'load-path "~/.emacs.d/lib/dired")
-(require 'dired-tar)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
