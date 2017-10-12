@@ -16,15 +16,20 @@
 (require 'js2-jedi-direx)
 
 (defun js2-mode-complex-hook()
+  (message "apply js2-mode-complex-hook")
   (yas-minor-mode)
   (yas-activate-extra-mode 'js-mode)
   ;;(define-key js-mode-map [tab] 'yas/expand)
   (define-key yas-minor-mode-map [tab] 'yas/expand)
-  (define-key js-mode-map "\C-cx" 'js2-jedi-direx:pop-to-buffer)
+
+  (if (boundp 'js-mode-map)
+      (progn (define-key js-mode-map "\C-cx" 'js2-jedi-direx:pop-to-buffer)
+             (define-key js-mode-map "\M-j" nil)
+             (define-key js-mode-map (kbd "RET") 'js2-line-break)
+             ))
+
   (define-key js2-mode-map "\C-cx" 'js2-jedi-direx:pop-to-buffer)
-  (define-key js-mode-map "\M-j" nil)
   (define-key js2-mode-map "\M-j" nil)
-  (define-key js-mode-map (kbd "RET") 'js2-line-break)
   (define-key js2-mode-map (kbd "RET") 'js2-line-break)
   (hs-minor-mode)
   ;;(define-key direx:direx-mode-map (kbd "O") 'js2-jedi-direx:find-item-other-window-and-close)

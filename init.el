@@ -17,12 +17,12 @@
   :load-path "lib/ace-jump-mode"
   :init
   (autoload 'ace-jump-mode "ace-jump-mode" nil t)
-  (bind-key "M-j" 'ace-jump-mode))
+  (bind-key [f4]  'ace-jump-mode))
 
 (use-package evil-mode
-             :load-path "lib/evil-mode"
-             :commands evil-mode
-             :bind (([f9] . evil-mode)))
+  :load-path "lib/evil-mode"
+  :commands evil-mode
+  :bind (([f9] . evil-mode)))
 
 ;Initialize package.el
 (package-initialize)
@@ -155,10 +155,6 @@
     (interactive)
     (set-language-environment "UTF-8"))
 
-;;раскладки
-(global-set-key [f3] 'setcp1251)
-(global-set-key [f4] 'setutf8)
-
 ;;макросы
 (global-set-key [f5] 'kmacro-start-macro)
 (global-set-key [f6] 'kmacro-end-macro)
@@ -192,6 +188,7 @@
 (global-set-key (kbd "M-p") 'backward-paragraph)
 (global-set-key (kbd "M-n") 'forward-paragraph)
 (global-set-key (kbd "C-x j") 'previous-multiframe-window)
+(global-set-key [f3] 'other-window) ;; default C-x o
 
 (defun m-prev-window()
   (interactive)
