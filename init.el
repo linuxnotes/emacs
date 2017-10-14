@@ -187,13 +187,26 @@
 ;; перемещение с использованием Alt
 (global-set-key (kbd "M-p") 'backward-paragraph)
 (global-set-key (kbd "M-n") 'forward-paragraph)
-(global-set-key (kbd "C-x j") 'previous-multiframe-window)
-(global-set-key [f3] 'other-window) ;; default C-x o
+;; newline-without-break-of-line
+(defun newline-without-break-of-line ()
+  "https://stackoverflow.com/questions/5898448/how-to-add-a-new-line-without-breaking-the-current-line
+  1. move to end of the line.
+  2. insert newline with index"
 
+  (interactive)
+  (let ((oldpos (point)))
+    (end-of-line)
+    (newline-and-indent)))
+
+(global-set-key (kbd "<C-return>") 'newline-without-break-of-line)
+
+;; for windows
 (defun m-prev-window()
   (interactive)
-(other-window -1))
-(global-set-key (kbd "C-x p") 'm-prev-window)
+  (other-window -1))
+
+(global-set-key (kbd "C-x p") 'm-prev-window) ;; previous-multiframe-window
+(global-set-key [f3] 'other-window) ;; default C-x o
 (global-set-key (kbd "C-c d") 'delete-trailing-whitespace)
 
 
