@@ -403,74 +403,86 @@
         (select-window (funcall selector)))
       (setq arg (if (plusp arg) (1- arg) (1+ arg))))))
 
-(add-to-list 'load-path "~/.emacs.d/ahg")
-(require 'ahg)
-
-;; patched for user ahg for directory or for full project
-(defun ahg-status-clbk (clbk &rest extra-switches)
-  "Run hg status. When called non-interactively, it is possible
+;;;;;;;; ahg ;;;;;;;;;;;;;;;;;;
+;;(add-to-list 'load-path "~/.emacs.d/lib/ahg")
+;;(require 'ahg)
+;;(global-set-key (kbd "C-c h g d") 'ahg-status-cur-dir)
+(use-package ahg
+  :load-path "lib/ahg"
+  :commands ahg-status ahg-glog ahg-log ahg-status-cur-dir
+  :config
+  (progn
+    ;; patched for user ahg for directory or for full project
+    (defun ahg-status-clbk (clbk &rest extra-switches)
+      "Run hg status. When called non-interactively, it is possible
 to pass extra switches to hg status."
-  (interactive)
-  (let ((buf (get-buffer-create "*aHg-status*"))
-        (curdir default-directory)
-        (show-message (interactive-p))
-        (root (ahg-root)))
-    (when ahg-status-consider-extra-switches
-      (let ((sbuf (ahg-get-status-buffer root)))
-        (when sbuf
-          (with-current-buffer sbuf
-            (setq extra-switches ahg-status-extra-switches)))))
-    (with-current-buffer buf
-      (let ((inhibit-read-only t))
-        (erase-buffer))
-      (setq default-directory (file-name-as-directory curdir))
-      (set (make-local-variable 'ahg-root) (car extra-switches)) ;; changes
-      (set (make-local-variable 'ahg-status-extra-switches) extra-switches)
-      (ahg-push-window-configuration))
-	;;(message "calback = %s extra-switches = %s" clbk (car extra-switches))
-    (ahg-generic-command
-     "status" extra-switches
-     (lexical-let ((clbk clbk)
-				   (default-dir (car extra-switches))
-				   (no-pop ahg-status-no-pop)
-                   (point-pos ahg-status-point-pos))
-       (lambda (process status)
-         (ahg-status-sentinel process status no-pop point-pos)
-		 ;;(message "callback = %s" clbk)
-		 (funcall clbk)
-		 ))
-	 buf
+      (interactive)
+      (let ((buf (get-buffer-create "*aHg-status*"))
+            (curdir default-directory)
+            (show-message (interactive-p))
+            (root (ahg-root)))
+        (when ahg-status-consider-extra-switches
+          (let ((sbuf (ahg-get-status-buffer root)))
+            (when sbuf
+              (with-current-buffer sbuf
+                (setq extra-switches ahg-status-extra-switches)))))
+        (with-current-buffer buf
+          (let ((inhibit-read-only t))
+            (erase-buffer))
+          (setq default-directory (file-name-as-directory curdir))
+          (set (make-local-variable 'ahg-root) (car extra-switches)) ;; changes
+          (set (make-local-variable 'ahg-status-extra-switches) extra-switches)
+          (ahg-push-window-configuration))
+        ;;(message "calback = %s extra-switches = %s" clbk (car extra-switches))
+        (ahg-generic-command
+         "status" extra-switches
+         (lexical-let ((clbk clbk)
+                       (default-dir (car extra-switches))
+                       (no-pop ahg-status-no-pop)
+                       (point-pos ahg-status-point-pos))
+           (lambda (process status)
+             (ahg-status-sentinel process status no-pop point-pos)
+             ;;(message "callback = %s" clbk)
+             (funcall clbk)
+             ))
+         buf
          nil (not show-message))))
 
-(defun ahg-status-refresh ()
-  (interactive)
-  (let ((ahg-status-point-pos (ahg-line-point-pos))
-        ;;(ahg-status-consider-extra-switches t)
-        )
-    (call-interactively 'ahg-status-cur-dir)))
+    (defun ahg-status-refresh ()
+      (interactive)
+      (let ((ahg-status-point-pos (ahg-line-point-pos))
+            ;;(ahg-status-consider-extra-switches t)
+            )
+        (call-interactively 'ahg-status-cur-dir)))
 
-(defun ahg-status-cur-dir ()
-  "Получить статус по текущему каталогу"
-  (interactive)
-  (let ((curdir default-directory)
-		(newcurdir (expand-file-name default-directory))
-		)
-	(setq default-directory newcurdir)
-	(ahg-status-clbk (lexical-let ((_newcurdir newcurdir)) (lambda () (setq default-directory _newcurdir)))
-					 newcurdir)
-	(setq default-directory newcurdir)))
-(global-set-key (kbd "C-c h g d") 'ahg-status-cur-dir)
+    (defun ahg-status-cur-dir ()
+      "Получить статус по текущему каталогу"
+      (interactive)
+      (let ((curdir default-directory)
+            (newcurdir (expand-file-name default-directory))
+            )
+        (setq default-directory newcurdir)
+        (ahg-status-clbk (lexical-let ((_newcurdir newcurdir)) (lambda () (setq default-directory _newcurdir)))
+                         newcurdir)
+        (setq default-directory newcurdir)))
+      (global-set-key (kbd "C-c h g d") 'ahg-status-cur-dir)
+    )
+  :init
+  (bind-key "C-c h g s" 'ahg-status)
+  (bind-key "C-c h g g" 'ahg-glog)
+  (bind-key "C-c h g l" 'ahg-log)
+  (bind-key "C-c h g d" 'ahg-status-cur-dir))
 
 ;;; Control version systems
 (when (not (fboundp 'string-suffix-p))
   (defun string-suffix-p (str1 str2 &optional ignore-case)
-  (let ((begin2 (- (length str2) (length str1)))
-        (end2 (length str2)))
-    (when (< begin2 0) (setq begin2 0))
-    (eq t (compare-strings str1 nil nil
-                           str2 begin2 end2
-                           ignore-case))))
-)
+    (let ((begin2 (- (length str2) (length str1)))
+          (end2 (length str2)))
+      (when (< begin2 0) (setq begin2 0))
+      (eq t (compare-strings str1 nil nil
+                             str2 begin2 end2
+                             ignore-case))))
+  )
 
 (when (not (fboundp 'define-error))
   (defun define-error (name message &optional parent)
