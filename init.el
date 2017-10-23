@@ -510,17 +510,23 @@ Defaults to `error'."
 	(require 'init-special)
   (error nil))
 
-(add-to-list 'load-path "~/.emacs.d/magit")
-(add-to-list 'load-path "~/.emacs.d/git-modes")
-
-;; try load magit
+;; for current magit 2.11.0
+;; git clone https://github.com/magit/magit.git
+;; git clone https://github.com/magit/with-editor
+;; git clone https://github.com/magnars/dash.el.git
+;; cd magit;
+;; ;; add to config.mk
+;; LOAD_PATH  = -L ~/creation/magit/lisp
+;; LOAD_PATH += -L ~/creation/dash.el
+;; LOAD_PATH += -L ~/creation/with-editor
+;; git checkout 2.11.0
+;; make
+(add-to-list 'load-path "~/.emacs.d/ext-lib/with-editor")
+(add-to-list 'load-path "~/.emacs.d/ext-lib/magit/lisp")
 (condition-case nil
-	(progn
-	  (require 'magit)
-	  (setq magit-last-seen-setup-instructions "1.4.0")
-
-	  )
-  (error nil))
+    (progn
+      (require 'magit)
+      (setq magit-last-seen-setup-instructions "2.11.0")))
 
 ;; my functions
 (defun change-brackets (from-b to-b)
