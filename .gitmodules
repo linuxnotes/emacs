@@ -52,3 +52,6 @@
 [submodule "lib/json-reformat"]
 	path = lib/json-reformat
 	url = https://github.com/gongo/json-reformat.git
+[submodule "lib/dash.el"]
+	path = lib/dash.el
+	url = https://github.com/magnars/dash.el.git
