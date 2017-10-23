@@ -27,6 +27,7 @@ git-modes
 projectile/package.el
 init-special.el
 auto-complete
+ext-lib/
 #emacs-ctable
 #emacs-deferred
 #emacs-epc
