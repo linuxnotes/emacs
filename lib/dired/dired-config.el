@@ -51,6 +51,10 @@
      (define-key dired-mode-map (kbd "C-c C-l") 'e:dired-clear-folder))))
 (add-hook 'dired-mode-hook 'e:dired-complex-hook 1)
 
+(autoload 'du "~/.emacs.d/lib/dired/disk-usage" "List disk usage in DIR.
+
+With prefix arg EDIT-ARGS, let user to edit arguments given to du." t)
+
 (provide 'dired-config)
 
 ;; (require 'ls-lisp)
