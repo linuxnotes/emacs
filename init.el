@@ -684,3 +684,6 @@ Defaults to `error'."
 
 (add-to-list 'load-path "~/.emacs.d/lib/undo-tree")
 (require 'undo-tree-config)
+
+(add-to-list 'load-path "~/.emacs.d/lib/icicles/")
+(require 'icicles-config)

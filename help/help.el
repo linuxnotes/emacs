@@ -93,4 +93,9 @@
 ;;
 ;; M-x prepend-to-register <RET> r
 
-;; 
+;; It is bound to C-x TAB.
+;; (indent-rigidly START END ARG &optional INTERACTIVE)
+;; and than with <left> <right> <s-left> <s-right> region can be moved.
+
+
+;; key + C-h describe key bindings
