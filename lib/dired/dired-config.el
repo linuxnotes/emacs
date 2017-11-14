@@ -18,6 +18,22 @@
   (interactive)
   ;; in *Python* goto to folder of current buffer
   ;; execute !python buffer_name
+  (let* (
+         (folder-name (expand-file-name default-directory))
+         (proc (get-process "shell"))
+         (buf (get-buffer "*shell*"))
+         )
+    (switch-to-buffer-other-window buf)
+    (process-send-string proc (concat "cd " (file-name-directory folder-name))) ; "\n" ;; in the end
+    (comint-send-input)
+    (setq default-directory (file-name-directory folder-name))
+    (goto-char (point-max))
+    ))
+
+(defun e:dired-open-eshell()
+  (interactive)
+  ;; in *Python* goto to folder of current buffer
+  ;; execute !python buffer_name
   (let* ((folder-name (expand-file-name default-directory)))
     (with-current-buffer "*eshell*"
       (eshell-return-to-prompt)
@@ -47,8 +63,10 @@
 
 (defun e:dired-complex-hook()
   ((lambda ()
-     (define-key dired-mode-map (kbd "C-c C-e") 'e:dired-open-shell)
-     (define-key dired-mode-map (kbd "C-c C-l") 'e:dired-clear-folder))))
+     (define-key dired-mode-map (kbd "C-c C-e") 'e:dired-open-eshell)
+     (Define-key dired-mode-map (kbd "C-c C-s") 'e:dired-open-shell)
+     (define-key dired-mode-map (kbd "C-c C-l") 'e:dired-clear-folder)
+     )))
 (add-hook 'dired-mode-hook 'e:dired-complex-hook 1)
 
 (autoload 'du "~/.emacs.d/lib/dired/disk-usage" "List disk usage in DIR.

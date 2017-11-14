@@ -202,7 +202,7 @@
 	 ;; this change need for correct indent in python mode when use yasnippet
 	 ;; ((lambda () (set (make-local-variable 'yas-indent-line) 'fixed)))
 	 ;;(setq yas/after-exit-snippet-hook 'indent-according-to-mode)
-	 (smart-operator-mode-on)
+	 ;;(smart-operator-mode-on)
    ))
 )
 

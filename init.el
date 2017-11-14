@@ -13,11 +13,18 @@
 (require 'use-package)
 
 (use-package ace-jump-mode
-  :defer t
+  ;;:defer t
   :load-path "lib/ace-jump-mode"
   :init
   (autoload 'ace-jump-mode "ace-jump-mode" nil t)
-  (bind-key [f4]  'ace-jump-mode))
+  :config
+  (setq ace-jump-mode-move-keys
+    (nconc (loop for i from ?a to ?z collect i)
+           ))
+  ;;(define-key global-map (kbd "C-c SPC") 'ace-jump-mode)
+  (define-key global-map (kbd "C-c j") 'ace-jump-mode)
+  ;;(bind-key [f4]  'ace-jump-mode)
+  )
 
 (use-package evil-mode
   :load-path "lib/evil-mode"
@@ -527,6 +534,7 @@ Defaults to `error'."
     (progn
       (require 'magit)
       (setq magit-last-seen-setup-instructions "2.11.0")))
+(global-set-key (kbd "C-c h g m") 'magit-status)
 
 ;; my functions
 (defun change-brackets (from-b to-b)
