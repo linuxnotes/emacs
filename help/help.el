@@ -99,3 +99,6 @@
 
 
 ;; key + C-h describe key bindings
+
+;; delete up to char 'zap-to-char
+;; M-z

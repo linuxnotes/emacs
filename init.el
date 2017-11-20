@@ -287,8 +287,8 @@
 (use-package visual-basic-mode
   :load-path "lib/vb-mode"
   :commands visual-basic-mode
-  :mode (("\\.vb\\'" . lua-mode)
-         ("\\.vbs\\'" . lua-mode)))
+  :mode (("\\.vb\\'" . visual-basic-mode)
+         ("\\.vbs\\'" . visual-basic-mode)))
 
 ;; Python
 (load "~/.emacs.d/python/python-config.el")
