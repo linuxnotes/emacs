@@ -24,7 +24,7 @@
          (buf (get-buffer "*shell*"))
          )
     (switch-to-buffer-other-window buf)
-    (process-send-string proc (concat "cd " (file-name-directory folder-name))) ; "\n" ;; in the end
+    (process-send-string proc (concat "cd " (file-name-directory folder-name) "\n")) ; "\n" ;; in the end
     (comint-send-input)
     (setq default-directory (file-name-directory folder-name))
     (goto-char (point-max))
@@ -64,7 +64,7 @@
 (defun e:dired-complex-hook()
   ((lambda ()
      (define-key dired-mode-map (kbd "C-c C-e") 'e:dired-open-eshell)
-     (Define-key dired-mode-map (kbd "C-c C-s") 'e:dired-open-shell)
+     (define-key dired-mode-map (kbd "C-c C-s") 'e:dired-open-shell)
      (define-key dired-mode-map (kbd "C-c C-l") 'e:dired-clear-folder)
      )))
 (add-hook 'dired-mode-hook 'e:dired-complex-hook 1)
