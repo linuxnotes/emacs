@@ -518,16 +518,22 @@ Defaults to `error'."
   (error nil))
 
 ;; for current magit 2.11.0
+;; cd ~/.emaac.d/ext-lib/
 ;; git clone https://github.com/magit/magit.git
 ;; git clone https://github.com/magit/with-editor
 ;; git clone https://github.com/magnars/dash.el.git
 ;; cd magit;
+
 ;; ;; add to config.mk
 ;; LOAD_PATH  = -L ~/creation/magit/lisp
 ;; LOAD_PATH += -L ~/creation/dash.el
 ;; LOAD_PATH += -L ~/creation/with-editor
 ;; git checkout 2.11.0
 ;; make
+
+;; If not doesn't make, need try remove compiled files.
+;; cd ~/.emacs.d/
+;; find . -name '*.elc' | xargs rm
 (add-to-list 'load-path "~/.emacs.d/ext-lib/with-editor")
 (add-to-list 'load-path "~/.emacs.d/ext-lib/magit/lisp")
 (condition-case nil
@@ -693,5 +699,5 @@ Defaults to `error'."
 (add-to-list 'load-path "~/.emacs.d/lib/undo-tree")
 (require 'undo-tree-config)
 
-(add-to-list 'load-path "~/.emacs.d/lib/icicles/")
-(require 'icicles-config)
+;; (add-to-list 'load-path "~/.emacs.d/lib/icicles/")
+;; (require 'icicles-config)
