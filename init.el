@@ -701,3 +701,13 @@ Defaults to `error'."
 
 ;; (add-to-list 'load-path "~/.emacs.d/lib/icicles/")
 ;; (require 'icicles-config)
+
+;;; php-mode
+;;git clone https://github.com/ejmr/php-mode.gi
+(use-package php-mode
+  :load-path "lib/php-mode" "lib/php-mode/skeleton"
+  :commands php-mode
+  :mode ("\\.php\\'" . php-mode))
+(eval-after-load 'php-mode
+  '(require 'php-ext))
+
