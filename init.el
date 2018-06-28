@@ -18,13 +18,10 @@
   :init
   (autoload 'ace-jump-mode "ace-jump-mode" nil t)
   :config
-  (setq ace-jump-mode-move-keys
-    (nconc (loop for i from ?a to ?z collect i)
-           ))
-  ;;(define-key global-map (kbd "C-c SPC") 'ace-jump-mode)
-  (define-key global-map (kbd "C-c j") 'ace-jump-mode)
-  ;;(bind-key [f4]  'ace-jump-mode)
-  )
+  ((progn (setq ace-jump-mode-move-keys
+                (nconc (loop for i from ?a to ?z collect i)))
+          (define-key global-map (kbd "C-c j") 'ace-jump-mode)
+          (define-key global-map (kbd "C-c c") 'ace-jump-char-mode))))
 
 (use-package evil-mode
   :load-path "lib/evil-mode"
