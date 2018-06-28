@@ -653,6 +653,25 @@ Defaults to `error'."
  '(js2-bounce-indent-p nil)
  '(js2-electric-keys (quote ("{" "}" "(" ")" "[" "]" ":" ";" "," "*")))
  '(js2-highlight-level 3)
+ '(logview-additional-level-mappings
+   (quote
+    (("PYTHON_LOG"
+      (error "ERROR" "CRITICAL")
+      (warning "WARN" "WARNING")
+      (information "INFO" "SESSION")
+      (debug "DEBUG")
+      (trace "TRACE")
+      (aliases "PythonLogLevels")))))
+ '(logview-additional-submodes
+   (quote
+    (("PYTHON-LOGGING"
+      (format . "TIMESTAMP LEVEL [IGNORED] [THREAD] ")
+      (levels . "PYTHON_LOG")
+      (aliases "PythonLogSub")))))
+ '(logview-additional-timestamp-formats
+   (quote
+    (("python-log-err"
+      (java-pattern . "yyyy-MM-dd HH:mm:ss,SSS")))))
  '(package-selected-packages (quote (org-pomodoro ssh "ssh" powerline "powerline")))
  '(send-mail-function (quote smtpmail-send-it))
  '(smtpmail-smtp-server "smtp.mail.ru")
@@ -711,3 +730,18 @@ Defaults to `error'."
 (eval-after-load 'php-mode
   '(require 'php-ext))
 
+
+;;; logview-mode
+;; check for commit: 902c881
+;; git clone https://github.com/doublep/logview.git
+;; check for commit: d8674ac
+;; https://github.com/doublep/datetime.git
+;; check for commit: 3860b69
+;; git clone https://github.com/doublep/extmap.git
+(use-package logview
+  :load-path "lib/logview" "lib/logview/logview" "lib/logview/datetime" "lib/logview/extmap"
+  :commands logview-mode
+  :mode ("\\.log\\(?:\\.[0-9]+\\)?\\'" . logview-mode)
+  :init
+  (progn (require 'logview)
+         (require 'logview-config)))
