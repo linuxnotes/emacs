@@ -10,9 +10,20 @@
 ;; cd git-clones
 ;; git checkout 1.0.0
 
-(add-to-list 'load-path "~/.emacs.d/projectile/dash")
-(add-to-list 'load-path "~/.emacs.d/cl-lib")
-(add-to-list 'load-path "~/.emacs.d/lib23/magit")
+(add-to-list 'load-path "~/.emacs.d/lib/e-tools")
+(require 'e-tools)
+
+(e-tools-add-to-list 'load-path
+                     "~/.emacs.d/projectile/dash"
+                     "~/.emacs.d/cl-lib"
+                     "~/.emacs.d/lib23/magit")
+
+;;(e-tools-load-module "elisp" 'elisp-config)
+;;(e-tools-load-module "js" 'js-config)
+;;(e-tools-load-module "vb-mode" 'visual-basic-mode)
+;;(e-tools-load-module "per" 'perl-config)
+;;(e-tools-load-module "python" 'python-config)
+
 
 ;; try load magit
 (condition-case nil

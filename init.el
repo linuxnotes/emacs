@@ -6,36 +6,37 @@
 	     '("melpa" . "http://melpa.milkbox.net/packages/")
          t)
 
+;Initialize package.el
+(package-initialize)
+
 (add-to-list 'load-path "~/.emacs.d/lib/e-tools")
 (require 'e-tools)
+(require 'compile)
 
-(e-tools-add-to-list 'load-path "~/.emacs.d/lib/use-package")
-(require 'use-package)
+(e-tools-load-module "lib/use-package" 'use-package)
+(customize-set-value 'use-package-verbose t)
 
 (use-package ace-jump-mode
-  ;;:defer t
+  :defer t
   :load-path "lib/ace-jump-mode"
   :init
   (autoload 'ace-jump-mode "ace-jump-mode" nil t)
+  (define-key global-map (kbd "C-c j") 'ace-jump-mode)
+  (define-key global-map (kbd "C-c c") 'ace-jump-char-mode)
   :config
-  ((progn (setq ace-jump-mode-move-keys
-                (nconc (loop for i from ?a to ?z collect i)))
-          (define-key global-map (kbd "C-c j") 'ace-jump-mode)
-          (define-key global-map (kbd "C-c c") 'ace-jump-char-mode))))
+  (setq ace-jump-mode-move-keys
+           (nconc (loop for i from ?a to ?z collect i))))
 
-(use-package evil-mode
-  :load-path "lib/evil-mode"
+(use-package evil
+  :load-path "lib/evil"
   :commands evil-mode
+  :init (require 'evil)
   :bind (([f9] . evil-mode)))
-
-;Initialize package.el
-(package-initialize)
 
 ;; power line pretty status bar
 (package-install 'powerline)
 (powerline-default-theme)
 (setq powerline-default-separator 'arrow-fade)
-
 
 (package-install 'ssh)
 (setq tramp-default-method "ssh")
@@ -57,34 +58,15 @@
 	   ))
   )
 
-(defun append-to-list (list-var elements)
-  "Append ELEMENTS to the end of LIST-VAR.
-   The return value is the new value of LIST-VAR.
-   Example: (append-to-list 'some '(\"some1\", \"some2\", \"some3\"))
-  "
-  (set list-var (append (symbol-value list-var) elements)))
-
 ;; отключение стандартной
 ;; системы контроля версий
 ;; http://www.gnu.org/software/emacs/manual/html_node/emacs/Version-Control.html
 (setf vc-handled-backends nil)
 
-(defun part-module-load-f(name feature-name)
-  "Load module function"
-  (add-to-list 'load-path (concat "~/.emacs.d/" name))
-  (require feature-name)
-)
-
-(append-to-list 'load-path '("~/.emacs.d/lang" "~/.emacs.d/lib"  "~/.emacs.d/cl-lib"))
+(e-tools-add-to-list 'load-path "~/.emacs.d/lang" "~/.emacs.d/lib"  "~/.emacs.d/cl-lib")
 (condition-case nil
 	(require 'cl-lib)
   (error(load-file "~/.emacs.d/cl-lib/cl-lib.el")))
-
-;;;; Установка констант
-(defun is-windows ()
-  (boundp 'w32-system-shells))
-(defun is-linux ()
-  (not (boundp 'w32-system-shells)))
 
 ;; шрифт
 ;; cp hack2.0 /usr/share/fonts/truetype/ -R
@@ -275,24 +257,31 @@
 (yas-reload-all) ;; this need for use yasnippet as minor mode
 (setq yas-indent-line 'fixed)
 
-;;emacs lisp
-(part-module-load-f "elisp" 'elisp-config)
-;;javascript
-(part-module-load-f "js" 'js-config)
-;; visual basic
-;;(part-module-load-f "vb-mode" 'visual-basic-mode)
+(use-package elisp-config
+  :load-path "elisp"
+  :commands common-list-mode
+  :mode (("\\.cl\\'" . common-list-mode)))
+
+(use-package js-config
+  :load-path "js"
+  :commands js2-mode
+  :mode (("\\.js\\'" . js2-mode)))
+
 (use-package visual-basic-mode
   :load-path "lib/vb-mode"
   :commands visual-basic-mode
   :mode (("\\.vb\\'" . visual-basic-mode)
          ("\\.vbs\\'" . visual-basic-mode)))
 
-;; Python
-(load "~/.emacs.d/python/python-config.el")
-;;(part-module-load-f "python" 'python-config)
+;; python and perl also autoloaded,
+;; so add config by hook
+(use-package python-config
+  :hook (python-mode . python-config-one-time-hook)
+  :load-path "python")
 
-(add-to-list 'load-path "~/.emacs.d/perl/")
-(require 'perl-config)
+(use-package perl-config
+  :hook (perl-mode . perl-config-one-time-hook)
+  :load-path "perl")
 
 (use-package lua-mode
   :load-path "lib/lua-mode"
@@ -307,11 +296,11 @@
   :config (setq json-reformat:pretty-string? 't))
 
 ;; web mode
-(part-module-load-f "web-mode" 'web-mode-config)
+(e-tools-load-module "web-mode" 'web-mode-config)
 ;; макросы
-(part-module-load-f "macros" 'my-user-macro)
+(e-tools-load-module "macros" 'my-user-macro)
 ;; Themes
-(part-module-load-f "theme" 'theme-config)
+(e-tools-load-module "theme" 'theme-config)
 
 ;; projectile
 ;; projectile-mode ;; если нужно не глобально
@@ -638,7 +627,7 @@ Defaults to `error'."
 		 (reverse-input-method (intern charset-symbol-name))))
 
 (if (file-exists-p (expand-file-name "~/ide-skel/ide-skel-config.el"))
-	(part-module-load-f "ide-skel" 'ide-skel-config)
+	(e-tools-load-module "ide-skel" 'ide-skel-config)
   nil)
 
 (custom-set-variables

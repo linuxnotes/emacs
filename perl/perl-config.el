@@ -28,9 +28,7 @@
 
 		   (if (boundp 'cperl-mode-map)
 			   (define-key cperl-mode-map (kbd "C-x i") 'yas-expand) ;; redifine insert-file that not used
-			 nil)
-		   ))
-		)
+			 nil))))
 	  (add-hook 'perl-mode-hook 'perl-mode-complex-hook)
 	  (add-hook 'cperl-mode-hook 'perl-mode-complex-hook)
 
@@ -65,7 +63,9 @@
 			  (concat
 			   (expand-file-name "~/perl5") ":")
 			  (getenv "PERL_LOCAL_LIB_ROOT")))
-  nil)
+  (defun perl-mode-complex-hook()
+    "Stub"
+    (nil)))
 
 (setq
  cperl-close-paren-offset -4
@@ -73,7 +73,10 @@
  cperl-indent-level 4
  cperl-indent-parens-as-block t
  cperl-tabs-always-indent t
- cperl-pod-here-fontify nil
- )
+ cperl-pod-here-fontify nil)
+
+(defun perl-config-one-time-hook ()
+  (perl-mode-complex-hook)
+  (remove-hook 'perl-mode-hook 'perl-config-one-time-hook))
 
 (provide 'perl-config)

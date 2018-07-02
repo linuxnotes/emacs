@@ -63,8 +63,24 @@
     (switch-to-buffer-other-window buf)
     (process-send-string proc (concat "cd " (file-name-directory buf-file-name) "\n"))
     (process-send-string proc (concat "!python " (file-name-nondirectory buf-file-name) "\n"))
-    (goto-char (point-max))
-    ))
+    (goto-char (point-max))))
+
+(defun python-config-execute-test-in-shell ()
+  (interactive)
+  ;; in *Python* goto to folder of current buffer
+  ;; execute !python buffer_name
+  (require 'bm-tl)
+  (let* ((buf-file-name (expand-file-name (buffer-file-name)))
+         (proc (python-shell-get-process-or-error "Python process not found"))
+         (buf (process-buffer proc))
+         (tst-name (bm-tl-get-test-for-py buf-file-name)))
+    (if (not (null tst-name))
+        (progn
+          (switch-to-buffer-other-window buf)
+          (process-send-string proc (concat "cd " (file-name-directory tst-name) "\n"))
+          (process-send-string proc (concat "!python " (file-name-nondirectory tst-name) "\n"))
+          (goto-char (point-max)))
+      nil)))
 
 ;; python jedi may be slow
 (require 'concurrent)
@@ -94,6 +110,8 @@
 ;; ;; ; don't split windows
 ;; (setq py-switch-buffers-on-execute-p nil)
 ;; (setq py-split-windows-on-execute-p nil)
+
+(setq py-use-current-dir-when-execute-p t)
 
 (defun ipythonm()
   "Define ipython correct command"
@@ -208,6 +226,7 @@
      (define-key python-mode-map (kbd "C-c C-c") 'python-config-execute-buffer-in-shell)
 	 (jedi:setup)
 	 (define-key python-mode-map (kbd "C-x i") 'yas-expand) ;; redifine insert-file that not used
+     (define-key python-mode-map (kbd "C-c c r") 'python-config-execute-test-in-shell) ;; redifine insert-file that not used
      (hs-minor-mode)
 	 ;; this change need for correct indent in python mode when use yasnippet
 	 ;; ((lambda () (set (make-local-variable 'yas-indent-line) 'fixed)))
@@ -248,5 +267,9 @@
 (add-hook 'jedi-mode-hook 'jedi-direx:setup)
 
 (add-hook 'python-mode-hook 'jedi:setup)
+
+(defun python-config-one-time-hook ()
+  (python-mode-complex-hook)
+  (remove-hook 'python-mode-hook 'python-config-one-time-hook))
 
 (provide 'python-config)
