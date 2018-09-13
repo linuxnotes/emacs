@@ -18,6 +18,28 @@
 			(re-search-forward "^\\(.*\\)\n\\(\\(.*\n\\)*\\)\\1\n" end t))
 		(replace-match "\\1\n\\2")))))
 
+(defun replace-to-json (start end)
+  "Find duplicate lines in region START to END keeping first occurrence."
+  (interactive "*r")
+  (if (not (fboundp 'py-sf-reg-table2json))
+      (progn
+        (pymacs-exec (concat
+                      "if not \""
+                      (format (bm-tl-join (expand-file-name "~/.emacs.d/") "python" "python_helpers") t)
+                      "\" in sys.path: sys.path.append(\""
+                      (format (bm-tl-join (expand-file-name "~/.emacs.d/")
+                                          "python" "python_helpers") t) "\")"))
+
+        (pymacs-load "string_functions.region" "py-sf-reg-")
+        )
+    nil)
+  (save-excursion
+    (let* ((string (buffer-substring start end))
+           (new-string (py-sf-reg-table2json string)))
+      (delete-region start end)
+      (insert new-string)
+      )))
+
 (defun uniquify-all-lines-buffer ()
   "Delete duplicate lines in buffer and keep first occurrence."
   (interactive "*")
