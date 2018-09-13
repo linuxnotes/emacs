@@ -276,6 +276,7 @@
 ;; python and perl also autoloaded,
 ;; so add config by hook
 (use-package python-config
+  :commands (ipythonm)
   :hook (python-mode . python-config-one-time-hook)
   :load-path "python")
 
@@ -296,7 +297,21 @@
   :config (setq json-reformat:pretty-string? 't))
 
 ;; web mode
-(e-tools-load-module "web-mode" 'web-mode-config)
+;; http://web-mode.org/
+;; MMM Mode for Emacs и https://bitbucket.org/pjenvey/mmm-mako/downloads/
+(use-package web-mode
+  :load-path "web-mode"
+  :commands (web-mode)
+  :mode (("\\.mako\\'" . web-mode)
+         ("\\.phtml\\'" . web-mode)
+         ("\\.tpl\\.php\\'" . web-mode)
+         ("\\.[agj]sp\\'" . web-mode)
+         ("\\.as[cp]x\\'" . web-mode)
+         ("\\.erb\\'" . web-mode)
+         ("\\.mustache\\'" . web-mode)
+         ("\\.djhtml\\'" . web-mode)
+         ("\\.html?\\'" . web-mode)))
+
 ;; макросы
 (e-tools-load-module "macros" 'my-user-macro)
 ;; Themes
