@@ -65,15 +65,22 @@
     (process-send-string proc (concat "!python " (file-name-nondirectory buf-file-name) "\n"))
     (goto-char (point-max))))
 
-(defun python-config-execute-test-in-shell ()
+(defun python-config-execute-test-in-shell-inter ()
   (interactive)
   ;; in *Python* goto to folder of current buffer
   ;; execute !python buffer_name
+  (let* ((buf-file-name (expand-file-name (buffer-file-name))))
+    (python-config-execute-test-in-shell buf-file-name)
+  ))
+
+(defun python-config-execute-test-in-shell (file-name)
+  ;; in *Python* goto to folder of current buffer
+  ;; execute !python buffer_name
   (require 'bm-tl)
-  (let* ((buf-file-name (expand-file-name (buffer-file-name)))
+  (let* ((buf-file-name (expand-file-name file-name))
          (proc (python-shell-get-process-or-error "Python process not found"))
          (buf (process-buffer proc))
-         (tst-name (bm-tl-get-test-for-py buf-file-name)))
+         (tst-name (bm-tl-get-test-for-py-or-self buf-file-name)))
     (if (not (null tst-name))
         (progn
           (switch-to-buffer-other-window buf)
@@ -226,7 +233,7 @@
      (define-key python-mode-map (kbd "C-c C-c") 'python-config-execute-buffer-in-shell)
 	 (jedi:setup)
 	 (define-key python-mode-map (kbd "C-x i") 'yas-expand) ;; redifine insert-file that not used
-     (define-key python-mode-map (kbd "C-c c r") 'python-config-execute-test-in-shell) ;; redifine insert-file that not used
+     (define-key python-mode-map (kbd "C-c c r") 'python-config-execute-test-in-shell-inter) ;; redifine insert-file that not used
      (hs-minor-mode)
 	 ;; this change need for correct indent in python mode when use yasnippet
 	 ;; ((lambda () (set (make-local-variable 'yas-indent-line) 'fixed)))
@@ -260,9 +267,9 @@
 (define-key direx:direx-mode-map (kbd "O") 'direx:override-find-item-other-window)
 
 (eval-after-load "python"
-  '(define-key python-mode-map "\C-cx" 'jedi-direx:pop-to-buffer))
+  '(define-key python-mode-map "\C-cxj" 'jedi-direx:pop-to-buffer))
 (eval-after-load "python-mode"
-  '(define-key python-mode-map "\C-cx" 'jedi-direx:pop-to-buffer))
+  '(define-key python-mode-map "\C-cxj" 'jedi-direx:pop-to-buffer))
 
 (add-hook 'jedi-mode-hook 'jedi-direx:setup)
 
@@ -272,4 +279,19 @@
   (python-mode-complex-hook)
   (remove-hook 'python-mode-hook 'python-config-one-time-hook))
 
+(defun python-config-dired-execute-test()
+  (interactive)
+  (let ((file (dired-get-filename nil t)))
+    (message "test for file-name = %s" file)
+    (python-config-execute-test-in-shell file)
+    ))
+
+;; run tests for python files
+(defun python-config-dired-complex-hook()
+  ((lambda ()
+     (define-key dired-mode-map (kbd "C-c C-c") 'python-config-dired-execute-test))))
+
+(add-hook 'dired-mode-hook 'python-config-dired-complex-hook)
+
 (provide 'python-config)
+
