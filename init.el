@@ -313,7 +313,8 @@
          ("\\.html?\\'" . web-mode)))
 
 ;; макросы
-(e-tools-load-module "macros" 'my-user-macro)
+;;(e-tools-load-module "macros" 'my-user-macro)
+
 ;; Themes
 (e-tools-load-module "theme" 'theme-config)
 
@@ -344,20 +345,20 @@
          ))
 
 ;; todo
-(add-to-list 'load-path "~/.emacs.d/todo/")
-(require 'todo-config)
+;; (add-to-list 'load-path "~/.emacs.d/todo/")
+;; (require 'todo-config)
 
-;; navigator
-(defun load-nav()
-  " Загрузка панели навигатора "
-  (interactive)
-  (add-to-list 'load-path "~/.emacs.d/emacs-nav-49/")
-  (require 'nav)
-  (nav-disable-overeager-window-splitting)
-  ;;(nav)
-  ;; Optional: set up a quick key to toggle nav
-  (global-set-key [?\C-x ?n ?n]  'nav-toggle))
-(load-nav)
+;; ;; navigator
+;; (defun load-nav()
+;;   " Загрузка панели навигатора "
+;;   (interactive)
+;;   (add-to-list 'load-path "~/.emacs.d/emacs-nav-49/")
+;;   (require 'nav)
+;;   (nav-disable-overeager-window-splitting)
+;;   ;;(nav)
+;;   ;; Optional: set up a quick key to toggle nav
+;;   (global-set-key [?\C-x ?n ?n]  'nav-toggle))
+;; (load-nav)
 
 (setq x-select-enable-clipboard t)
 ;; (setq selection-coding-system 'compound-text-with-extensions)
