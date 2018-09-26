@@ -1,23 +1,61 @@
+
 ;;;; Configuration for using dictem
 ;; * apt-get install dcit dictd dictzip dictfmt
 ;; * download dictionaries from dict.mova.org/dicts
-;; *  add for every database into /etc/dictd/dictd.conf
-;;      database sdict { data "/usr/share/dictd/sdict_ru-en.dict.dz"
-;;                       index "/usr/share/dictd/sdict_ru-en.index" }
+;; * add for every database into /etc/dictd/dictd.conf
+;;   database sdict { data "/usr/share/dictd/sdict_ru-en.dict.dz"
+;;                    index "/usr/share/dictd/sdict_ru-en.index" }
 ;; * chmod +r /usr/share/dictd
 ;; * service dictd restart
 
+;;  remove dictd server process
+;;  ps aux | grep dictd | grep -v grep  | awk ' { print $2; }' | sudo xargs kill -2
+;;  sudo dictd -L <path> -v
+;;  sudo apt-get install dict-freedict-eng-rus
+;;  sudo /usr/lib/stardict-tools/stardict2txt enru.ifo enru.txt
+;;  sudo dictfmt  --utf8 -f enru < enru.txt
+;;  http://stardict-4.sourceforge.net/HowToCreateDictionary -- generate from tabfile idx and ifo for startdict
+;;  https://gist.github.com/rongyi/ff2f8a1a82cddb2efc9239bb0d7ca78b  -- startdict2txt
+;;  https://github.com/huzheng001/stardict-3/tree/master/tools -- startdict-3/tools
+;;  need write util that create index file from tabfile
+;;  https://manpages.debian.org/testing/dictd/dictd.8.en.html -- about index file
+;;  https://en.wikipedia.org/wiki/DICT -- description of dict server
+;;  http://tech.memoryimprintstudio.com/the-ultimate-offline-dictionary-with-dictd-in-linux/ --install dictd for arch linux
+;;  https://github.com/substack/parse-dictd -- parse dict files
+;;  http://download.huzheng.org/ -- dictionaries archives
+;;  http://stardict-4.sourceforge.net/StarDictFileFormat
+;;
+;;  create virtualenv:
+;;  git clone https://github.com/ilius/pyglossary.git
+;;  change in setup.py import VERSION
+;;  python setup.py install
+;;  in the same folder (It may require to add pyglossary to PYTHONPATH)
+;;  pyglossary
+;;  convert from ifo to index
+;;  cp dictname.dict.dz /usr/share/dictd/
+;;  cp dictname.index   /usr/share/dictd/
+
+;; add to dictd.conf:
+;;
+;; # Database section here:
+;; database dictname { data  "/usr/share/dictd/dictname.dict.dz"
+;;                     index "/usr/share/dictd/dictname.index" }
+;;
+;;
+
 (provide 'dictem-config)
 
-(when (executable-find "dictd")            ; check dictd is available
+(when (executable-find "dict")            ; check dictd is available
   (require 'dictem)
 
   (setq dictem-server "localhost")
   (setq dictem-user-databases-alist
-		`(("_en-en"  . ("foldoc" "gcide" "wn"))))
-  
+        `(("en-ru"  . ("enru")) ("ru-en"  . ("ruen")))
+		;;`(("_en-en"  . ("foldoc" "gcide" "wn")))
+        )
+
   (setq dictem-use-user-databases-only t)
-  (setq dictem-default-database "korolew")
+  (setq dictem-default-database "*")
 
   (setq dictem-port   "2628")
   (dictem-initialize)
@@ -48,9 +86,6 @@
 
   (define-key dictem-mode-map [tab] 'dictem-next-link)
   (define-key dictem-mode-map [(backtab)] 'dictem-previous-link)
-
-  (setq dictem-user-databases-alist
-		'(("_en-en"  . ("foldoc" "gcide" "wn"))))
 
 ;;; http://paste.lisp.org/display/89086
   (defun dictem-run-define-at-point-with-query ()
@@ -85,10 +120,15 @@
 	  (if (= (length dictem-query) 0) nil
 		(dictem-run 'dictem-base-search (dictem-get-default-database) dictem-query "."))))
 
-  (global-set-key "\C-cd" 'dictem-run-define-at-point)
-  (global-set-key "\C-cD" 'dictem-run-define-at-point-with-query)
+  (global-set-key "\C-cxd" 'dictem-run-define-at-point)
+  (global-set-key "\C-cxD" 'dictem-run-define-at-point-with-query)
 
-  (global-set-key "\C-cs" 'dictem-run-search)
-  (global-set-key "\C-cm" 'dictem-run-match)
+  ;; (global-set-key "\C-cs" 'dictem-run-search)
+  ;; (global-set-key "\C-cm" 'dictem-run-match)
   ;; (global-set-key "\C-cd" 'dictem-run-define)
 )
+
+
+;;;; Python alternatives that may be need to see.
+;; https://stackoverflow.com/questions/21395011/python-module-with-access-to-english-dictionaries-including-definitions-of-words
+;; https://github.com/atykhonov/google-translate -- google-translate module for emacs
