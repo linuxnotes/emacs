@@ -18,10 +18,35 @@
 			(re-search-forward "^\\(.*\\)\n\\(\\(.*\n\\)*\\)\\1\n" end t))
 		(replace-match "\\1\n\\2")))))
 
-(defun replace-to-json (start end)
+(defun someutil-replace-to-json (start end)
   "Find duplicate lines in region START to END keeping first occurrence."
   (interactive "*r")
-  (if (not (fboundp 'py-sf-reg-table2json))
+  (someutils-load-region-functions)
+  (save-excursion
+    (let* ((string (buffer-substring start end))
+           (new-string (py-sf-reg-table2json string)))
+      (delete-region start end)
+      (insert new-string)
+      )))
+
+(defun someutils-swap-assignment-line (point)
+  (interactive "d")
+  (someutils-swap-assignment-region (line-beginning-position) (line-end-position)))
+
+(defun someutils-swap-assignment-region (start end)
+  (interactive "*r")
+  (someutils-load-region-functions 'py-sf-reg-swap-assignment-line)
+  (save-excursion
+    (let* ((string (buffer-substring start end))
+           (new-string (py-sf-reg-swap-assignment-line string)))
+      (delete-region start end)
+      (insert new-string))))
+
+(defun someutils-load-region-functions(&optional f force)
+  (if (null f)
+      (setq f 'py-sf-reg-table2json)
+    nil)
+  (if (or (not (fboundp f)) (not (null force)))
       (progn
         (pymacs-exec (concat
                       "if not \""
@@ -30,15 +55,8 @@
                       (format (bm-tl-join (expand-file-name "~/.emacs.d/")
                                           "python" "python_helpers") t) "\")"))
 
-        (pymacs-load "string_functions.region" "py-sf-reg-")
-        )
-    nil)
-  (save-excursion
-    (let* ((string (buffer-substring start end))
-           (new-string (py-sf-reg-table2json string)))
-      (delete-region start end)
-      (insert new-string)
-      )))
+        (pymacs-load "string_functions.region" "py-sf-reg-"))
+    nil))
 
 (defun uniquify-all-lines-buffer ()
   "Delete duplicate lines in buffer and keep first occurrence."
