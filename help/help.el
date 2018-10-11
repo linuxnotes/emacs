@@ -103,3 +103,6 @@
 
 ;; delete up to char 'zap-to-char
 ;; M-z
+
+;; C-x n n               edit region
+;; C-x n w narrow-region

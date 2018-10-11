@@ -22,12 +22,12 @@
   (define-key yas-minor-mode-map [tab] 'yas/expand)
 
   (if (boundp 'js-mode-map)
-      (progn (define-key js-mode-map "\C-cx" 'js2-jedi-direx:pop-to-buffer)
+      (progn (define-key js-mode-map "\C-cxj" 'js2-jedi-direx:pop-to-buffer)
              (define-key js-mode-map "\M-j" nil)
              (define-key js-mode-map (kbd "RET") 'js2-line-break)
              ))
 
-  (define-key js2-mode-map "\C-cx" 'js2-jedi-direx:pop-to-buffer)
+  (define-key js2-mode-map "\C-cxj" 'js2-jedi-direx:pop-to-buffer)
   (define-key js2-mode-map "\M-j" nil)
   (define-key js2-mode-map (kbd "RET") 'js2-line-break)
   (hs-minor-mode)

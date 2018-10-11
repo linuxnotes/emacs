@@ -442,7 +442,6 @@ to pass extra switches to hg status."
           (set (make-local-variable 'ahg-root) (car extra-switches)) ;; changes
           (set (make-local-variable 'ahg-status-extra-switches) extra-switches)
           (ahg-push-window-configuration))
-        ;;(message "calback = %s extra-switches = %s" clbk (car extra-switches))
         (ahg-generic-command
          "status" extra-switches
          (lexical-let ((clbk clbk)
@@ -451,7 +450,6 @@ to pass extra switches to hg status."
                        (point-pos ahg-status-point-pos))
            (lambda (process status)
              (ahg-status-sentinel process status no-pop point-pos)
-             ;;(message "callback = %s" clbk)
              (funcall clbk)
              ))
          buf
@@ -465,7 +463,7 @@ to pass extra switches to hg status."
         (call-interactively 'ahg-status-cur-dir)))
 
     (defun ahg-status-cur-dir ()
-      "Получить статус по текущему каталогу"
+      "Get status of current directory"
       (interactive)
       (let ((curdir default-directory)
             (newcurdir (expand-file-name default-directory))
@@ -747,3 +745,12 @@ Defaults to `error'."
   :init
   (progn (require 'logview)
          (require 'logview-config)))
+(put 'narrow-to-region 'disabled nil)
+
+;; https://medium.com/@enzuru/sunrise-commander-an-orthodox-file-manager-for-emacs-2f92fd08ac9e
+;; git clone https://github.com/escherdragon/sunrise-commander
+;; (add-to-list 'load-path "~/.emacs.d/lib/sunrise-commander")
+;; (require 'sunrise-commander)
+;; (require 'sunrise-x-buttons)
+;; (require 'sunrise-x-modeline)
+;; (add-to-list 'auto-mode-alist '("\\.srvm\\'" . sr-virtual-mode))

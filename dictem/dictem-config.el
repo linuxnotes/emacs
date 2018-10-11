@@ -132,3 +132,16 @@
 ;;;; Python alternatives that may be need to see.
 ;; https://stackoverflow.com/questions/21395011/python-module-with-access-to-english-dictionaries-including-definitions-of-words
 ;; https://github.com/atykhonov/google-translate -- google-translate module for emacs
+
+;; google-translate
+;;
+(add-to-list 'load-path "~/.emacs.d/lib/google-translate")
+(require 'google-translate)
+(require 'google-translate-default-ui)
+(customize-set-variable 'google-translate-default-source-language "en")
+(customize-set-variable 'google-translate-default-target-language "ru")
+(global-set-key "\C-cxg" 'google-translate-at-point)
+(global-set-key "\C-cxG" 'google-translate-at-point-reverse)
+
+
+
