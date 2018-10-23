@@ -41,11 +41,136 @@
 (package-install 'ssh)
 (setq tramp-default-method "ssh")
 (require 'ssh)
+(setq ssh-directory-tracking-mode t)
+
+(if (>= emacs-major-version 26)
+;;; OVERWRITE for comint-file-name-prefix computing
+    (defun ssh (input-args &optional buffer)
+      "Open a network login connection via `ssh' with args INPUT-ARGS.
+INPUT-ARGS should start with a host name; it may also contain
+other arguments for `ssh'.
+
+Input is sent line-at-a-time to the remote connection.
+
+Communication with the remote host is recorded in a buffer `*ssh-HOST*'
+\(or `*ssh-USER@HOST*' if the remote username differs\).
+If a prefix argument is given and the buffer `*ssh-HOST*' already exists,
+a new buffer with a different connection will be made.
+
+When called from a program, if the optional second argument BUFFER is
+a string or buffer, it specifies the buffer to use.
+
+The variable `ssh-program' contains the name of the actual program to
+run.  It can be a relative or absolute path.
+
+The variable `ssh-explicit-args' is a list of arguments to give to
+the ssh when starting.  They are prepended to any arguments given in
+INPUT-ARGS.
+
+If the default value of `ssh-directory-tracking-mode' is t, then the
+default directory in that buffer is set to a remote (FTP) file name to
+access your home directory on the remote machine.  Occasionally this causes
+an error, if you cannot access the home directory on that machine.  This
+error is harmless as long as you don't try to use that default directory.
+
+If `ssh-directory-tracking-mode' is neither t nor nil, then the default
+directory is initially set up to your (local) home directory.
+This is useful if the remote machine and your local machine
+share the same files via NFS.  This is the default.
+
+If you wish to change directory tracking styles during a session, use the
+function `ssh-directory-tracking-mode' rather than simply setting the
+variable.
+
+The variable `ssh-x-display-follow-current-frame' can be used to specify
+how ssh X display tunelling interacts with frames on remote displays."
+      (interactive (list
+		            (read-from-minibuffer "ssh arguments (hostname first): "
+                                          (ssh-hostname-at-point)
+                                          nil nil 'ssh-history)
+		            current-prefix-arg))
+
+      (let* ((process-connection-type ssh-process-connection-type)
+             (args (ssh-parse-words input-args))
+             (host-parts (split-string (car args) "@"))
+             (host (car (last host-parts)))
+             (user (or (cadr (member "-l" args))
+                       (if (= 2 (length host-parts)) (car host-parts))
+                       (user-login-name)))
+             (buffer-name (if (string= user (user-login-name))
+                              (format "*ssh %s*" host)
+                            (format "*ssh %s@%s*" user host)))
+             proc)
+
+        (and ssh-explicit-args
+             (setq args (append ssh-explicit-args args)))
+
+        (cond ((null buffer))
+	          ((stringp buffer)
+	           (setq buffer-name buffer))
+              ((bufferp buffer)
+               (setq buffer-name (buffer-name buffer)))
+              ((numberp buffer)
+               (setq buffer-name (format "%s<%d>" buffer-name buffer)))
+              (t
+               (setq buffer-name (generate-new-buffer-name buffer-name))))
+
+        (setq buffer (get-buffer-create buffer-name))
+        (pop-to-buffer buffer-name)
+
+        (cond
+         ((comint-check-proc buffer-name))
+         (t
+          (ssh-with-check-display-override
+           #'(lambda ()
+               (comint-exec buffer buffer-name ssh-program nil args)))
+          (setq proc (get-buffer-process buffer))
+          ;; Set process-mark to point-max in case there is text in the
+          ;; buffer from a previous exited process.
+          (set-marker (process-mark proc) (point-max))
+
+          ;; comint-output-filter-functions is treated like a hook: it is
+          ;; processed via run-hooks or run-hooks-with-args in later versions
+          ;; of emacs.
+          ;; comint-output-filter-functions should already have a
+          ;; permanent-local property, at least in emacs 19.27 or later.
+          (cond
+           ((fboundp 'make-local-hook)
+            (make-local-hook 'comint-output-filter-functions)
+            (add-hook 'comint-output-filter-functions 'ssh-carriage-filter nil t))
+           (t
+            (make-local-variable 'comint-output-filter-functions)
+            (add-hook 'comint-output-filter-functions 'ssh-carriage-filter)))
+
+          (ssh-mode)
+
+          (make-local-variable 'ssh-host)
+          (setq ssh-host host)
+          (make-local-variable 'ssh-remote-user)
+          (setq ssh-remote-user user)
+
+          (message "ssh-directory-tracking-mode = %s" ssh-directory-tracking-mode)
+          (condition-case ex
+              (cond ((eq ssh-directory-tracking-mode t)
+                     ;; Do this here, rather than calling the tracking mode
+                     ;; function, to avoid a gratuitous resync check; the default
+                     ;; should be the user's home directory, be it local or remote.
+                     (setq comint-file-name-prefix
+                           (concat "/ssh:" "" ssh-remote-user "@" ssh-host ":"))
+                     (cd-absolute comint-file-name-prefix))
+                    ((null ssh-directory-tracking-mode))
+                    (t
+                     (cd-absolute (concat comint-file-name-prefix "~/"))))
+            (error
+             (message "error comint-file-name-prefix = %s error = %s" comint-file-name-prefix ex)
+             )))))
+      buffer)
+  nil)
 (add-hook 'ssh-mode-hook
           (lambda ()
             (setq ssh-directory-tracking-mode t)
             (shell-dirtrack-mode t)
-            (setq dirtrackp nil)))
+            ))
 
 ;;; Utils
 (defmacro part-module-load(name &optional feature)
