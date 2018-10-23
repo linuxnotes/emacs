@@ -104,5 +104,16 @@
 ;; delete up to char 'zap-to-char
 ;; M-z
 
-;; C-x n n               edit region
+;; C-x n n edit region
 ;; C-x n w narrow-region
+
+
+;;; Artist mode
+;;  Alt + x insert-char 245 Ʌ
+;;                      7E1 ߡ
+;;                      7DC ߜ
+;;                          v
+;;                     1405 ᐅ
+;;                     140A ᐊ
+;;                     1433 ᐳ
+;;                     1438 ᐸ
