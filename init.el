@@ -421,6 +421,12 @@ how ssh X display tunelling interacts with frames on remote displays."
   :init (modify-coding-system-alist 'file "\\.json\\'" 'utf-8)
   :config (setq json-reformat:pretty-string? 't))
 
+;; cs-mode
+(use-package csharp-mode
+  :load-path "cs-mode"
+  :commands csharp-mode
+  :mode ("\\.cs\\'" . csharp-mode))
+
 ;; web mode
 ;; http://web-mode.org/
 ;; MMM Mode for Emacs и https://bitbucket.org/pjenvey/mmm-mako/downloads/
@@ -454,6 +460,10 @@ how ssh X display tunelling interacts with frames on remote displays."
 (if (not (is-windows))
 	(progn
 	  (require 'projectile)
+      (custom-set-variables
+       '(projectile-mode-line
+         '(:eval (format " P[%s]" (projectile-project-name))))
+       )
 	  (projectile-global-mode))
   nil)
 
@@ -543,7 +553,7 @@ how ssh X display tunelling interacts with frames on remote displays."
 ;;(global-set-key (kbd "C-c h g d") 'ahg-status-cur-dir)
 (use-package ahg
   :load-path "lib/ahg"
-  :commands ahg-status ahg-glog ahg-log ahg-status-cur-dir
+  :commands ahg-status ahg-glog ahg-log ahg-status-cur-dir ahg-log-cur-file
   :config
   (progn
     ;; patched for user ahg for directory or for full project
@@ -804,10 +814,6 @@ Defaults to `error'."
  '(smtpmail-stream-type (quote ssl)))
 (global-hl-line-mode 1)
 
-(add-to-list 'load-path "~/.emacs.d/cs-mode/")
-(require 'csharp-mode)
-(add-to-list 'auto-mode-alist '("\.cs\'" . csharp-mode))
-
 ;; Editing
 (setq-default tab-width 4
               fill-column 80
@@ -879,3 +885,14 @@ Defaults to `error'."
 ;; (require 'sunrise-x-buttons)
 ;; (require 'sunrise-x-modeline)
 ;; (add-to-list 'auto-mode-alist '("\\.srvm\\'" . sr-virtual-mode))
+
+;; eshell
+(defun eshell-clear ()
+  "Clear the eshell buffer."
+  (interactive)
+  (let ((inhibit-read-only t))
+    (erase-buffer)
+    (eshell-send-input)))
+
+;; for performance
+(setq auto-window-vscroll nil)

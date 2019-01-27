@@ -23,6 +23,7 @@
 (require 'e-tools)
 
 (define-coding-system-alias 'ascii 'us-ascii)
+;;(setq flymake-gui-warnings-enabled nil)
 
 ;;pymacs
 (add-to-list 'load-path "~/.emacs.d/python/Pymacs/") ;; pymacs
@@ -59,10 +60,18 @@
          (buf-file-name (expand-file-name (buffer-file-name)))
          (proc (python-shell-get-process-or-error "Python process not found"))
          (buf (process-buffer proc))
+         (test-dir (file-name-directory buf-file-name))
+         (test-file (file-name-nondirectory buf-file-name))
+         (cd-cmd (concat "cd " test-dir  "\n"))
+         (test-cmd (concat "! python " test-file "\n"))
          )
     (switch-to-buffer-other-window buf)
-    (process-send-string proc (concat "cd " (file-name-directory buf-file-name) "\n"))
-    (process-send-string proc (concat "!python " (file-name-nondirectory buf-file-name) "\n"))
+    (comint-send-string proc cd-cmd)
+    (sleep-for 0.1)
+    (comint-send-string proc test-cmd)
+    (sleep-for 0.1)
+    ;; (process-send-string proc cd-cmd)
+    ;; (process-send-string proc test-cmd)
     (goto-char (point-max))))
 
 (defun python-config-execute-test-in-shell-inter ()
@@ -85,7 +94,9 @@
         (progn
           (switch-to-buffer-other-window buf)
           (process-send-string proc (concat "cd " (file-name-directory tst-name) "\n"))
-          (process-send-string proc (concat "!python " (file-name-nondirectory tst-name) "\n"))
+          (sleep-for 0.1)
+          (process-send-string proc (concat "! python " (file-name-nondirectory tst-name) "\n"))
+          (sleep-for 0.1)
           (goto-char (point-max)))
       nil)))
 
@@ -186,13 +197,29 @@
 ;;       ))
 ;;   (add-to-list 'flymake-allowed-file-name-masks
 ;;                '("\\.py\\'" flymake-pyflakes-init)))
+(condition-case nil
+    (require 'flymake)
+  (error nil))
+
 (when (load "flymake" t)
-  (defun flymake-pyflakes-init ()
-    (let* ((temp-file (flymake-init-create-temp-buffer-copy
-                       'flymake-create-temp-inplace)))
-      (list "pyflakes" (list temp-file))))
-  (add-to-list 'flymake-allowed-file-name-masks
-               '("\\.py\\'" flymake-pyflakes-init)))
+ (defun flymake-pyflakes-init ()
+     (let* ((temp-file (flymake-init-create-temp-buffer-copy
+ 		       'flymake-create-temp-inplace))
+ 	   (local-file (file-relative-name
+ 			temp-file
+ 			(file-name-directory buffer-file-name))))
+       (list "pyflakes" (list local-file))))
+   (add-to-list 'flymake-allowed-file-name-masks
+ 	            '("\\.py\\'" flymake-pyflakes-init)))
+
+
+;; (when (load "flymake" t)
+;;   (defun flymake-pyflakes-init ()
+;;     (let* ((temp-file (flymake-init-create-temp-buffer-copy
+;;                        'flymake-create-temp-inplace)))
+;;       (list "pyflakes" (list temp-file))))
+;;   (add-to-list 'flymake-allowed-file-name-masks
+;;                '("\\.py\\'" flymake-pyflakes-init)))
 
 
 (require 'cl-lib)
@@ -214,11 +241,16 @@
 	  (indent-for-tab-command)
 	  )))
 
+;; (defun elpy-flymake-error-at-point ()
+;;   "Return the flymake error at point, or nil if there is none."
+;;   (mapconcat #'flymake-diagnostic-text (flymake-diagnostics (point)) "\n"))
+
 (defun python-mode-complex-hook ()
   ;;http://stfw.ru/page.php?id=12357
   ;; определение и вызов функции
   ((lambda ()
 	 (message "Run python complex hook")
+     (setq python-eldoc-get-doc nil)
 	 (set-variable 'py-indent-offset 4)
 	 (set-variable 'py-smart-indentation nil)
 	 (set-variable 'indent-tabs-mode nil)
@@ -229,7 +261,9 @@
      (define-key python-mode-map (kbd "\e\ef") 'flymake-mode)
 	 (define-key python-mode-map [(tab)] 'm-jedi:complete)
      (define-key python-mode-map jedi:key-complete 'jedi:complete)
-     (define-key python-mode-map (kbd "C-c f") 'flymake-display-err-menu-for-current-line)
+     ;;(define-key python-mode-map (kbd "C-c f") 'flymake-display-warning)
+     (define-key python-mode-map (kbd "C-c f") 'flymake-show-diagnostic)
+     ;;(define-key python-mode-map (kbd "C-c f") 'flymake-display-err-menu-for-current-line)
      (define-key python-mode-map (kbd "C-c C-c") 'python-config-execute-buffer-in-shell)
 	 (jedi:setup)
 	 (define-key python-mode-map (kbd "C-x i") 'yas-expand) ;; redifine insert-file that not used
