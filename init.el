@@ -23,6 +23,7 @@
   (autoload 'ace-jump-mode "ace-jump-mode" nil t)
   (define-key global-map (kbd "C-c j") 'ace-jump-mode)
   (define-key global-map (kbd "C-c c") 'ace-jump-char-mode)
+  (define-key global-map (kbd "C-c l") 'ace-jump-line-mode)
   :config
   (setq ace-jump-mode-move-keys
            (nconc (loop for i from ?a to ?z collect i))))
@@ -808,10 +809,12 @@ Defaults to `error'."
     (("python-log-err"
       (java-pattern . "yyyy-MM-dd HH:mm:ss,SSS")))))
  '(package-selected-packages (quote (org-pomodoro ssh "ssh" powerline "powerline")))
+ '(projectile-mode-line (quote (:eval (format " P[%s]" (projectile-project-name)))))
  '(send-mail-function (quote smtpmail-send-it))
  '(smtpmail-smtp-server "smtp.mail.ru")
  '(smtpmail-smtp-service 465)
- '(smtpmail-stream-type (quote ssl)))
+ '(smtpmail-stream-type (quote ssl))
+ '(undo-tree-mode-lighter " UT "))
 (global-hl-line-mode 1)
 
 ;; Editing
@@ -894,5 +897,8 @@ Defaults to `error'."
     (erase-buffer)
     (eshell-send-input)))
 
-;; for performance
+;;; for performance
 (setq auto-window-vscroll nil)
+;; enable so-long
+(when (require 'so-long nil :noerror)
+   (so-long-enable))
