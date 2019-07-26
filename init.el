@@ -34,6 +34,15 @@
   :init (require 'evil)
   :bind (([f9] . evil-mode)))
 
+(use-package global-text-scale
+  :load-path "lib/default-text-scale"
+  :commands global-text-scale-adjust
+  :bind
+  (("M-+" . (lambda () (interactive) (global-text-scale-adjust 1))) ;
+   ("M--" . (lambda () (interactive) (global-text-scale-adjust -1)))
+   )
+  )
+
 ;; power line pretty status bar
 (package-install 'powerline)
 (powerline-default-theme)
@@ -202,6 +211,7 @@ how ssh X display tunelling interacts with frames on remote displays."
   (message "initfuncs-set-fonts")
   (condition-case nil
       (progn (set-default-font "Hack 9" t t)
+             ;;(set-face-attribute 'default nil :height 58)
              (message "font setted"))
     (error
      (if (is-linux)
@@ -209,6 +219,8 @@ how ssh X display tunelling interacts with frames on remote displays."
        (set-default-font "Courier New 10" t t))
      ))
   )
+
+
 (initfuncs-set-fonts)
 ;; excecute after create frame
 ;;(add-to-list 'after-make-frame-functions #'initfuncs-set-fonts)
@@ -902,3 +914,10 @@ Defaults to `error'."
 ;; enable so-long
 (when (require 'so-long nil :noerror)
    (so-long-enable))
+(put 'set-goal-column 'disabled nil)
+
+;; texinfo mode
+(defun texinfo-mode-complex-hook()
+    (yas-minor-mode))
+(add-hook 'texinfo-mode-hook 'texinfo-mode-complex-hook)
+

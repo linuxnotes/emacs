@@ -1,0 +1,15 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: modepath
+# key: modepath
+# binding: direct-keybinding
+# group: spec
+# contributor: linuxnotes
+# --
+#coding: utf-8
+
+import os
+import $1
+
+rel_path = lambda x: os.path.abspath(os.path.join(os.path.dirname($1.__file__), x))
+get_module_path = lambda: os.path.dirname($1.__file__)
+$0

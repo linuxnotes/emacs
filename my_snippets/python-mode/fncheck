@@ -1,0 +1,10 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: fncheck
+# key: fncheck
+# binding: direct-keybinding
+# group: spec
+# contributor: linuxnotes
+# --
+def check(val, msg):
+    if not val: raise Exception(msg)
+$0
