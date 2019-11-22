@@ -7,4 +7,3 @@
 # --
 def check(val, msg):
     if not val: raise Exception(msg)
-$0
