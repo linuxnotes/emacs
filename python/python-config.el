@@ -1,23 +1,24 @@
-;;;; Настройки для работы с python
+;;;; Python configuration
 ;;;; http://habrahabr.ru/post/46350/
 
-;; Магия которую пришлось выполнить после установки pymacs для python и для emacs если сам pymacs ставить из
-;; 1. видимо в новой версии pymacs который python немного поменялся api, поэтому from Pymacs.pymacs import main не работает,
-;;    а работает просто from Pymacs import main
-;;    поэтому находим файлы pymacs.el pymacs.elc и в них делаем замену этим строчек
-;; 2. Выдается ошибка не совпадения версий, это чиним аналогично ищем pymacs.el, pymacs.elc и ставим версию как у pymacs из python
-;;    после этого получилось загрузить pycomplete
-;; 3. Не удается найти модуль, для этого прописываем дополнительные пути для загрузки сразу после requre pymacs, туда нужно
-;;    вписать путь, где лежит pycomplete
-;; 4. Чтобы удалить установленный из git pymacs нужно найти все Pymacs модули и удалить их и потом еще в файле
-;;    /usr/local/lib/python2.7/dist-packages/easy-install.pth удалить путь до папке куда скопирован git репозиторий
-
-;; Если используется дистрибутив вроде Ubuntu, то он сразу устанавливает Pymacs и lisp и python нужной версии,
-;; в текущей конфигурации была версия 0.23
-
-;; python-mode нужно скачивать с github: https://github.com/emacsmirror/python-mode
-
-;; change interpreter directory (setq default-directory "desired-directory")
+;;; Pymacs installation magic
+;; 1. In new pymacs probaly some api changed,
+;;    from Pymacs.pymacs import main # not working
+;;    # new version
+;;    from Pymacs import main
+;;    so in files pymacs.el need do replace
+;; 2. Error version mismatch.
+;;    fix: open pymacs.el and change version same in python
+;;    after we can load pycomplete
+;; 3. Error on can't find module:
+;;    fix: after (require pymacs)
+;;         write path where pycomplete is
+;; 4. For remove pymacs installed from git need:
+;;    remove from /usr/local/lib/python2.7/dist-packages/easy-install.pth path to folder where git repo is
+;;
+;; On Ubuntu Pymacs, lisp and python can be install with correct versions.
+;; python-mode can be download: https://github.com/emacsmirror/python-mode
+;; change interpreter directory: (setq default-directory "desired-directory")
 
 ;;NOTE CHECK THAT PYTHONPATH IS SETTED
 (require 'e-tools)
@@ -101,6 +102,8 @@
       nil)))
 
 ;; python jedi may be slow
+(require 'python-environment)
+(customize-set-value 'python-environment-virtualenv (list "virtualenv" "--quiet"))
 (require 'concurrent)
 (require 'epc)
 ;;(setq jedi:setup-keys t)                      ; optional
