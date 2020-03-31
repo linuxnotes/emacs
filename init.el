@@ -1,20 +1,28 @@
-;;;;
+;;;; packages
 (require 'package)
-
-;Add melpa to list of repositories
-(add-to-list 'package-archives
-	     '("melpa" . "http://melpa.milkbox.net/packages/")
-         t)
-
-;Initialize package.el
+(let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
+                    (not (gnutls-available-p))))
+       (proto (if no-ssl "http" "https")))
+  (when no-ssl
+    (warn "\
+Your version of Emacs does not support SSL connections,
+which is unsafe because it allows man-in-the-middle attacks.
+There are two things you can do about this warning:
+1. Install an Emacs version that does support SSL and be safe.
+2. Remove this warning from your init file so you won't see it again."))
+  (add-to-list 'package-archives (cons "melpa" (concat proto "://melpa.org/packages/")) t)
+  ;; Comment/uncomment this line to enable MELPA Stable if desired.  See `package-archive-priorities`
+  ;; and `package-pinned-packages`. Most users will not need or want to do this.
+  (add-to-list 'package-archives (cons "melpa-stable" (concat proto "://stable.melpa.org/packages/")) t))
 (package-initialize)
+;; 60c81ca fee0167
+(add-to-list 'load-path "~/.emacs.d/lib/use-package")
+(require 'use-package)
 
-(add-to-list 'load-path "~/.emacs.d/lib/e-tools")
-(require 'e-tools)
-(require 'compile)
-
-(e-tools-load-module "lib/use-package" 'use-package)
-(customize-set-value 'use-package-verbose t)
+(defun is-windows ()
+  (boundp 'w32-system-shells))
+(defun is-linux ()
+  (not (boundp 'w32-system-shells)))
 
 (use-package ace-jump-mode
   :defer t
@@ -34,19 +42,23 @@
   :init (require 'evil)
   :bind (([f9] . evil-mode)))
 
-(use-package global-text-scale
-  :load-path "lib/default-text-scale"
-  :commands global-text-scale-adjust
-  :bind
-  (("M-+" . (lambda () (interactive) (global-text-scale-adjust 1))) ;
-   ("M--" . (lambda () (interactive) (global-text-scale-adjust -1)))
-   )
-  )
+;; ;; it make emacs VERY slow
+;; (use-package global-text-scale
+;;   :load-path "lib/default-text-scale"
+;;   :commands global-text-scale-adjust
+;;   :bind
+;;   (("M-+" . (lambda () (interactive) (global-text-scale-adjust 1))) ;
+;;    ("M--" . (lambda () (interactive) (global-text-scale-adjust -1)))
+;;    )
+;;   )
+;; ;; (global-text-scale-adjust 0)
+;; ;; (global-text-scale-mode)  ;; enable/disable
 
+;; make emacs slow
 ;; power line pretty status bar
-(package-install 'powerline)
-(powerline-default-theme)
-(setq powerline-default-separator 'arrow-fade)
+;; (package-install 'powerline)
+;; (powerline-default-theme)
+;; (setq powerline-default-separator 'arrow-fade)
 
 (package-install 'ssh)
 (setq tramp-default-method "ssh")
@@ -198,7 +210,9 @@ how ssh X display tunelling interacts with frames on remote displays."
 ;; http://www.gnu.org/software/emacs/manual/html_node/emacs/Version-Control.html
 (setf vc-handled-backends nil)
 
-(e-tools-add-to-list 'load-path "~/.emacs.d/lang" "~/.emacs.d/lib"  "~/.emacs.d/cl-lib")
+(add-to-list 'load-path "~/.emacs.d/lang")
+
+(add-to-list 'load-path "~/.emacs.d/cl-lib")
 (condition-case nil
 	(require 'cl-lib)
   (error(load-file "~/.emacs.d/cl-lib/cl-lib.el")))
@@ -210,8 +224,9 @@ how ssh X display tunelling interacts with frames on remote displays."
 (defun initfuncs-set-fonts (&rest args)
   (message "initfuncs-set-fonts")
   (condition-case nil
-      (progn (set-default-font "Hack 9" t t)
-             ;;(set-face-attribute 'default nil :height 58)
+      (progn (set-default-font "Hack 12" t t)
+             ;;(set-default-font "DejaVu Sans Mono 9" t t)
+             ;;(set-face-attribute 'default nil :height 90) ;; 90 = 9pt
              (message "font setted"))
     (error
      (if (is-linux)
@@ -252,7 +267,7 @@ how ssh X display tunelling interacts with frames on remote displays."
 (fset 'yes-or-no-p 'y-or-n-p)
 
 ;;
-(setq scroll-step 1)
+;;(setq scroll-step 1)
 
 ;; dont change window
 (push (cons "\\*shell\\*" display-buffer--same-window-action) display-buffer-alist)
@@ -292,7 +307,7 @@ how ssh X display tunelling interacts with frames on remote displays."
 ;; выбор буффера
 ;; переопеределим стандартный list-buffer на ibuffer
 ;;(global-set-key [f11] 'ibuffer)
-(global-set-key (kbd "C-x C-b") 'ibuffer)
+ (global-set-key (kbd "C-x C-b") 'buffer-menu)
 
 ;; работы с закладками
 ;; выбор закладки C-x r l bookmark-bmenu-list
@@ -392,8 +407,8 @@ how ssh X display tunelling interacts with frames on remote displays."
 (setq yas-snippet-dirs
       '("~/.emacs.d/yasnippet/yasmate/snippets" "~/.emacs.d/yasnippet/snippets"
 		"~/.emacs.d/my_snippets"))
-(yas-reload-all) ;; this need for use yasnippet as minor mode
-(setq yas-indent-line 'fixed)
+;;(yas-reload-all) ;; this need for use yasnippet as minor mode
+;;(setq yas-indent-line 'fixed)
 
 (use-package elisp-config
   :load-path "elisp"
@@ -460,24 +475,29 @@ how ssh X display tunelling interacts with frames on remote displays."
 ;;(e-tools-load-module "macros" 'my-user-macro)
 
 ;; Themes
-(e-tools-load-module "theme" 'theme-config)
+(add-to-list 'load-path "~/.emacs.d/theme")
+(require 'theme-config)
 
 ;; projectile
 ;; projectile-mode ;; если нужно не глобально
-(add-to-list 'load-path "~/.emacs.d/projectile")
-(add-to-list 'load-path "~/.emacs.d/projectile/dash")
-(add-to-list 'load-path "~/.emacs.d/projectile/s")
-(add-to-list 'load-path "~/.emacs.d/projectile/f")
-(add-to-list 'load-path "~/.emacs.d/projectile/pkg-info")
-(add-to-list 'load-path "~/.emacs.d/projectile/epl")
+;; (add-to-list 'load-path "~/.emacs.d/projectile")
+;; (add-to-list 'load-path "~/.emacs.d/projectile/dash")
+;; (add-to-list 'load-path "~/.emacs.d/projectile/s")
+;; (add-to-list 'load-path "~/.emacs.d/projectile/f")
+;; (add-to-list 'load-path "~/.emacs.d/projectile/pkg-info")
+;; (add-to-list 'load-path "~/.emacs.d/projectile/epl")
 (if (not (is-windows))
 	(progn
 	  (require 'projectile)
+      (require 'helm-projectile)
       (custom-set-variables
        '(projectile-mode-line
          '(:eval (format " P[%s]" (projectile-project-name))))
        )
-	  (projectile-global-mode))
+	  ;;(projectile-global-mode) ;; obsolete
+      (projectile-mode +1)
+      (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+      )
   nil)
 
 ;; autopair
@@ -661,9 +681,11 @@ Defaults to `error'."
       (when message (put name 'error-message message)))))
 
 ;; load special settings
-(condition-case nil
-	(require 'init-special)
-  (error nil))
+(add-to-list 'load-path "~/.emacs.d/mlib/")
+(require 'init-special)
+;; (condition-case nil
+;; 	(require 'init-special)
+;;   (error nil))
 
 ;; for current magit 2.11.0
 ;; cd ~/.emaac.d/ext-lib/
@@ -727,8 +749,9 @@ Defaults to `error'."
   (yas-reload-all))
 
 ;; add spelling, must be placed after mode configs
-(add-to-list 'load-path "~/.emacs.d/spelling")
-(require 'spell-config)
+;; need todo spelling for by the key, not auto
+;; (add-to-list 'load-path "~/.emacs.d/spelling")
+;; (require 'spell-config)
 
 ;; after install
 ;; git clone https://github.com/auto-complete/auto-complete.git
@@ -789,7 +812,8 @@ Defaults to `error'."
 		 (reverse-input-method (intern charset-symbol-name))))
 
 (if (file-exists-p (expand-file-name "~/ide-skel/ide-skel-config.el"))
-	(e-tools-load-module "ide-skel" 'ide-skel-config)
+    (add-to-list 'load-path "~/.emacs.d/ide-skel")
+    (require 'ide-skel-config)
   nil)
 
 (custom-set-variables
@@ -820,14 +844,15 @@ Defaults to `error'."
    (quote
     (("python-log-err"
       (java-pattern . "yyyy-MM-dd HH:mm:ss,SSS")))))
- '(package-selected-packages (quote (org-pomodoro ssh "ssh" powerline "powerline")))
+ '(package-selected-packages (quote (s org-pomodoro ssh)))
  '(projectile-mode-line (quote (:eval (format " P[%s]" (projectile-project-name)))))
  '(send-mail-function (quote smtpmail-send-it))
  '(smtpmail-smtp-server "smtp.mail.ru")
  '(smtpmail-smtp-service 465)
  '(smtpmail-stream-type (quote ssl))
  '(undo-tree-mode-lighter " UT "))
-(global-hl-line-mode 1)
+
+;;(global-hl-line-mode t)
 
 ;; Editing
 (setq-default tab-width 4
@@ -921,3 +946,7 @@ Defaults to `error'."
     (yas-minor-mode))
 (add-hook 'texinfo-mode-hook 'texinfo-mode-complex-hook)
 
+;; disable
+;; - electric-indent-mode
+;; - electric-pair-mode
+;; - global-edit-server-edit-mode

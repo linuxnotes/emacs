@@ -1,11 +1,11 @@
 ;;;
 
-(defun my-custom-to-sql-ide() 
+(defun my-custom-to-sql-ide()
   (interactive)
   ";; Превращаем emacs в аналог sqldeveloper
   ;; ide-skel, sqlplus, tabbar, plsql
-  ;; Инструкция по установке 
-  ;; 1. устанавливается instant-client 
+  ;; Инструкция по установке
+  ;; 1. устанавливается instant-client
   ;; 2. устанавливается instant-client-sqlplus
   ;; 3. устанавливаются расширения для emacs
   ;; 4. конфигурируется tnsnames.ora
@@ -43,7 +43,7 @@
   (global-set-key [C-next]  'tabbar-forward)
 
   (my-load-sqlplus)
-  
+
 ;;;; (require 'folding)
   ;; подсветка скобок
   ;; (require 'highlight-sexp)
@@ -52,23 +52,35 @@
 
 ;;;; plsql
   ;; C-c C-c compile current psql buffer
-  (defun load-pl-sql-mode() 
+  (defun load-pl-sql-mode()
 	(interactive)
 	(require 'plsql)
-	(setq plsql-indent 2) 
-	)
+	(setq plsql-indent 4))
   (load-pl-sql-mode) ;; будем грузить по умолчанию
   (add-to-list 'auto-mode-alist '("\\.sql$" . plsql-mode))
 )
 
-(defun my-include-sqlplus2() 
+(defun my-include-sqlplus2()
   (interactive)
   ;; (add-to-list 'load-path "~/.emacs.d/ide-skel")
   (setenv "LD_LIBRARY_PATH" "$ORACLE_HOME/lib:$JAVA_HOME/jre/lib/amd64:/usr/local/lib:/usr/lib/oracle/12.1/client/lib")
   (setenv "NLS_LANG" "AMERICAN_AMERICA.UTF8")
   (load-file "~/.emacs.d/ide-skel/sqlplus2.el")
   ;; (require 'sqlplus2)
-)
+  )
+
+(unless (fboundp 'makehash)
+    (defun makehash (&optional test)
+       (declare (obsolete make-hash-table "22.1"))
+       (make-hash-table :test (or test 'eql))))
+
+(defun load-pl-sql-mode()
+  (interactive)
+  (require 'plsql)
+  (setq plsql-indent 4))
+
+(defun plsql-mode-complex-hook ()
+  (yas-minor-mode))
 
 (defun my-load-sqlplus()
   (interactive)
@@ -83,6 +95,9 @@
   (setenv "PATH" (concat
 				  "~/bin/utils/"
 				  ":"
-				  (getenv "PATH"))))
+				  (getenv "PATH")))
+  (load-pl-sql-mode) ;; будем грузить по умолчанию
+  (add-to-list 'auto-mode-alist '("\\.sql$" . plsql-mode))
+  (add-hook 'plsql-mode 'plsql-mode-complex-hook))
 
 (provide 'ide-skel-config)

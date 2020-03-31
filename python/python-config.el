@@ -20,6 +20,10 @@
 ;; python-mode can be download: https://github.com/emacsmirror/python-mode
 ;; change interpreter directory: (setq default-directory "desired-directory")
 
+;; Other configs:
+;; https://realpython.com/emacs-the-best-python-editor/
+;; https://stackoverflow.com/questions/29809061/how-to-properly-setup-jedi-with-elpy-in-emacs
+
 ;;NOTE CHECK THAT PYTHONPATH IS SETTED
 (require 'e-tools)
 
@@ -205,6 +209,7 @@
   (error nil))
 
 (when (load "flymake" t)
+ (customize-set-value 'flymake-no-changes-timeout 5)
  (defun flymake-pyflakes-init ()
      (let* ((temp-file (flymake-init-create-temp-buffer-copy
  		       'flymake-create-temp-inplace))
@@ -252,7 +257,7 @@
   ;;http://stfw.ru/page.php?id=12357
   ;; определение и вызов функции
   ((lambda ()
-	 (message "Run python complex hook")
+	 ;;(message "Run python complex hook")
      (setq python-eldoc-get-doc nil)
 	 (set-variable 'py-indent-offset 4)
 	 (set-variable 'py-smart-indentation nil)
@@ -271,6 +276,7 @@
 	 (jedi:setup)
 	 (define-key python-mode-map (kbd "C-x i") 'yas-expand) ;; redifine insert-file that not used
      (define-key python-mode-map (kbd "C-c c r") 'python-config-execute-test-in-shell-inter) ;; redifine insert-file that not used
+     (define-key python-mode-map (kbd "C-c 3") 'py-tl-2-to-3) ;; check support python 3
      (hs-minor-mode)
 	 ;; this change need for correct indent in python mode when use yasnippet
 	 ;; ((lambda () (set (make-local-variable 'yas-indent-line) 'fixed)))
