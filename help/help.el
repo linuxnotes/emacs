@@ -117,3 +117,19 @@
 ;;                     140A ᐊ
 ;;                     1433 ᐳ
 ;;                     1438 ᐸ
+
+
+;; check version
+;; https://emacs.stackexchange.com/questions/35335/how-to-test-for-specific-emacs-version-or-newer
+;; version=
+;; version<
+;; version<=
+;; Example: (if (version< emacs-version "24.4") (message "some") nil)
+;; or
+;;  (if (or (>= emacs-major-version 24)
+;;        (and (= emacs-major-version 24)
+;;             (>= emacs-minor-version 4)))
+;;        (message "true")
+;;      (message "false"))
+;;
+;;

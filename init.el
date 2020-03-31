@@ -1,4 +1,4 @@
-;;;; packages
+;;; packages
 (require 'package)
 (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
                     (not (gnutls-available-p))))
@@ -19,11 +19,43 @@ There are two things you can do about this warning:
 (add-to-list 'load-path "~/.emacs.d/lib/use-package")
 (require 'use-package)
 
+;;;; Utils
 (defun is-windows ()
   (boundp 'w32-system-shells))
 (defun is-linux ()
   (not (boundp 'w32-system-shells)))
+;;; config
+(defun load-config()
+  "Open file with config"
+  (interactive)
+  (find-file "~/.emacs.d/init.el"))
+(defun reload-config()
+  "Reload configuration file"
+  (interactive)
+  (load-file "~/.emacs.d/init.el"))
 
+(defun setcp1251()
+    (interactive)
+    (set-language-environment "Cyrillic-CP1251"))
+(defun setutf8()
+    (interactive)
+    (set-language-environment "UTF-8"))
+;;
+;; for windows
+(defun m-prev-window()
+  (interactive)
+  (other-window -1))
+;; newline-without-break-of-line
+(defun newline-without-break-of-line ()
+  "https://stackoverflow.com/questions/5898448/how-to-add-a-new-line-without-breaking-the-current-line
+  1. move to end of the line.
+  2. insert newline with index"
+  (interactive)
+  (let ((oldpos (point)))
+    (end-of-line)
+    (newline-and-indent)))
+
+;;; ace-jump-mode
 (use-package ace-jump-mode
   :defer t
   :load-path "lib/ace-jump-mode"
@@ -36,35 +68,11 @@ There are two things you can do about this warning:
   (setq ace-jump-mode-move-keys
            (nconc (loop for i from ?a to ?z collect i))))
 
-(use-package evil
-  :load-path "lib/evil"
-  :commands evil-mode
-  :init (require 'evil)
-  :bind (([f9] . evil-mode)))
-
-;; ;; it make emacs VERY slow
-;; (use-package global-text-scale
-;;   :load-path "lib/default-text-scale"
-;;   :commands global-text-scale-adjust
-;;   :bind
-;;   (("M-+" . (lambda () (interactive) (global-text-scale-adjust 1))) ;
-;;    ("M--" . (lambda () (interactive) (global-text-scale-adjust -1)))
-;;    )
-;;   )
-;; ;; (global-text-scale-adjust 0)
-;; ;; (global-text-scale-mode)  ;; enable/disable
-
-;; make emacs slow
-;; power line pretty status bar
-;; (package-install 'powerline)
-;; (powerline-default-theme)
-;; (setq powerline-default-separator 'arrow-fade)
-
+;;; ssh
 (package-install 'ssh)
 (setq tramp-default-method "ssh")
 (require 'ssh)
 (setq ssh-directory-tracking-mode t)
-
 (if (>= emacs-major-version 26)
 ;;; OVERWRITE for comint-file-name-prefix computing
     (defun ssh (input-args &optional buffer)
@@ -188,58 +196,18 @@ how ssh X display tunelling interacts with frames on remote displays."
              )))))
       buffer)
   nil)
-(add-hook 'ssh-mode-hook
-          (lambda ()
-            (setq ssh-directory-tracking-mode t)
-            (shell-dirtrack-mode t)
-            ))
+(add-hook 'ssh-mode-hook (lambda ()
+                           (setq ssh-directory-tracking-mode t)
+                           (shell-dirtrack-mode t)))
 
-;;; Utils
-(defmacro part-module-load(name &optional feature)
-  "Load module macro"
-  `(progn
-	 (add-to-list 'load-path ,(concat "~/.emacs.d/" (symbol-name name)))
-	 ,(if (not (not feature))
-		 `(require ',feature)
-	   `(require ',(intern (concat (symbol-name name) "-config")))
-	   ))
-  )
-
-;; отключение стандартной
-;; системы контроля версий
-;; http://www.gnu.org/software/emacs/manual/html_node/emacs/Version-Control.html
-(setf vc-handled-backends nil)
-
-(add-to-list 'load-path "~/.emacs.d/lang")
-
-(add-to-list 'load-path "~/.emacs.d/cl-lib")
-(condition-case nil
-	(require 'cl-lib)
-  (error(load-file "~/.emacs.d/cl-lib/cl-lib.el")))
-
-;; шрифт
-;; cp hack2.0 /usr/share/fonts/truetype/ -R
-;; fc-cache
-;; set-default-font font keep-size fonts if font equal t then also for future
-(defun initfuncs-set-fonts (&rest args)
-  (message "initfuncs-set-fonts")
+;;; cl-lib: in emacs newer than 24.3 cl-lib functions included
+(when (version< emacs-version "24.3")
+  (add-to-list 'load-path "~/.emacs.d/cl-lib")
   (condition-case nil
-      (progn (set-default-font "Hack 12" t t)
-             ;;(set-default-font "DejaVu Sans Mono 9" t t)
-             ;;(set-face-attribute 'default nil :height 90) ;; 90 = 9pt
-             (message "font setted"))
-    (error
-     (if (is-linux)
-         (set-default-font "Monospace 10" t t) ;; шрифт для Linux
-       (set-default-font "Courier New 10" t t))
-     ))
-  )
+      (require 'cl-lib)
+    (error(load-file "~/.emacs.d/cl-lib/cl-lib.el"))))
 
-
-(initfuncs-set-fonts)
-;; excecute after create frame
-;;(add-to-list 'after-make-frame-functions #'initfuncs-set-fonts)
-
+;;; backus and autosaves
 ;; move backups in special directory
 ;; Write backup files to own directory
 ;; Backups and temp files
@@ -248,118 +216,58 @@ how ssh X display tunelling interacts with frames on remote displays."
               backup-by-copying t
               create-lockfiles nil)
 
-
+;;; vc, ahg, magit
+;; disable standrard version control
+;; http://www.gnu.org/software/emacs/manual/html_node/emacs/Version-Control.html
+(setf vc-handled-backends nil)
 ;; Make backups of files, even when they're in version control
 (setq vc-make-backup-files t)
-;;(setq make-backup-files nil)
-
-;; выключить toolbar
-(tool-bar-mode -1)
-(scroll-bar-mode -1)
-
-;;не показывть начальный экран
-(setq inhibit-startup-message t)
 
 ;; табы по 4
 (setq default-tab-width 4)
 
-;; краткие ответы на вопрос
-(fset 'yes-or-no-p 'y-or-n-p)
-
-;;
-;;(setq scroll-step 1)
-
 ;; dont change window
 (push (cons "\\*shell\\*" display-buffer--same-window-action) display-buffer-alist)
-
-;;показывать парные скобки
-(show-paren-mode t)
-
-;;;; работа с конфигом
-(defun load-config()
-  "Функция открывает в буфере каталог с конфигом"
-  (interactive)
-  (find-file "~/.emacs.d/init.el"))
-
-(defun reload-config()
-  "Перезагрузить файл конфигурации"
-  (interactive)
-  (load-file "~/.emacs.d/init.el"))
-
-(defun setcp1251()
-    (interactive)
-    (set-language-environment "Cyrillic-CP1251"))
-
-(defun setutf8()
-    (interactive)
-    (set-language-environment "UTF-8"))
 
 ;;макросы
 (global-set-key [f5] 'kmacro-start-macro)
 (global-set-key [f6] 'kmacro-end-macro)
 (global-set-key [f7] 'call-last-kbd-macro)
 
-;; нумерация строк
-;; можно использовать linum-mode, но он вроде как медленнее
-(load-file "~/.emacs.d/nlinam/nlinum.el")
-(global-set-key [f8] 'nlinum-mode)
-
-;; выбор буффера
-;; переопеределим стандартный list-buffer на ibuffer
-;;(global-set-key [f11] 'ibuffer)
+;;; line numbers
+;; In most cases it is enough C-x l
+(global-set-key [f8] 'linum-mode)
+;; Buffer list
+;; Normal function is list-buffer
  (global-set-key (kbd "C-x C-b") 'buffer-menu)
-
 ;; работы с закладками
 ;; выбор закладки C-x r l bookmark-bmenu-list
-
-;; Убираем уход в background
+;; Normal it put emacs in background mode, that
+;; is not conviniently
 (global-set-key (kbd "C-z") 'undo)
-
-;;Закомментировать раскомментировать область
+;; comment/uncomment region
 (global-set-key (kbd "\e\ec") 'comment-region)
 (global-set-key (kbd "\e\eu") 'uncomment-region)
+;; revert buffer
 (global-set-key (kbd "\e\er") 'revert-buffer)
-
-;; поиск файла
+;; find file at point
 (global-set-key (kbd "\e\exf") 'find-file-at-point)
-
-;; перемещение с использованием Alt
+;; convinient paragraph moving
 (global-set-key (kbd "M-p") 'backward-paragraph)
 (global-set-key (kbd "M-n") 'forward-paragraph)
-;; newline-without-break-of-line
-(defun newline-without-break-of-line ()
-  "https://stackoverflow.com/questions/5898448/how-to-add-a-new-line-without-breaking-the-current-line
-  1. move to end of the line.
-  2. insert newline with index"
 
-  (interactive)
-  (let ((oldpos (point)))
-    (end-of-line)
-    (newline-and-indent)))
+
 
 (global-set-key (kbd "<C-return>") 'newline-without-break-of-line)
-
-;; for windows
-(defun m-prev-window()
-  (interactive)
-  (other-window -1))
-
 (global-set-key (kbd "C-x p") 'm-prev-window) ;; previous-multiframe-window
-(global-set-key [f3] 'other-window) ;; default C-x o
 (global-set-key (kbd "C-c d") 'delete-trailing-whitespace)
-
-
-;; замена строк
 (global-set-key (kbd "C-x C-m") 'replace-string)
-
-;; меню для вставки
+;; insert menu
 (global-set-key (kbd "C-c y") '(lambda ()
     (interactive) (popup-menu 'yank-menu)))
-
 ;; remove binding set-fill-prefix
 (global-set-key (kbd "C-x .") nil)
-
-;; включение возможности делать upcase/downcase region
+;; Enable feature to upcase/downcase region
 (put 'upcase-region 'disabled nil)
 (put 'downcase-region 'disabled nil)
 
@@ -375,87 +283,82 @@ how ssh X display tunelling interacts with frames on remote displays."
 					 (documentation . "Support for Cyrillic CP1251."))
  '("Cyrillic"))
 
-
-;; popup
+;;; popup
 (add-to-list 'load-path "~/.emacs.d/popup")
-;;(load-file "~/.emacs.d/popup/popup.el")
 (require 'popup)
 
-;; autocomplete
+;;; autocomplete
 (add-to-list 'load-path "~/.emacs.d/auto-complete")
-;;(load "~/.emacs.d/auto_complete/auto-complete.el")
 (require 'auto-complete) ;; if load not by require it will be jedi:complete error
 (customize-set-value 'ac-auto-start nil)
 (add-to-list 'ac-dictionary-directories "~/.emacs.d/auto_complete/dict")
 (require 'auto-complete-config)
 (global-auto-complete-mode t)
 (global-set-key (kbd "C-c i") 'auto-complete)
-
-;; change key-maps
+;; change auto-complete key-maps
 (define-key ac-completing-map "\M-n" nil)
 (define-key ac-completing-map "\M-p" nil)
 (define-key ac-completing-map "\C-n" 'ac-next)
 (define-key ac-completing-map "\C-p" 'ac-previous)
-
 ;;(ac-config-default)
 ;;(customize-set-value 'ac-auto-show-menu 0.2)
 
-;; yasnippet
+;;; yasnippet
 (add-to-list 'load-path "~/.emacs.d/yasnippet")
 (require 'yasnippet)
 ;; Load the snippet files themselves
 (setq yas-snippet-dirs
-      '("~/.emacs.d/yasnippet/yasmate/snippets" "~/.emacs.d/yasnippet/snippets"
+      '("~/.emacs.d/yasnippet/yasmate/snippets"
+        "~/.emacs.d/yasnippet/snippets"
 		"~/.emacs.d/my_snippets"))
 ;;(yas-reload-all) ;; this need for use yasnippet as minor mode
 ;;(setq yas-indent-line 'fixed)
 
+;;; elisp
 (use-package elisp-config
   :load-path "elisp"
   :commands common-list-mode
   :mode (("\\.cl\\'" . common-list-mode)))
-
+;;; js
 (use-package js-config
   :load-path "js"
   :commands js2-mode
   :mode (("\\.js\\'" . js2-mode)))
-
+;;; vb
 (use-package visual-basic-mode
   :load-path "lib/vb-mode"
   :commands visual-basic-mode
   :mode (("\\.vb\\'" . visual-basic-mode)
          ("\\.vbs\\'" . visual-basic-mode)))
-
+;;; python
 ;; python and perl also autoloaded,
 ;; so add config by hook
 (use-package python-config
   :commands (ipythonm)
   :hook (python-mode . python-config-one-time-hook)
   :load-path "python")
-
+;;; perl
 (use-package perl-config
   :hook (perl-mode . perl-config-one-time-hook)
   :load-path "perl")
-
+;;; lua
 (use-package lua-mode
   :load-path "lib/lua-mode"
   :commands lua-mode
   :mode ("\\.lua\\'" . lua-mode))
-
+;;; json
 (use-package json-mode
   :load-path "lib/json-mode" "lib/json-snatcher" "lib/json-reformat"
   :commands json-mode
   :mode ("\\.json\\'" . json-mode)
   :init (modify-coding-system-alist 'file "\\.json\\'" 'utf-8)
   :config (setq json-reformat:pretty-string? 't))
-
-;; cs-mode
+;;; cs-mode
 (use-package csharp-mode
   :load-path "cs-mode"
   :commands csharp-mode
   :mode ("\\.cs\\'" . csharp-mode))
-
-;; web mode
+;;; web mode
 ;; http://web-mode.org/
 ;; MMM Mode for Emacs и https://bitbucket.org/pjenvey/mmm-mako/downloads/
 (use-package web-mode
@@ -471,9 +374,6 @@ how ssh X display tunelling interacts with frames on remote displays."
          ("\\.djhtml\\'" . web-mode)
          ("\\.html?\\'" . web-mode)))
 
-;; макросы
-;;(e-tools-load-module "macros" 'my-user-macro)
-
 ;; Themes
 (add-to-list 'load-path "~/.emacs.d/theme")
 (require 'theme-config)
@@ -486,50 +386,29 @@ how ssh X display tunelling interacts with frames on remote displays."
 ;; (add-to-list 'load-path "~/.emacs.d/projectile/f")
 ;; (add-to-list 'load-path "~/.emacs.d/projectile/pkg-info")
 ;; (add-to-list 'load-path "~/.emacs.d/projectile/epl")
-(if (not (is-windows))
-	(progn
-	  (require 'projectile)
-      (require 'helm-projectile)
-      (custom-set-variables
-       '(projectile-mode-line
-         '(:eval (format " P[%s]" (projectile-project-name))))
-       )
-	  ;;(projectile-global-mode) ;; obsolete
-      (projectile-mode +1)
-      (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-      )
-  nil)
 
-;; autopair
+(when (not (is-windows))
+  (require 'projectile)
+  (require 'helm-projectile)
+  (custom-set-variables
+   '(projectile-mode-line
+     '(:eval (format " P[%s]" (projectile-project-name)))))
+  ;;(projectile-global-mode) ;; obsolete
+  (projectile-mode +1)
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
+
+;;; autopair
 ;; for emacs >= 24.4 electric-pair-mode is recomended
 ;; else autopair
-(if (or (>= emacs-major-version 24)
-        (and (= emacs-major-version 24)
-             (>= emacs-minor-version 4)))
+(if (version<= "24.4" emacs-version)
     (electric-pair-mode)
-  (progn (add-to-list 'load-path "~/.emacs.d/autopair")
-         (require 'autopair)
-         (autopair-global-mode)
-         ))
+  (progn
+    (add-to-list 'load-path "~/.emacs.d/autopair")
+    (require 'autopair)
+    (autopair-global-mode)))
 
-;; todo
-;; (add-to-list 'load-path "~/.emacs.d/todo/")
-;; (require 'todo-config)
-
-;; ;; navigator
-;; (defun load-nav()
-;;   " Загрузка панели навигатора "
-;;   (interactive)
-;;   (add-to-list 'load-path "~/.emacs.d/emacs-nav-49/")
-;;   (require 'nav)
-;;   (nav-disable-overeager-window-splitting)
-;;   ;;(nav)
-;;   ;; Optional: set up a quick key to toggle nav
-;;   (global-set-key [?\C-x ?n ?n]  'nav-toggle))
-;; (load-nav)
-
+;; clipboard compatible with other system
 (setq x-select-enable-clipboard t)
-;; (setq selection-coding-system 'compound-text-with-extensions)
 
 ;; работает для javascript
 (global-set-key (kbd "\e\eh") 'hs-hide-block)
@@ -808,6 +687,7 @@ Defaults to `error'."
 
 ;; set bindings for differrent charset
 (when (>= emacs-major-version 24)
+  (add-to-list 'load-path "~/.emacs.d/lang")
   (progn (require 'charset-bindings)
 		 (reverse-input-method (intern charset-symbol-name))))
 

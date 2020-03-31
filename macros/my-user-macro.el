@@ -1,6 +1,8 @@
 ;;; Макросы
+;; (add-to-list 'load-path "~/.emacs.d/macros")
+;; (require 'my-user-macro)
 
-;; для создания макроса нужно сделать 
+;; для создания макроса нужно сделать
 ;; макрос, потом name-last-kbd-macro
 ;; потом insert-kbd-macro (можно и без name-last-kbd-macro)
 
